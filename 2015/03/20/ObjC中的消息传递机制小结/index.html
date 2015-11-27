@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ObjC中的消息传递机制小结 | “More is Different.”</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ObjC中的消息传递机制小结标签（空格分隔）： ObjC
+
+原文链接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ObjC中的消息传递机制小结">
+<meta property="og:url" content="https://github.com/watermeion/2015/03/20/ObjC中的消息传递机制小结/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="ObjC中的消息传递机制小结标签（空格分隔）： ObjC
+
+原文链接">
+<meta property="og:image" content="http://www.objc.io/images/issue-7/communication-patterns-flow-chart.png">
+<meta property="og:updated_time" content="2015-11-27T11:06:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ObjC中的消息传递机制小结">
+<meta name="twitter:description" content="ObjC中的消息传递机制小结标签（空格分隔）： ObjC
+
+原文链接">
+  
+    <link rel="alternative" href="/atom.xml" title="“More is Different.”" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">“More is Different.”</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">-—Philip W. Anderson</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/watermeion"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ObjC中的消息传递机制小结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/20/ObjC中的消息传递机制小结/" class="article-date">
+  <time datetime="2015-03-20T02:36:55.000Z" itemprop="datePublished">2015-03-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ObjC中的消息传递机制小结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ObjC中的消息传递机制小结">ObjC中的消息传递机制小结</h1><p>标签（空格分隔）： ObjC</p>
+<hr>
+<p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">原文链接</a></p>
+<a id="more"></a>
+<p>###KVO</p>
+<ol>
+<li>One to Many: 一个对象的value changes 可以被多个对象监听</li>
+<li>但recipient 必须知道 sender 的生命周期，因为必须在sender对象deallcated之前unregister the observer</li>
+<li>在Core Data 中使用要注意 Core Data的Faulting 机制，因为managed对象变成fault时也会引发KVO监听</li>
+</ol>
+<p>###Notifications</p>
+<ol>
+<li>Broadcast: sender 和 recipient 不需要知道彼此的生命周期，低相关性；</li>
+<li>可以通过<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;###Delegation&#10;1. &#36890;&#36807;&#20989;&#25968;&#21442;&#25968;&#20256;&#36882;&#25968;&#25454;&#10;2. &#26494;&#32806;&#21512;&#65292;&#20351;&#29992;&#24191;&#27867;&#10;&#62; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.&#10;&#10;3. &#32039;&#32806;&#21512;&#19981;&#36866;&#29992; &#65292;&#23481;&#26131;&#36896;&#25104;&#24490;&#29615;&#24341;&#29992;&#65311;&#10;&#10;###Blocks&#10;1. &#28508;&#22312;&#38544;&#24739;&#65306; &#10;&#62; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.&#10;&#22914;&#10;```self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) &#123;&#10;    // handle selection ...&#10;&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>而 如下就不会，原因是operation 执行完后会立即释放</p>
+</blockquote>
+<figure class="highlight"><figcaption><span>= [[NSOperationQueue alloc] init];</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyOperation *operation = [[MyOperation alloc] init];&#10;operation.completionBlock = ^&#123;&#10;    [self finishedOperation];&#10;&#125;;&#10;[self.queue addOperation:operation];</span><br></pre></td></tr></table></figure>
+<p>###Target-Action</p>
+<ol>
+<li>Target-Action is the typical pattern used to send messages in response to user-interface events.</li>
+<li>A limitation of target-action-based communication is that the messages sent cannot carry any custom payloads. </li>
+<li>非常松耦合，target 和 action 不用知道对方的存在，甚至target=nil ,Action 会沿着响应链一直传递直到找到响应者。On iOS, each control can even be associated with multiple target-action pairs.</li>
+</ol>
+<p>###何时用哪个</p>
+<p><img src="http://www.objc.io/images/issue-7/communication-patterns-flow-chart.png" alt=" recommendation"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/watermeion/2015/03/20/ObjC中的消息传递机制小结/" data-id="cihhkk0j2000h0clkuoqgfyqr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ObjC/">ObjC</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/21/ios项目中可用的第三方库总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          IOS项目中可用的第三方库总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/19/生命的意义/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">生命的意义</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IOS/">IOS</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/New/">New</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ObjC/">ObjC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/发现/">发现</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/感悟/">感悟</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/摘抄/">摘抄</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/IOS/" style="font-size: 20px;">IOS</a> <a href="/tags/New/" style="font-size: 10px;">New</a> <a href="/tags/ObjC/" style="font-size: 20px;">ObjC</a> <a href="/tags/发现/" style="font-size: 10px;">发现</a> <a href="/tags/感悟/" style="font-size: 10px;">感悟</a> <a href="/tags/摘抄/" style="font-size: 10px;">摘抄</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">7</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/11/27/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/11/27/New-Photo-Blog/">Gallery Post</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/12/Loved-Ted-Vedio-4-a-m/">Loved Ted Vedio 4 a.m.</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/03/IOS-Block-之我见/">IOS Block 之我见</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/02/IOS开发ARC技术要点（转载）/">IOS开发ARC技术要点（转载）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Tad Guo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS 性能优化的几方面 · “More is Different.”</title><meta name="description" content="##2015年07月24日
+IOS程序性能优化
+计算代码运行时间，  BNRtimeBlock NSDate
+
+善用xcode的性能分析工具
+
+图片：优先使用[UIImage imageNamed@&amp;quot;&amp;quot;]  ImageCache类 使用gradient图片代替硬编码实现的gradient;
+
+对于复杂的View,使用drawRect 自绘而不是从nib中载入
+
+对于TableView .重用Cell;减少cell初始化的工作量，延迟装载;定制复杂cell时，使用drawRect自绘。Cache 尽可能多的东西，包括cell高度
+
+在线程中使用 autoreleasepool
+
+将一些不太重要的任务放在idle时运行问：idle是什么时候？
+
+不要再viewWillAppear中做费时的操作，只进行背景色、字体等设置&lt;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="http://weibo.com/sunchongsheng" target="_blank" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/11/27/IOS-性能优化的几方面/" class="post-title-link">IOS 性能优化的几方面</a></h2><div class="post-meta"><div class="post-time">2015年11月27日</div></div><div class="post-content"><p>##2015年07月24日</p>
+<h3 id="IOS程序性能优化">IOS程序性能优化</h3><ol>
+<li><p>计算代码运行时间，  <code>BNRtimeBlock</code> <code>NSDate</code></p>
+</li>
+<li><p>善用xcode的性能分析工具</p>
+</li>
+<li><p>图片：优先使用<code>[UIImage imageNamed@&quot;&quot;]</code>  <code>ImageCache</code>类<br> 使用gradient图片代替硬编码实现的gradient;</p>
+</li>
+<li><p>对于复杂的View,使用drawRect 自绘而不是从nib中载入</p>
+</li>
+<li><p>对于TableView .重用Cell;减少cell初始化的工作量，延迟装载;定制复杂cell时，使用drawRect自绘。Cache 尽可能多的东西，包括cell高度</p>
+</li>
+<li><p>在线程中使用 autoreleasepool</p>
+</li>
+<li><p>将一些不太重要的任务放在idle时运行<br>问：idle是什么时候？</p>
+</li>
+<li><p>不要再<code>viewWillAppear</code>中做费时的操作，只进行背景色、字体等设置</p>
+</li>
+<li><p>使用多线程来延迟加载资源、如图片</p>
+</li>
+<li><p>关于后台任务<br>系统进入background后，有10分钟的运行时间，因此有很多值得注意的事项：<br>a)尽量减少内存的使用，当内存不足时，IOS将kill那些内存消耗多的app<br>b)释放所有的共享资源，比如Calendar 与 Address bool 当app进入后台时，若果还在使用共享资源，IOS会立即kill掉该应用程序<br>c)正确处理apps生命周期，当进入后台时，赢保持用户数据，以便回到前台时能够恢复，当进入后台时，IOS会保存当前App的一个快照，以便之后在合适的时候呈现给用户以提高用户体检，因此应该避免在屏幕上呈现用户信息，以免西楼用户个人资料。</p>
+</li>
+<li><p>如果关键代码使用 C/C++/asm 效率更高就使用 C/C++/asm。</p>
+</li>
+<li><p>如果一个方法在一个循环次数非常多的循环中使用，在进入循环前使用 methodForSelector 获取该方法 IMP，然后在循环体中直接使用该 IMP。</p>
+</li>
+<li><p>关于内存释放</p>
+</li>
+</ol>
+<p>在 didReceiveMemoryWarning 中释放内存，比如cache 的图像，view 等，并记得调用 [supper didReceiveMemoryWarning]。清理函数 didReceiveMemoryWarning, viewDidUnload 和 dealloc 都是在方法结尾处调用 supper 的方法。 </p>
+<ol>
+<li>提高 APP 加载速度</li>
+</ol>
+<p>避免使用静态初始化，包括静态c++对象，加载时会运行的代码，如+(void) load{} ，会造成在Main函数之前运行额外的代码。</p>
+<ol>
+<li>利用 cache 空间换时间。cache 是一种常见的空间换时间的提供性能的收到，可以用在相当多的场合。</li>
+</ol>
+<p>尽量 cache 那些可重复利用的对象，比如 table cell，date/number formatters，正则表达式，sqlite语句等。</p>
+<ol>
+<li>关于数据库</li>
+</ol>
+<p>缓存经常用到的 sqlite 语句；优化数据库查询语句，用sqlite3_trace和sqlite3_profile来查找性能差的语句；如果可能的话，缓存查询结果缓。</p>
+<p>在使用 sqlite_prepare会将SQL查询编译成字节码，要使用bind，重用那些已经prepared的语句。</p>
+</div></article></div></section><footer><div class="paginator"><a class="prev"> </a><a href="/2015/11/27/Unicode-and-NSString/" class="next">下一篇</a></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?a36e15d9e2adec9a21fcdd9f686b1ed2";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

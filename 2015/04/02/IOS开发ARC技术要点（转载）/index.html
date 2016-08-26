@@ -1,154 +1,380 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS开发ARC技术要点（转载） · “More is Different.”</title><meta name="description" content="文章出处：不忘初“辛”
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS开发ARC技术要点（转载） · “More is Different.”</title><meta name="description" content="&amp;#x6587;&amp;#x7AE0;&amp;#x51FA;&amp;#x5904;&amp;#xFF1A;&amp;#x4E0D;&amp;#x5FD8;&amp;#x521D;&amp;#x201C;&amp;#x8F9B;&amp;#x201D;
 
-本文来源于我个人的ARC学习笔记，旨在通过简明扼要的方式总结出iOS开发中ARC(Automatic Reference Counting，自动引用计数)内存管理技术的要点，所以不会涉及全部细节。这篇文章不是一篇标准的ARC使用教程，并假定读者已经对ARC有了一定了解和使用经验。详细的关于ARC的信息请参见苹果的官方文档与网上的其他教程：）
-
-##本文的主要内容：
-
-ARC的本质
-ARC的开启与关闭
-ARC的修饰符
-ARC与Block
-ARC与Toll-Free Bridging
-ARC的本质
-
-
-###1. ARC的本质ARC是编译器（时）特性，而不是运行时特性，更不是垃圾回收器(GC)。
-
-Automatic Reference Counting (ARC) is a c"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/04/02/IOS开发ARC技术要点（转载）/" class="post-title-link">IOS开发ARC技术要点（转载）</a></h2><div class="post-meta"><div class="post-time">2015年4月2日</div></div><div class="post-content"><p>文章出处：<a href="http://www.cnblogs.com/flyFreeZn/p/4264220.html" target="_blank" rel="external">不忘初“辛”</a></p>
+&amp;#x672C;&amp;#x6587;&amp;#x6765;&amp;#x6E90;&amp;#x4E8E;&amp;#x6211;&amp;#x4E2A;&amp;#x4EBA;&amp;#x7684;ARC&amp;#x5B66;&amp;#x4E60;&amp;#x7B14;&amp;#x8BB0;&amp;#xFF0C;&amp;#x65E8;&amp;#x5728;&amp;#x901A;&amp;#x8FC7;&amp;#x7B80;&amp;#x660E;&amp;#x627C;&amp;#x8981;&amp;#x7684;&amp;#x65B9;&amp;#x5F0F;&amp;#x603B;&amp;#x7ED3;&amp;#x51FA;iOS&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;ARC(Automatic Reference Counting&amp;#xFF0C;&amp;#x81EA;&amp;#x52A8;&amp;#x5F15;&amp;#x7528;&amp;#x8BA1;&amp;#x6570;)&amp;#x5185;&amp;#x5B58;&amp;#x7BA1;&amp;#x7406;&amp;#x6280;&amp;#x672F;&amp;#x7"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/04/02/IOS开发ARC技术要点（转载）/" class="post-title-link">IOS开发ARC技术要点（转载）</a></h2><div class="post-meta"><div class="post-time">2015年4月2日</div></div><div class="post-content"><p>&#x6587;&#x7AE0;&#x51FA;&#x5904;&#xFF1A;<a href="http://www.cnblogs.com/flyFreeZn/p/4264220.html" target="_blank" rel="external">&#x4E0D;&#x5FD8;&#x521D;&#x201C;&#x8F9B;&#x201D;</a></p>
 <blockquote>
-<p>本文来源于我个人的ARC学习笔记，旨在通过简明扼要的方式总结出iOS开发中ARC(Automatic Reference Counting，自动引用计数)内存管理技术的要点，所以不会涉及全部细节。这篇文章不是一篇标准的ARC使用教程，并假定读者已经对ARC有了一定了解和使用经验。详细的关于ARC的信息请参见苹果的官方文档与网上的其他教程：）</p>
+<p>&#x672C;&#x6587;&#x6765;&#x6E90;&#x4E8E;&#x6211;&#x4E2A;&#x4EBA;&#x7684;ARC&#x5B66;&#x4E60;&#x7B14;&#x8BB0;&#xFF0C;&#x65E8;&#x5728;&#x901A;&#x8FC7;&#x7B80;&#x660E;&#x627C;&#x8981;&#x7684;&#x65B9;&#x5F0F;&#x603B;&#x7ED3;&#x51FA;iOS&#x5F00;&#x53D1;&#x4E2D;ARC(Automatic Reference Counting&#xFF0C;&#x81EA;&#x52A8;&#x5F15;&#x7528;&#x8BA1;&#x6570;)&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x6280;&#x672F;&#x7684;&#x8981;&#x70B9;&#xFF0C;&#x6240;&#x4EE5;&#x4E0D;&#x4F1A;&#x6D89;&#x53CA;&#x5168;&#x90E8;&#x7EC6;&#x8282;&#x3002;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;&#x4E0D;&#x662F;&#x4E00;&#x7BC7;&#x6807;&#x51C6;&#x7684;ARC&#x4F7F;&#x7528;&#x6559;&#x7A0B;&#xFF0C;&#x5E76;&#x5047;&#x5B9A;&#x8BFB;&#x8005;&#x5DF2;&#x7ECF;&#x5BF9;ARC&#x6709;&#x4E86;&#x4E00;&#x5B9A;&#x4E86;&#x89E3;&#x548C;&#x4F7F;&#x7528;&#x7ECF;&#x9A8C;&#x3002;&#x8BE6;&#x7EC6;&#x7684;&#x5173;&#x4E8E;ARC&#x7684;&#x4FE1;&#x606F;&#x8BF7;&#x53C2;&#x89C1;&#x82F9;&#x679C;&#x7684;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x4E0E;&#x7F51;&#x4E0A;&#x7684;&#x5176;&#x4ED6;&#x6559;&#x7A0B;&#xFF1A;&#xFF09;</p>
 </blockquote>
-<p>##本文的主要内容：</p>
+<p>##&#x672C;&#x6587;&#x7684;&#x4E3B;&#x8981;&#x5185;&#x5BB9;&#xFF1A;</p>
 <ul>
-<li>ARC的本质</li>
-<li>ARC的开启与关闭</li>
-<li>ARC的修饰符</li>
-<li>ARC与Block</li>
-<li>ARC与Toll-Free Bridging</li>
-<li>ARC的本质</li>
+<li>ARC&#x7684;&#x672C;&#x8D28;</li>
+<li>ARC&#x7684;&#x5F00;&#x542F;&#x4E0E;&#x5173;&#x95ED;</li>
+<li>ARC&#x7684;&#x4FEE;&#x9970;&#x7B26;</li>
+<li>ARC&#x4E0E;Block</li>
+<li>ARC&#x4E0E;Toll-Free Bridging</li>
+<li>ARC&#x7684;&#x672C;&#x8D28;</li>
 </ul>
 <a id="more"></a>
-<p>###1. ARC的本质<br>ARC是编译器（时）特性，而不是运行时特性，更不是垃圾回收器(GC)。</p>
+<p>###1. ARC&#x7684;&#x672C;&#x8D28;<br>ARC&#x662F;&#x7F16;&#x8BD1;&#x5668;&#xFF08;&#x65F6;&#xFF09;&#x7279;&#x6027;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x8FD0;&#x884C;&#x65F6;&#x7279;&#x6027;&#xFF0C;&#x66F4;&#x4E0D;&#x662F;&#x5783;&#x573E;&#x56DE;&#x6536;&#x5668;(GC)&#x3002;</p>
 <blockquote>
 <p>Automatic Reference Counting (ARC) is a compiler-level feature that simplifies the process of managing object lifetimes (memory management) in Cocoa applications.</p>
 </blockquote>
-<p>ARC只是相对于MRC（Manual Reference Counting或称为非ARC，下文中我们会一直使用MRC来指代非ARC的管理方式）的一次改进，但它和之前的技术本质上没有区别。具体信息可以参考ARC编译器官方文档。</p>
-<p>###2. ARC的开启与关闭<br>不同于XCode4可以在创建工程时选择关闭ARC，XCode5在创建的工程是默认开启ARC，没有可以关闭ARC的选项。</p>
-<p>如果需要对特定文件开启或关闭ARC，可以在工程选项中选择<figure class="highlight"><figcaption><span>-> Compile Phases -> Compile Sources```，在里面找到对应文件，添加```flag```:</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;**&#25171;&#24320;ARC&#65306;**```-fobjc-arc</span><br></pre></td></tr></table></figure></p>
-<p><strong>关闭ARC：</strong><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#22914;&#22270;&#65306;&#10;&#10;![&#31034;&#24847;&#22270;](http://images.cnitblog.com/blog/349615/201501/311559437226630.png)&#10;&#10;&#10;###3. ARC&#30340;&#20462;&#39280;&#31526;&#10;&#10;ARC&#20027;&#35201;&#25552;&#20379;&#20102;4&#31181;&#20462;&#39280;&#31526;&#65292;&#20182;&#20204;&#20998;&#21035;&#26159;:```__strong,__weak,__autoreleasing,__unsafe_unretained```&#12290;&#10;&#10;```__strong</span><br></pre></td></tr></table></figure></p>
-<p>表示引用为强引用。对应在定义property时的”strong”。所有对象只有当没有任何一个强引用指向时，才会被释放。</p>
-<p>注意：如果在声明引用时不加修饰符，那么引用将默认是强引用。当需要释放强引用指向的对象时，需要将强引用置nil。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#34920;&#31034;&#24341;&#29992;&#20026;&#24369;&#24341;&#29992;&#12290;&#23545;&#24212;&#22312;&#23450;&#20041;property&#26102;&#29992;&#30340;&#34;weak&#34;&#12290;&#24369;&#24341;&#29992;&#19981;&#20250;&#24433;&#21709;&#23545;&#35937;&#30340;&#37322;&#25918;&#65292;&#21363;&#21482;&#35201;&#23545;&#35937;&#27809;&#26377;&#20219;&#20309;&#24378;&#24341;&#29992;&#25351;&#21521;&#65292;&#21363;&#20351;&#26377;100&#20010;&#24369;&#24341;&#29992;&#23545;&#35937;&#25351;&#21521;&#20063;&#27809;&#29992;&#65292;&#35813;&#23545;&#35937;&#20381;&#28982;&#20250;&#34987;&#37322;&#25918;&#12290;&#19981;&#36807;&#22909;&#22312;&#65292;&#23545;&#35937;&#22312;&#34987;&#37322;&#25918;&#30340;&#21516;&#26102;&#65292;&#25351;&#21521;&#23427;&#30340;&#24369;&#24341;&#29992;&#20250;&#33258;&#21160;&#34987;&#32622;nil&#65292;&#36825;&#20010;&#25216;&#26415;&#21483;zeroing weak pointer&#12290;&#36825;&#26679;&#26377;&#25928;&#24471;&#38450;&#27490;&#26080;&#25928;&#25351;&#38024;&#12289;&#37326;&#25351;&#38024;&#30340;&#20135;&#29983;&#12290;__weak&#19968;&#33324;&#29992;&#22312;delegate&#20851;&#31995;&#20013;&#38450;&#27490;&#24490;&#29615;&#24341;&#29992;&#25110;&#32773;&#29992;&#26469;&#20462;&#39280;&#25351;&#21521;&#30001;Interface Builder&#32534;&#36753;&#19982;&#29983;&#25104;&#30340;UI&#25511;&#20214;&#12290;&#10;&#10;```__autoreleasing</span><br></pre></td></tr></table></figure>
-<p>表示在autorelease pool中自动释放对象的引用，和MRC时代autorelease的用法相同。定义property时不能使用这个修饰符，任何一个对象的property都不应该是autorelease型的。</p>
-<p>一个常见的误解是，在ARC中没有autorelease，因为这样一个“自动释放”看起来好像有点多余。这个误解可能源自于将ARC的“自动”和autorelease“自动”的混淆。其实你只要看一下每个iOS App的main.m文件就能知道，autorelease不仅好好的存在着，并且变得更fashion了：不需要再手工被创建，也不需要再显式得调用[drain]方法释放内存池。</p>
-<p>以下两行代码的意义是相同的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *str = [[[NSString alloc] initWithFormat:@&#34;hehe&#34;] autorelease]; // MRC&#10;NSString *__autoreleasing str = [[NSString alloc] initWithFormat:@&#34;hehe&#34;]; // ARC</span><br></pre></td></tr></table></figure>
-<p> 这里关于autoreleasepool就不做展开了，详细地信息可以参考官方文档或者其他文章。</p>
-<p>__autoreleasing在ARC中主要用在参数传递返回值（out-parameters）和引用传递参数（pass-by-reference）的情况下。</p>
+<p>ARC&#x53EA;&#x662F;&#x76F8;&#x5BF9;&#x4E8E;MRC&#xFF08;Manual Reference Counting&#x6216;&#x79F0;&#x4E3A;&#x975E;ARC&#xFF0C;&#x4E0B;&#x6587;&#x4E2D;&#x6211;&#x4EEC;&#x4F1A;&#x4E00;&#x76F4;&#x4F7F;&#x7528;MRC&#x6765;&#x6307;&#x4EE3;&#x975E;ARC&#x7684;&#x7BA1;&#x7406;&#x65B9;&#x5F0F;&#xFF09;&#x7684;&#x4E00;&#x6B21;&#x6539;&#x8FDB;&#xFF0C;&#x4F46;&#x5B83;&#x548C;&#x4E4B;&#x524D;&#x7684;&#x6280;&#x672F;&#x672C;&#x8D28;&#x4E0A;&#x6CA1;&#x6709;&#x533A;&#x522B;&#x3002;&#x5177;&#x4F53;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x53C2;&#x8003;ARC&#x7F16;&#x8BD1;&#x5668;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x3002;</p>
+<p>###2. ARC&#x7684;&#x5F00;&#x542F;&#x4E0E;&#x5173;&#x95ED;<br>&#x4E0D;&#x540C;&#x4E8E;XCode4&#x53EF;&#x4EE5;&#x5728;&#x521B;&#x5EFA;&#x5DE5;&#x7A0B;&#x65F6;&#x9009;&#x62E9;&#x5173;&#x95ED;ARC&#xFF0C;XCode5&#x5728;&#x521B;&#x5EFA;&#x7684;&#x5DE5;&#x7A0B;&#x662F;&#x9ED8;&#x8BA4;&#x5F00;&#x542F;ARC&#xFF0C;&#x6CA1;&#x6709;&#x53EF;&#x4EE5;&#x5173;&#x95ED;ARC&#x7684;&#x9009;&#x9879;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x9700;&#x8981;&#x5BF9;&#x7279;&#x5B9A;&#x6587;&#x4EF6;&#x5F00;&#x542F;&#x6216;&#x5173;&#x95ED;ARC&#xFF0C;&#x53EF;&#x4EE5;&#x5728;&#x5DE5;&#x7A0B;&#x9009;&#x9879;&#x4E2D;&#x9009;&#x62E9;<figure class="highlight"><figcaption><span>-&gt; Compile Phases -&gt; Compile Sources```&#xFF0C;&#x5728;&#x91CC;&#x9762;&#x627E;&#x5230;&#x5BF9;&#x5E94;&#x6587;&#x4EF6;&#xFF0C;&#x6DFB;&#x52A0;```flag```:</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">
+**&#x6253;&#x5F00;ARC&#xFF1A;**```-fobjc-arc</span><br></pre></td></tr></table></figure></p>
+<p><strong>&#x5173;&#x95ED;ARC&#xFF1A;</strong><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">
+&#x5982;&#x56FE;&#xFF1A;
+
+![&#x793A;&#x610F;&#x56FE;](http://images.cnitblog.com/blog/349615/201501/311559437226630.png)
+
+
+###3. ARC&#x7684;&#x4FEE;&#x9970;&#x7B26;
+
+ARC&#x4E3B;&#x8981;&#x63D0;&#x4F9B;&#x4E86;4&#x79CD;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x4ED6;&#x4EEC;&#x5206;&#x522B;&#x662F;:```__strong,__weak,__autoreleasing,__unsafe_unretained```&#x3002;
+
+```__strong</span><br></pre></td></tr></table></figure></p>
+<p>&#x8868;&#x793A;&#x5F15;&#x7528;&#x4E3A;&#x5F3A;&#x5F15;&#x7528;&#x3002;&#x5BF9;&#x5E94;&#x5728;&#x5B9A;&#x4E49;property&#x65F6;&#x7684;&#x201D;strong&#x201D;&#x3002;&#x6240;&#x6709;&#x5BF9;&#x8C61;&#x53EA;&#x6709;&#x5F53;&#x6CA1;&#x6709;&#x4EFB;&#x4F55;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#x6307;&#x5411;&#x65F6;&#xFF0C;&#x624D;&#x4F1A;&#x88AB;&#x91CA;&#x653E;&#x3002;</p>
+<p>&#x6CE8;&#x610F;&#xFF1A;&#x5982;&#x679C;&#x5728;&#x58F0;&#x660E;&#x5F15;&#x7528;&#x65F6;&#x4E0D;&#x52A0;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x90A3;&#x4E48;&#x5F15;&#x7528;&#x5C06;&#x9ED8;&#x8BA4;&#x662F;&#x5F3A;&#x5F15;&#x7528;&#x3002;&#x5F53;&#x9700;&#x8981;&#x91CA;&#x653E;&#x5F3A;&#x5F15;&#x7528;&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#x65F6;&#xFF0C;&#x9700;&#x8981;&#x5C06;&#x5F3A;&#x5F15;&#x7528;&#x7F6E;nil&#x3002;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x8868;&#x793A;&#x5F15;&#x7528;&#x4E3A;&#x5F31;&#x5F15;&#x7528;&#x3002;&#x5BF9;&#x5E94;&#x5728;&#x5B9A;&#x4E49;property&#x65F6;&#x7528;&#x7684;&quot;weak&quot;&#x3002;&#x5F31;&#x5F15;&#x7528;&#x4E0D;&#x4F1A;&#x5F71;&#x54CD;&#x5BF9;&#x8C61;&#x7684;&#x91CA;&#x653E;&#xFF0C;&#x5373;&#x53EA;&#x8981;&#x5BF9;&#x8C61;&#x6CA1;&#x6709;&#x4EFB;&#x4F55;&#x5F3A;&#x5F15;&#x7528;&#x6307;&#x5411;&#xFF0C;&#x5373;&#x4F7F;&#x6709;100&#x4E2A;&#x5F31;&#x5F15;&#x7528;&#x5BF9;&#x8C61;&#x6307;&#x5411;&#x4E5F;&#x6CA1;&#x7528;&#xFF0C;&#x8BE5;&#x5BF9;&#x8C61;&#x4F9D;&#x7136;&#x4F1A;&#x88AB;&#x91CA;&#x653E;&#x3002;&#x4E0D;&#x8FC7;&#x597D;&#x5728;&#xFF0C;&#x5BF9;&#x8C61;&#x5728;&#x88AB;&#x91CA;&#x653E;&#x7684;&#x540C;&#x65F6;&#xFF0C;&#x6307;&#x5411;&#x5B83;&#x7684;&#x5F31;&#x5F15;&#x7528;&#x4F1A;&#x81EA;&#x52A8;&#x88AB;&#x7F6E;nil&#xFF0C;&#x8FD9;&#x4E2A;&#x6280;&#x672F;&#x53EB;zeroing weak pointer&#x3002;&#x8FD9;&#x6837;&#x6709;&#x6548;&#x5F97;&#x9632;&#x6B62;&#x65E0;&#x6548;&#x6307;&#x9488;&#x3001;&#x91CE;&#x6307;&#x9488;&#x7684;&#x4EA7;&#x751F;&#x3002;__weak&#x4E00;&#x822C;&#x7528;&#x5728;delegate&#x5173;&#x7CFB;&#x4E2D;&#x9632;&#x6B62;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x6216;&#x8005;&#x7528;&#x6765;&#x4FEE;&#x9970;&#x6307;&#x5411;&#x7531;Interface Builder&#x7F16;&#x8F91;&#x4E0E;&#x751F;&#x6210;&#x7684;UI&#x63A7;&#x4EF6;&#x3002;
+
+```__autoreleasing</span><br></pre></td></tr></table></figure>
+<p>&#x8868;&#x793A;&#x5728;autorelease pool&#x4E2D;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x548C;MRC&#x65F6;&#x4EE3;autorelease&#x7684;&#x7528;&#x6CD5;&#x76F8;&#x540C;&#x3002;&#x5B9A;&#x4E49;property&#x65F6;&#x4E0D;&#x80FD;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x4EFB;&#x4F55;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;property&#x90FD;&#x4E0D;&#x5E94;&#x8BE5;&#x662F;autorelease&#x578B;&#x7684;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x5E38;&#x89C1;&#x7684;&#x8BEF;&#x89E3;&#x662F;&#xFF0C;&#x5728;ARC&#x4E2D;&#x6CA1;&#x6709;autorelease&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x6837;&#x4E00;&#x4E2A;&#x201C;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#x201D;&#x770B;&#x8D77;&#x6765;&#x597D;&#x50CF;&#x6709;&#x70B9;&#x591A;&#x4F59;&#x3002;&#x8FD9;&#x4E2A;&#x8BEF;&#x89E3;&#x53EF;&#x80FD;&#x6E90;&#x81EA;&#x4E8E;&#x5C06;ARC&#x7684;&#x201C;&#x81EA;&#x52A8;&#x201D;&#x548C;autorelease&#x201C;&#x81EA;&#x52A8;&#x201D;&#x7684;&#x6DF7;&#x6DC6;&#x3002;&#x5176;&#x5B9E;&#x4F60;&#x53EA;&#x8981;&#x770B;&#x4E00;&#x4E0B;&#x6BCF;&#x4E2A;iOS App&#x7684;main.m&#x6587;&#x4EF6;&#x5C31;&#x80FD;&#x77E5;&#x9053;&#xFF0C;autorelease&#x4E0D;&#x4EC5;&#x597D;&#x597D;&#x7684;&#x5B58;&#x5728;&#x7740;&#xFF0C;&#x5E76;&#x4E14;&#x53D8;&#x5F97;&#x66F4;fashion&#x4E86;&#xFF1A;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x624B;&#x5DE5;&#x88AB;&#x521B;&#x5EFA;&#xFF0C;&#x4E5F;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x663E;&#x5F0F;&#x5F97;&#x8C03;&#x7528;[drain]&#x65B9;&#x6CD5;&#x91CA;&#x653E;&#x5185;&#x5B58;&#x6C60;&#x3002;</p>
+<p>&#x4EE5;&#x4E0B;&#x4E24;&#x884C;&#x4EE3;&#x7801;&#x7684;&#x610F;&#x4E49;&#x662F;&#x76F8;&#x540C;&#x7684;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *str = [[[NSString alloc] initWithFormat:@&quot;hehe&quot;] autorelease]; // MRC
+NSString *__autoreleasing str = [[NSString alloc] initWithFormat:@&quot;hehe&quot;]; // ARC</span><br></pre></td></tr></table></figure>
+<p> &#x8FD9;&#x91CC;&#x5173;&#x4E8E;autoreleasepool&#x5C31;&#x4E0D;&#x505A;&#x5C55;&#x5F00;&#x4E86;&#xFF0C;&#x8BE6;&#x7EC6;&#x5730;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x6216;&#x8005;&#x5176;&#x4ED6;&#x6587;&#x7AE0;&#x3002;</p>
+<p>__autoreleasing&#x5728;ARC&#x4E2D;&#x4E3B;&#x8981;&#x7528;&#x5728;&#x53C2;&#x6570;&#x4F20;&#x9012;&#x8FD4;&#x56DE;&#x503C;&#xFF08;out-parameters&#xFF09;&#x548C;&#x5F15;&#x7528;&#x4F20;&#x9012;&#x53C2;&#x6570;&#xFF08;pass-by-reference&#xFF09;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x3002;</p>
 <blockquote>
 <p>__autoreleasing is used to denote arguments that are passed by reference (id *) and are autoreleased on return.</p>
 </blockquote>
-<p>比如常用的NSError的使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSError *__autoreleasing error; &#10;&#65532;if (![data writeToFile:filename options:NSDataWritingAtomic error:&#38;error]) &#10;&#65532;&#123; &#10;&#12288;&#12288;NSLog(@&#34;Error: %@&#34;, error); &#10;&#125;&#10;&#65288;&#22312;&#19978;&#38754;&#30340;writeToFile&#26041;&#27861;&#20013;error&#21442;&#25968;&#30340;&#31867;&#22411;&#20026;(NSError *__autoreleasing *)&#65289;</span><br></pre></td></tr></table></figure>
-<p>注意，如果你的error定义为了strong型，那么，编译器会帮你隐式地做如下事情，保证最终传入函数的参数依然是个__autoreleasing类型的引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSError *error; &#10;NSError *__autoreleasing tempError = error; // &#32534;&#35793;&#22120;&#28155;&#21152; &#10;if (![data writeToFile:filename options:NSDataWritingAtomic error:&#38;tempError]) &#10;&#65532;&#123; &#10;&#12288;&#12288;error = tempError; // &#32534;&#35793;&#22120;&#28155;&#21152; &#10;&#12288;&#12288;NSLog(@&#34;Error: %@&#34;, error); &#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>所以为了提高效率，避免这种情况，我们一般在定义error的时候将其（老老实实地=。=）声明为__autoreleasing类型的：</p>
-<figure class="highlight"><figcaption><span>*__autoreleasing error;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#22312;&#36825;&#37324;&#65292;&#21152;&#19978;__autoreleasing&#20043;&#21518;&#65292;&#30456;&#24403;&#20110;&#22312;MRC&#20013;&#23545;&#36820;&#22238;&#20540;error&#20570;&#20102;&#22914;&#19979;&#20107;&#24773;&#65306;&#10;&#10;```*error = [[[NSError alloc] init] autorelease];</span><br></pre></td></tr></table></figure>
-<p><strong><em>error指向的对象在创建出来后，被放入到了autoreleasing pool中，等待使用结束后的自动释放，函数外error的使用者并不需要关心</em></strong>error指向对象的释放。</p>
-<p>另外一点，在ARC中，所有这种指针的指针 （NSError **）的函数参数如果不加修饰符，编译器会默认将他们认定为__autoreleasing类型。</p>
-<p>比如下面的两段代码是等同的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)doSomething:(NSNumber **)value&#10;&#123;&#10;        // do something  &#10;&#125;&#10;- (NSString *)doSomething:(NSNumber * __autoreleasing *)value&#10;&#123;&#10;        // do something  &#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>除非你显式得给value声明了<strong>strong，否则value默认就是</strong>autoreleasing的。</p>
-<p>最后一点，某些类的方法会隐式地使用自己的autorelease pool，在这种时候使用__autoreleasing类型要特别小心。</p>
-<p>比如NSDictionary的[enumerateKeysAndObjectsUsingBlock]方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error&#10;&#123;&#10;    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop)&#123;&#10;&#10;          // do stuff  &#10;          if (there is some error &#38;&#38; error != nil)&#10;          &#123;&#10;                *error = [NSError errorWithDomain:@&#34;MyError&#34; &#65532;code:1 userInfo:nil];&#10;          &#125;&#10;&#65532;&#10;    &#125;];&#10;&#65532;&#125;</span><br></pre></td></tr></table></figure>
-<p>会隐式地创建一个autorelease pool，上面代码实际类似于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error&#10;&#123;&#10;    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop)&#123;&#10;&#10;          @autoreleasepool  // &#34987;&#38544;&#24335;&#21019;&#24314;&#10;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#123;&#10;              if (there is some error &#38;&#38; error != nil)&#10;              &#123;&#10;                    *error = [NSError errorWithDomain:@&#34;MyError&#34; &#65532;code:1 userInfo:nil];&#10;              &#125;&#10;&#65532;          &#125;&#10;    &#125;];&#10;&#10;    // *error &#22312;&#36825;&#37324;&#24050;&#32463;&#34987;dict&#30340;&#20570;&#26522;&#20030;&#36941;&#21382;&#26102;&#21019;&#24314;&#30340;autorelease pool&#37322;&#25918;&#25481;&#20102; &#65306;(  &#10;&#65532;&#125;</span><br></pre></td></tr></table></figure>
-<p>为了能够正常的使用*error，我们需要一个strong型的临时引用，在dict的枚举Block中是用这个临时引用，保证引用指向的对象不会在出了dict的枚举Block后被释放，正确的方式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error&#10;&#123;&#10;&#12288;&#12288;__block NSError* tempError; // &#21152;__block&#20445;&#35777;&#21487;&#20197;&#22312;Block&#20869;&#34987;&#20462;&#25913;  &#10;&#12288;&#12288;[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop)&#10;&#12288;&#12288;&#123; &#10;&#12288;&#12288;&#12288;&#12288;if (there is some error) &#10;&#12288;&#12288;&#12288;&#12288;&#123; &#10;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;*tempError = [NSError errorWithDomain:@&#34;MyError&#34; &#65532;code:1 userInfo:nil]; &#10;&#12288;&#12288;&#12288;&#12288;&#125; &#65532; &#10;&#10;&#12288;&#12288;&#125;] &#10;&#10;&#12288;&#12288;if (error != nil) &#10;&#12288;&#12288;&#123; &#10;&#12288;&#12288;&#12288;&#12288;*error = tempError; &#10;&#12288;&#12288;&#125; &#65532;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARC&#26159;&#22312;iOS 5&#24341;&#20837;&#30340;&#65292;&#32780;&#36825;&#20010;&#20462;&#39280;&#31526;&#20027;&#35201;&#26159;&#20026;&#20102;&#22312;ARC&#21018;&#21457;&#24067;&#26102;&#20860;&#23481;iOS 4&#20197;&#21450;&#29256;&#26412;&#26356;&#20302;&#30340;&#35774;&#22791;&#65292;&#22240;&#20026;&#36825;&#20123;&#29256;&#26412;&#30340;&#35774;&#22791;&#27809;&#26377;weak pointer system&#65292;&#31616;&#21333;&#30340;&#29702;&#35299;&#36825;&#20010;&#31995;&#32479;&#23601;&#26159;&#25105;&#20204;&#19978;&#38754;&#35762;weak&#26102;&#25552;&#21040;&#30340;&#65292;&#33021;&#22815;&#22312;weak&#24341;&#29992;&#25351;&#21521;&#23545;&#35937;&#34987;&#37322;&#25918;&#21518;&#65292;&#25226;&#24341;&#29992;&#20540;&#33258;&#21160;&#35774;&#20026;nil&#30340;&#31995;&#32479;&#12290;&#36825;&#20010;&#20462;&#39280;&#31526;&#22312;&#23450;&#20041;property&#26102;&#23545;&#24212;&#30340;&#26159;&#34;unsafe_unretained&#34;&#65292;&#23454;&#38469;&#21487;&#20197;&#23558;&#23427;&#29702;&#35299;&#20026;MRC&#26102;&#20195;&#30340;assign&#65306;&#32431;&#31929;&#21482;&#26159;&#23558;&#24341;&#29992;&#25351;&#21521;&#23545;&#35937;&#65292;&#27809;&#26377;&#20219;&#20309;&#39069;&#22806;&#30340;&#25805;&#20316;&#65292;&#22312;&#25351;&#21521;&#23545;&#35937;&#34987;&#37322;&#25918;&#26102;&#20381;&#28982;&#21407;&#21407;&#26412;&#26412;&#22320;&#25351;&#21521;&#21407;&#26469;&#34987;&#37322;&#25918;&#30340;&#23545;&#35937;&#65288;&#25152;&#22312;&#30340;&#20869;&#23384;&#21306;&#22495;&#65289;&#12290;&#25152;&#20197;&#38750;&#24120;&#19981;&#23433;&#20840;&#12290;&#10;&#10;&#29616;&#22312;&#21487;&#20197;&#23436;&#20840;&#24573;&#30053;&#25481;&#36825;&#20010;&#20462;&#39280;&#31526;&#20102;&#65292;&#22240;&#20026;iOS 4&#26089;&#24050;&#36864;&#20986;&#21382;&#21490;&#33310;&#21488;&#24456;&#22810;&#24180;&#12290;&#10;&#10;*&#20351;&#29992;&#20462;&#39280;&#31526;&#30340;&#27491;&#30830;&#23039;&#21183;&#65288;&#26041;&#24335;=&#12290;=&#65289;&#10;&#36825;&#21487;&#33021;&#26159;&#24456;&#22810;&#20154;&#37117;&#19981;&#30693;&#36947;&#30340;&#19968;&#20010;&#38382;&#39064;&#65292;&#21253;&#25324;&#20043;&#21069;&#30340;&#25105;&#65292;&#20294;&#21364;&#26159;&#19968;&#20010;&#29305;&#21035;&#35201;&#27880;&#24847;&#30340;&#38382;&#39064;&#12290;&#10;&#10;&#33529;&#26524;&#30340;&#25991;&#26723;&#20013;&#26126;&#30830;&#22320;&#20889;&#36947;&#65306;&#10;&#10;&#62;You should decorate variables correctly. When using qualifiers in an object variable declaration,&#10;&#10;the correct format is:&#10;&#10;```ClassName * qualifier variableName;</span><br></pre></td></tr></table></figure>
-<p>按照这个说明，要定义一个weak型的NSString引用，它的写法应该是：</p>
-<figure class="highlight"><figcaption><span>* __weak str = @"hehe";</span><a href="//">正确！```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#32780;&#19981;&#24212;&#35813;&#26159;&#65306;&#10;&#10;```__weak NSString *str = @&#34;hehe&#34;;  // &#38169;&#35823;&#65281;</span><br></pre></td></tr></table></figure>
-<p>我相信很多人都和我一样，从开始用ARC就一直用上面那种错误的写法。</p>
-<p>那这里就有疑问了，既然文档说是错误的，为啥编译器不报错呢？文档又解释道：</p>
+<p>&#x6BD4;&#x5982;&#x5E38;&#x7528;&#x7684;NSError&#x7684;&#x4F7F;&#x7528;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSError *__autoreleasing error; 
+&#xFFFC;if (![data writeToFile:filename options:NSDataWritingAtomic error:&amp;error]) 
+&#xFFFC;{ 
+&#x3000;&#x3000;NSLog(@&quot;Error: %@&quot;, error); 
+}
+&#xFF08;&#x5728;&#x4E0A;&#x9762;&#x7684;writeToFile&#x65B9;&#x6CD5;&#x4E2D;error&#x53C2;&#x6570;&#x7684;&#x7C7B;&#x578B;&#x4E3A;(NSError *__autoreleasing *)&#xFF09;</span><br></pre></td></tr></table></figure>
+<p>&#x6CE8;&#x610F;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x7684;error&#x5B9A;&#x4E49;&#x4E3A;&#x4E86;strong&#x578B;&#xFF0C;&#x90A3;&#x4E48;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x4F1A;&#x5E2E;&#x4F60;&#x9690;&#x5F0F;&#x5730;&#x505A;&#x5982;&#x4E0B;&#x4E8B;&#x60C5;&#xFF0C;&#x4FDD;&#x8BC1;&#x6700;&#x7EC8;&#x4F20;&#x5165;&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;&#x4F9D;&#x7136;&#x662F;&#x4E2A;__autoreleasing&#x7C7B;&#x578B;&#x7684;&#x5F15;&#x7528;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSError *error; 
+NSError *__autoreleasing tempError = error; // &#x7F16;&#x8BD1;&#x5668;&#x6DFB;&#x52A0; 
+if (![data writeToFile:filename options:NSDataWritingAtomic error:&amp;tempError]) 
+&#xFFFC;{ 
+&#x3000;&#x3000;error = tempError; // &#x7F16;&#x8BD1;&#x5668;&#x6DFB;&#x52A0; 
+&#x3000;&#x3000;NSLog(@&quot;Error: %@&quot;, error); 
+}</span><br></pre></td></tr></table></figure>
+<p>&#x6240;&#x4EE5;&#x4E3A;&#x4E86;&#x63D0;&#x9AD8;&#x6548;&#x7387;&#xFF0C;&#x907F;&#x514D;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x4E00;&#x822C;&#x5728;&#x5B9A;&#x4E49;error&#x7684;&#x65F6;&#x5019;&#x5C06;&#x5176;&#xFF08;&#x8001;&#x8001;&#x5B9E;&#x5B9E;&#x5730;=&#x3002;=&#xFF09;&#x58F0;&#x660E;&#x4E3A;__autoreleasing&#x7C7B;&#x578B;&#x7684;&#xFF1A;</p>
+<figure class="highlight"><figcaption><span>*__autoreleasing error;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x5728;&#x8FD9;&#x91CC;&#xFF0C;&#x52A0;&#x4E0A;__autoreleasing&#x4E4B;&#x540E;&#xFF0C;&#x76F8;&#x5F53;&#x4E8E;&#x5728;MRC&#x4E2D;&#x5BF9;&#x8FD4;&#x56DE;&#x503C;error&#x505A;&#x4E86;&#x5982;&#x4E0B;&#x4E8B;&#x60C5;&#xFF1A;
+
+```*error = [[[NSError alloc] init] autorelease];</span><br></pre></td></tr></table></figure>
+<p><strong><em>error&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#x5728;&#x521B;&#x5EFA;&#x51FA;&#x6765;&#x540E;&#xFF0C;&#x88AB;&#x653E;&#x5165;&#x5230;&#x4E86;autoreleasing pool&#x4E2D;&#xFF0C;&#x7B49;&#x5F85;&#x4F7F;&#x7528;&#x7ED3;&#x675F;&#x540E;&#x7684;&#x81EA;&#x52A8;&#x91CA;&#x653E;&#xFF0C;&#x51FD;&#x6570;&#x5916;error&#x7684;&#x4F7F;&#x7528;&#x8005;&#x5E76;&#x4E0D;&#x9700;&#x8981;&#x5173;&#x5FC3;</em></strong>error&#x6307;&#x5411;&#x5BF9;&#x8C61;&#x7684;&#x91CA;&#x653E;&#x3002;</p>
+<p>&#x53E6;&#x5916;&#x4E00;&#x70B9;&#xFF0C;&#x5728;ARC&#x4E2D;&#xFF0C;&#x6240;&#x6709;&#x8FD9;&#x79CD;&#x6307;&#x9488;&#x7684;&#x6307;&#x9488; &#xFF08;NSError **&#xFF09;&#x7684;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x5982;&#x679C;&#x4E0D;&#x52A0;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x4F1A;&#x9ED8;&#x8BA4;&#x5C06;&#x4ED6;&#x4EEC;&#x8BA4;&#x5B9A;&#x4E3A;__autoreleasing&#x7C7B;&#x578B;&#x3002;</p>
+<p>&#x6BD4;&#x5982;&#x4E0B;&#x9762;&#x7684;&#x4E24;&#x6BB5;&#x4EE3;&#x7801;&#x662F;&#x7B49;&#x540C;&#x7684;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)doSomething:(NSNumber **)value
+{
+        // do something  
+}
+- (NSString *)doSomething:(NSNumber * __autoreleasing *)value
+{
+        // do something  
+}</span><br></pre></td></tr></table></figure>
+<p>&#x9664;&#x975E;&#x4F60;&#x663E;&#x5F0F;&#x5F97;&#x7ED9;value&#x58F0;&#x660E;&#x4E86;<strong>strong&#xFF0C;&#x5426;&#x5219;value&#x9ED8;&#x8BA4;&#x5C31;&#x662F;</strong>autoreleasing&#x7684;&#x3002;</p>
+<p>&#x6700;&#x540E;&#x4E00;&#x70B9;&#xFF0C;&#x67D0;&#x4E9B;&#x7C7B;&#x7684;&#x65B9;&#x6CD5;&#x4F1A;&#x9690;&#x5F0F;&#x5730;&#x4F7F;&#x7528;&#x81EA;&#x5DF1;&#x7684;autorelease pool&#xFF0C;&#x5728;&#x8FD9;&#x79CD;&#x65F6;&#x5019;&#x4F7F;&#x7528;__autoreleasing&#x7C7B;&#x578B;&#x8981;&#x7279;&#x522B;&#x5C0F;&#x5FC3;&#x3002;</p>
+<p>&#x6BD4;&#x5982;NSDictionary&#x7684;[enumerateKeysAndObjectsUsingBlock]&#x65B9;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error
+{
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+
+          // do stuff  
+          if (there is some error &amp;&amp; error != nil)
+          {
+                *error = [NSError errorWithDomain:@&quot;MyError&quot; &#xFFFC;code:1 userInfo:nil];
+          }
+&#xFFFC;
+    }];
+&#xFFFC;}</span><br></pre></td></tr></table></figure>
+<p>&#x4F1A;&#x9690;&#x5F0F;&#x5730;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;autorelease pool&#xFF0C;&#x4E0A;&#x9762;&#x4EE3;&#x7801;&#x5B9E;&#x9645;&#x7C7B;&#x4F3C;&#x4E8E;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error
+{
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+
+          @autoreleasepool  // &#x88AB;&#x9690;&#x5F0F;&#x521B;&#x5EFA;
+&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;{
+              if (there is some error &amp;&amp; error != nil)
+              {
+                    *error = [NSError errorWithDomain:@&quot;MyError&quot; &#xFFFC;code:1 userInfo:nil];
+              }
+&#xFFFC;          }
+    }];
+
+    // *error &#x5728;&#x8FD9;&#x91CC;&#x5DF2;&#x7ECF;&#x88AB;dict&#x7684;&#x505A;&#x679A;&#x4E3E;&#x904D;&#x5386;&#x65F6;&#x521B;&#x5EFA;&#x7684;autorelease pool&#x91CA;&#x653E;&#x6389;&#x4E86; &#xFF1A;(  
+&#xFFFC;}</span><br></pre></td></tr></table></figure>
+<p>&#x4E3A;&#x4E86;&#x80FD;&#x591F;&#x6B63;&#x5E38;&#x7684;&#x4F7F;&#x7528;*error&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x4E00;&#x4E2A;strong&#x578B;&#x7684;&#x4E34;&#x65F6;&#x5F15;&#x7528;&#xFF0C;&#x5728;dict&#x7684;&#x679A;&#x4E3E;Block&#x4E2D;&#x662F;&#x7528;&#x8FD9;&#x4E2A;&#x4E34;&#x65F6;&#x5F15;&#x7528;&#xFF0C;&#x4FDD;&#x8BC1;&#x5F15;&#x7528;&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#x4E0D;&#x4F1A;&#x5728;&#x51FA;&#x4E86;dict&#x7684;&#x679A;&#x4E3E;Block&#x540E;&#x88AB;&#x91CA;&#x653E;&#xFF0C;&#x6B63;&#x786E;&#x7684;&#x65B9;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)loopThroughDictionary:(NSDictionary *)dict error:(NSError **)error
+{
+&#x3000;&#x3000;__block NSError* tempError; // &#x52A0;__block&#x4FDD;&#x8BC1;&#x53EF;&#x4EE5;&#x5728;Block&#x5185;&#x88AB;&#x4FEE;&#x6539;  
+&#x3000;&#x3000;[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop)
+&#x3000;&#x3000;{ 
+&#x3000;&#x3000;&#x3000;&#x3000;if (there is some error) 
+&#x3000;&#x3000;&#x3000;&#x3000;{ 
+&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;*tempError = [NSError errorWithDomain:@&quot;MyError&quot; &#xFFFC;code:1 userInfo:nil]; 
+&#x3000;&#x3000;&#x3000;&#x3000;} &#xFFFC; 
+
+&#x3000;&#x3000;}] 
+
+&#x3000;&#x3000;if (error != nil) 
+&#x3000;&#x3000;{ 
+&#x3000;&#x3000;&#x3000;&#x3000;*error = tempError; 
+&#x3000;&#x3000;} &#xFFFC;
+}</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ARC&#x662F;&#x5728;iOS 5&#x5F15;&#x5165;&#x7684;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x4FEE;&#x9970;&#x7B26;&#x4E3B;&#x8981;&#x662F;&#x4E3A;&#x4E86;&#x5728;ARC&#x521A;&#x53D1;&#x5E03;&#x65F6;&#x517C;&#x5BB9;iOS 4&#x4EE5;&#x53CA;&#x7248;&#x672C;&#x66F4;&#x4F4E;&#x7684;&#x8BBE;&#x5907;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x4E9B;&#x7248;&#x672C;&#x7684;&#x8BBE;&#x5907;&#x6CA1;&#x6709;weak pointer system&#xFF0C;&#x7B80;&#x5355;&#x7684;&#x7406;&#x89E3;&#x8FD9;&#x4E2A;&#x7CFB;&#x7EDF;&#x5C31;&#x662F;&#x6211;&#x4EEC;&#x4E0A;&#x9762;&#x8BB2;weak&#x65F6;&#x63D0;&#x5230;&#x7684;&#xFF0C;&#x80FD;&#x591F;&#x5728;weak&#x5F15;&#x7528;&#x6307;&#x5411;&#x5BF9;&#x8C61;&#x88AB;&#x91CA;&#x653E;&#x540E;&#xFF0C;&#x628A;&#x5F15;&#x7528;&#x503C;&#x81EA;&#x52A8;&#x8BBE;&#x4E3A;nil&#x7684;&#x7CFB;&#x7EDF;&#x3002;&#x8FD9;&#x4E2A;&#x4FEE;&#x9970;&#x7B26;&#x5728;&#x5B9A;&#x4E49;property&#x65F6;&#x5BF9;&#x5E94;&#x7684;&#x662F;&quot;unsafe_unretained&quot;&#xFF0C;&#x5B9E;&#x9645;&#x53EF;&#x4EE5;&#x5C06;&#x5B83;&#x7406;&#x89E3;&#x4E3A;MRC&#x65F6;&#x4EE3;&#x7684;assign&#xFF1A;&#x7EAF;&#x7CB9;&#x53EA;&#x662F;&#x5C06;&#x5F15;&#x7528;&#x6307;&#x5411;&#x5BF9;&#x8C61;&#xFF0C;&#x6CA1;&#x6709;&#x4EFB;&#x4F55;&#x989D;&#x5916;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x5728;&#x6307;&#x5411;&#x5BF9;&#x8C61;&#x88AB;&#x91CA;&#x653E;&#x65F6;&#x4F9D;&#x7136;&#x539F;&#x539F;&#x672C;&#x672C;&#x5730;&#x6307;&#x5411;&#x539F;&#x6765;&#x88AB;&#x91CA;&#x653E;&#x7684;&#x5BF9;&#x8C61;&#xFF08;&#x6240;&#x5728;&#x7684;&#x5185;&#x5B58;&#x533A;&#x57DF;&#xFF09;&#x3002;&#x6240;&#x4EE5;&#x975E;&#x5E38;&#x4E0D;&#x5B89;&#x5168;&#x3002;
+
+&#x73B0;&#x5728;&#x53EF;&#x4EE5;&#x5B8C;&#x5168;&#x5FFD;&#x7565;&#x6389;&#x8FD9;&#x4E2A;&#x4FEE;&#x9970;&#x7B26;&#x4E86;&#xFF0C;&#x56E0;&#x4E3A;iOS 4&#x65E9;&#x5DF2;&#x9000;&#x51FA;&#x5386;&#x53F2;&#x821E;&#x53F0;&#x5F88;&#x591A;&#x5E74;&#x3002;
+
+*&#x4F7F;&#x7528;&#x4FEE;&#x9970;&#x7B26;&#x7684;&#x6B63;&#x786E;&#x59FF;&#x52BF;&#xFF08;&#x65B9;&#x5F0F;=&#x3002;=&#xFF09;
+&#x8FD9;&#x53EF;&#x80FD;&#x662F;&#x5F88;&#x591A;&#x4EBA;&#x90FD;&#x4E0D;&#x77E5;&#x9053;&#x7684;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#xFF0C;&#x5305;&#x62EC;&#x4E4B;&#x524D;&#x7684;&#x6211;&#xFF0C;&#x4F46;&#x5374;&#x662F;&#x4E00;&#x4E2A;&#x7279;&#x522B;&#x8981;&#x6CE8;&#x610F;&#x7684;&#x95EE;&#x9898;&#x3002;
+
+&#x82F9;&#x679C;&#x7684;&#x6587;&#x6863;&#x4E2D;&#x660E;&#x786E;&#x5730;&#x5199;&#x9053;&#xFF1A;
+
+&gt;You should decorate variables correctly. When using qualifiers in an object variable declaration,
+
+the correct format is:
+
+```ClassName * qualifier variableName;</span><br></pre></td></tr></table></figure>
+<p>&#x6309;&#x7167;&#x8FD9;&#x4E2A;&#x8BF4;&#x660E;&#xFF0C;&#x8981;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;weak&#x578B;&#x7684;NSString&#x5F15;&#x7528;&#xFF0C;&#x5B83;&#x7684;&#x5199;&#x6CD5;&#x5E94;&#x8BE5;&#x662F;&#xFF1A;</p>
+<figure class="highlight"><figcaption><span>* __weak str = @&quot;hehe&quot;;</span><a href="//">&#x6B63;&#x786E;&#xFF01;```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x800C;&#x4E0D;&#x5E94;&#x8BE5;&#x662F;&#xFF1A;
+
+```__weak NSString *str = @&quot;hehe&quot;;  // &#x9519;&#x8BEF;&#xFF01;</span><br></pre></td></tr></table></figure>
+<p>&#x6211;&#x76F8;&#x4FE1;&#x5F88;&#x591A;&#x4EBA;&#x90FD;&#x548C;&#x6211;&#x4E00;&#x6837;&#xFF0C;&#x4ECE;&#x5F00;&#x59CB;&#x7528;ARC&#x5C31;&#x4E00;&#x76F4;&#x7528;&#x4E0A;&#x9762;&#x90A3;&#x79CD;&#x9519;&#x8BEF;&#x7684;&#x5199;&#x6CD5;&#x3002;</p>
+<p>&#x90A3;&#x8FD9;&#x91CC;&#x5C31;&#x6709;&#x7591;&#x95EE;&#x4E86;&#xFF0C;&#x65E2;&#x7136;&#x6587;&#x6863;&#x8BF4;&#x662F;&#x9519;&#x8BEF;&#x7684;&#xFF0C;&#x4E3A;&#x5565;&#x7F16;&#x8BD1;&#x5668;&#x4E0D;&#x62A5;&#x9519;&#x5462;&#xFF1F;&#x6587;&#x6863;&#x53C8;&#x89E3;&#x91CA;&#x9053;&#xFF1A;</p>
 <blockquote>
-<p>Other variants are technically incorrect but are “forgiven” by the compiler. To understand the issue, see<a href="http://cdecl.org/" target="_blank" rel="external">http://cdecl.org/</a>.</p>
+<p>Other variants are technically incorrect but are &#x201C;forgiven&#x201D; by the compiler. To understand the issue, see<a href="http://cdecl.org/" target="_blank" rel="external">http://cdecl.org/</a>.</p>
 </blockquote>
-<p>好吧，看来是苹果爸爸（=。=）考虑到很多人会用错，所以在编译器这边贴心地帮我们忽略并处理掉了这个错误：）虽然不报错，但是我们还是应该按照正确的方式去使用这些修饰符，如果你以前也常常用错误的写法，那看到这里记得以后不要这么写了，哪天编译器怒了，再不支持错误的写法，就要郁闷了。</p>
-<p>栈中指针默认值为nil<br>无论是被strong，weak还是autoreleasing修饰，声明在栈中的指针默认值都会是nil。所有这类型的指针不用再初始化的时候置nil了。虽然好习惯是最重要的，但是这个特性更加降低了“野指针”出现的可能性。</p>
-<p>在ARC中，以下代码会输出null而不是crash:)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)myMethod &#10;&#123;&#10;    NSString *name;&#10;    NSLog(@&#34;name: %@&#34;, name);&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="ARC与Block">ARC与Block</h3><p>在MRC时代，Block会隐式地对进入其作用域内的对象（或者说被Block捕获的指针指向的对象）加retain，来确保Block使用到该对象时，能够正确的访问。</p>
-<p>这件事情在下面代码展示的情况中要更加额外小心。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#8230;];&#10;&#10;// &#38544;&#24335;&#22320;&#35843;&#29992;[myController retain];&#36896;&#25104;&#24490;&#29615;&#24341;&#29992;&#10;myController.completionHandler =  ^(NSInteger result) &#123;&#10;   [myController dismissViewControllerAnimated:YES completion:nil];&#10;&#125;;&#10;&#10;[self presentViewController:myController animated:YES completion:^&#123;&#10;   [myController release]; // &#27880;&#24847;&#65292;&#36825;&#37324;&#35843;&#29992;[myController release];&#26159;&#22312;MRC&#20013;&#30340;&#19968;&#20010;&#24120;&#35268;&#20889;&#27861;&#65292;&#24182;&#19981;&#33021;&#35299;&#20915;&#19978;&#38754;&#24490;&#29615;&#24341;&#29992;&#30340;&#38382;&#39064;&#10;&#125;];</span><br></pre></td></tr></table></figure>
-<p>在这段代码中，myController的completionHandler调用了myController的方法[dismissViewController…]，这时completionHandler会对myController做retain操作。而我们知道，myController对completionHandler也至少有一个retain（一般准确讲是copy），这时就出现了在内存管理中最糟糕的情况：循环引用！简单点说就是：myController retain了completionHandler，而completionHandler也retain了myController。循环引用导致了myController和completionHandler最终都不能被释放。我们在delegate关系中，对delegate指针用weak就是为了避免这种问题。</p>
-<p>不过好在，编译器会及时地给我们一个警告，提醒我们可能会发生这类型的问题：</p>
-<p>对这种情况，我们一般用如下方法解决：给要进入Block的指针加一个__block修饰符。</p>
-<p>这个__block在MRC时代有两个作用：</p>
-<p>说明变量可改<br>说明指针指向的对象不做这个隐式的retain操作<br>一个变量如果不加<strong>block，是不能在Block里面修改的，不过这里有一个例外：static的变量和全局变量不需要加</strong>block就可以在Block中修改。</p>
-<p>使用这种方法，我们对代码做出修改，解决了循环引用的问题：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController * __block myController = [[MyViewController alloc] init&#8230;];&#10;// ...&#10;myController.completionHandler =  ^(NSInteger result) &#123;&#10;    [myController dismissViewControllerAnimated:YES completion:nil];&#10;&#125;;&#10;&#10;//&#20043;&#21518;&#27491;&#24120;&#30340;release&#25110;&#32773;retain</span><br></pre></td></tr></table></figure>
-<p>在ARC引入后，没有了retain和release等操作，情况也发生了改变：在任何情况下，<strong>block修饰符的作用只有上面的第一条：说明变量可改。即使加上了</strong>block修饰符，一个被block捕获的强引用也依然是一个强引用。这样在ARC下，如果我们还按照MRC下的写法，completionHandler对myController有一个强引用，而myController对completionHandler有一个强引用，这依然是循环引用，没有解决问题：（</p>
-<p>于是我们还需要对原代码做修改。简单的情况我们可以这样写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__block MyViewController * myController = [[MyViewController alloc] init&#8230;];&#10;// ...&#10;myController.completionHandler =  ^(NSInteger result) &#123;&#10;    [myController dismissViewControllerAnimated:YES completion:nil];&#10;    myController = nil;  // &#27880;&#24847;&#36825;&#37324;&#65292;&#20445;&#35777;&#20102;block&#32467;&#26463;myController&#24378;&#24341;&#29992;&#30340;&#35299;&#38500;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>在completionHandler之后将myController指针置nil，保证了completionHandler对myController强引用的解除，不过也同时解除了myController对myController对象的强引用。这种方法过于简单粗暴了，在大多数情况下，我们有更好的方法。</p>
-<p>这个更好的方法就是使用weak。（或者为了考虑iOS4的兼容性用unsafe_unretained，具体用法和weak相同，考虑到现在iOS4设备可能已经绝迹了，这里就不讲这个方法了）（关于这个方法的本质我们后面会谈到）</p>
-<p>为了保证completionHandler这个Block对myController没有强引用，我们可以定义一个临时的弱引用weakMyViewController来指向原myController的对象，并把这个弱引用传入到Block内，这样就保证了Block对myController持有的是一个弱引用，而不是一个强引用。如此，我们继续修改代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#8230;];&#10;// ...&#10;MyViewController * __weak weakMyViewController = myController;&#10;myController.completionHandler =  ^(NSInteger result) &#123;&#10;    [weakMyViewController dismissViewControllerAnimated:YES completion:nil];&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>这样循环引用的问题就解决了，但是却不幸地引入了一个新的问题：由于传入completionHandler的是一个弱引用，那么当myController指向的对象在completionHandler被调用前释放，那么completionHandler就不能正常的运作了。在一般的单线程环境中，这种问题出现的可能性不大，但是到了多线程环境，就很不好说了，所以我们需要继续完善这个方法。</p>
-<p>为了保证在Block内能够访问到正确的myController，我们在block内新定义一个强引用strongMyController来指向weakMyController指向的对象，这样多了一个强引用，就能保证这个myController对象不会在completionHandler被调用前释放掉了。于是，我们对代码再次做出修改：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#8230;];&#10;// ...&#10;MyViewController * __weak weakMyController = myController;&#10;myController.completionHandler =  ^(NSInteger result) &#123;&#10;    MyViewController *strongMyController = weakMyController;&#10;&#10;&#12288;&#12288;if (strongMyController) &#123;&#10;        // ...&#10;        [strongMyController dismissViewControllerAnimated:YES completion:nil];&#10;        // ...&#10;    &#125;&#10;    else &#123;&#10;        // Probably nothing...&#10;    &#125;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>到此，一个完善的解决方案就完成了：）</p>
-<p>官方文档对这个问题的说明到这里就结束了，但是可能很多朋友会有疑问，不是说不希望Block对原myController对象增加强引用么，这里为啥堂而皇之地在Block内新定义了一个强引用，这个强引用不会造成循环引用么？理解这个问题的关键在于理解被Block捕获的引用和在Block内定义的引用的区别。为了搞得明白这个问题，这里需要了解一些Block的实现原理，但由于篇幅的缘故，本文在这里就不展开了，详细的内容可以参考其他的文章，这里特别推荐唐巧的文章和另外2位作者的博文：这个和这个，讲的都比较清楚。</p>
-<p>这里假设大家已经对Block的实现原理有所了解了。我们就直入主题了！注意前方高能（=。=）</p>
-<p>为了更清楚地说明问题，这里用一个简单的程序举例。比如我们有如下程序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &#60;stdio.h&#62;&#10;&#10;int main()&#10;&#123;&#10;    int b = 10;&#10;    &#10;    int *a = &#38;b;&#10;    &#10;    void (^blockFunc)() = ^()&#123;&#10;    &#10;        int *c = a;&#10;&#10;    &#125;;&#10;    &#10;    blockFunc();&#10;    &#10;    return 1;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>程序中，同为int型的指针，a是被Block捕获的变量，而c是在Block内定义的变量。我们用clang -rewrite-objc处理后，可以看到如下代码：</p>
-<p>原main函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int main()&#10;&#123;&#10;    int b = 10;&#10;&#10;    int *a = &#38;b;&#10;&#10;    void (*blockFunc)() = (void (*)())&#38;__main_block_impl_0((void *)__main_block_func_0, &#38;__main_block_desc_0_DATA, a);&#10;&#10;    ((void (*)(__block_impl *))((__block_impl *)blockFunc)-&#62;FuncPtr)((__block_impl *)blockFunc);&#10;&#10;    return 1;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>Block的结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 &#123;&#10;  struct __block_impl impl;&#10;  struct __main_block_desc_0* Desc;&#10;  &#10;  int *a; // &#34987;&#25429;&#33719;&#30340;&#24341;&#29992; a &#20986;&#29616;&#22312;&#20102;block&#30340;&#32467;&#26500;&#20307;&#37324;&#38754;&#10;  &#10;  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) &#123;&#10;    impl.isa = &#38;_NSConcreteStackBlock;&#10;    impl.Flags = flags;&#10;    impl.FuncPtr = fp;&#10;    Desc = desc;&#10;  &#125;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>实际执行的函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static void __main_block_func_0(struct __main_block_impl_0 *__cself) &#123;&#10;  int *a = __cself-&#62;a; // bound by copy&#10;&#10;&#10;        int *c = a; // &#22312;block&#20013;&#22768;&#26126;&#30340;&#24341;&#29992; c &#22312;&#20989;&#25968;&#20013;&#22768;&#26126;&#65292;&#23384;&#22312;&#20110;&#20989;&#25968;&#26632;&#19978;&#10;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<p>我们可以清楚得看到，a和c存在的位置完全不同，如果Block存在于堆上（在ARC下Block默认在堆上），那么a作为Block结构体的一个成员，也自然会存在于堆上，而c无论如何，永远位于Block内实际执行代码的函数栈内。这也导致了两个变量生命周期的完全不同：c在Block的函数运行完毕，即会被释放，而a呢，只有在Block被从堆上释放的时候才会释放。</p>
-<p>回到我们的MyViewController的例子中，同上理，如果我们直接让Block捕获我们的myController引用，那么这个引用会被复制后（引用类型也会被复制）作为Block的成员变量存在于其所在的堆空间中，也就是为Block增加了一个指向myController对象的强引用，这就是造成循环引用的本质原因。对于MyViewController的例子，Block的结构体可以理解是这个样子：（准确的结构体肯定和以下这个有区别，但也肯定是如下这种形式：）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 &#123;&#10;  struct __block_impl impl;&#10;  struct __main_block_desc_0* Desc;&#10;  &#10;  MyViewController * __strong myController;  // &#34987;&#25429;&#33719;&#30340;&#24378;&#24341;&#29992;myController&#10;  &#10;  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) &#123;&#10;    impl.isa = &#38;_NSConcreteStackBlock;&#10;    impl.Flags = flags;&#10;    impl.FuncPtr = fp;&#10;    Desc = desc;&#10;  &#125;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>而反观我们给Block传入一个弱引用weakMyController，这时我们Block的结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 &#123;&#10;  struct __block_impl impl;&#10;  struct __main_block_desc_0* Desc;&#10;  &#10;  MyViewController * __weak weakMyController;  // &#34987;&#25429;&#33719;&#30340;&#24369;&#24341;&#29992;weakMyController&#10;  &#10;  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) &#123;&#10;    impl.isa = &#38;_NSConcreteStackBlock;&#10;    impl.Flags = flags;&#10;    impl.FuncPtr = fp;&#10;    Desc = desc;&#10;  &#125;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>再看在Block内声明的强引用strongMyController，它虽然是强引用，但存在于函数栈中，在函数执行期间，它一直存在，所以myController对象也一直存在，但是当函数执行完毕，strongMyController即被销毁，于是它对myController对象的强引用也被解除，这时Block对myController对象就不存在强引用关系了！加入了strongMyController的函数大体会是这个样子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static void __main_block_func_0(struct __main_block_impl_0 *__cself) &#123;&#10;&#10;  MyViewController * __strong strongMyController = __cself-&#62;weakMyController; &#10;&#10;    // ....&#10;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<p>综上所述，在ARC下（在MRC下会略有不同），Block捕获的引用和Block内声明的引用无论是存在空间与生命周期都是截然不同的，也正是这种不同，造成了我们对他们使用方式的区别。</p>
-<p>以上就解释了之前提到的所有问题，希望大家能看明白：）</p>
-<p>好的，最后再提一点，在ARC中，对Block捕获对象的内存管理已经简化了很多，由于没有了retain和release等操作，实际只需要考虑循环引用的问题就行了。比如下面这种，是没有内存泄露的问题的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TestObject *aObject = [[TestObject alloc] init];&#10;    &#10;aObject.name = @&#34;hehe&#34;;&#10;&#10;self.aBlock = ^()&#123;&#10;    &#10;    NSLog(@&#34;aObject&#39;s name = %@&#34;,aObject.name);&#10;        &#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>我们上面提到的解决方案，只是针对Block产生循环引用的问题，而不是说所有的Block捕获引用都要这么处理，一定要注意！</p>
-<h3 id="ARC与Toll-Free_Bridging">ARC与Toll-Free Bridging</h3><blockquote>
+<p>&#x597D;&#x5427;&#xFF0C;&#x770B;&#x6765;&#x662F;&#x82F9;&#x679C;&#x7238;&#x7238;&#xFF08;=&#x3002;=&#xFF09;&#x8003;&#x8651;&#x5230;&#x5F88;&#x591A;&#x4EBA;&#x4F1A;&#x7528;&#x9519;&#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x7F16;&#x8BD1;&#x5668;&#x8FD9;&#x8FB9;&#x8D34;&#x5FC3;&#x5730;&#x5E2E;&#x6211;&#x4EEC;&#x5FFD;&#x7565;&#x5E76;&#x5904;&#x7406;&#x6389;&#x4E86;&#x8FD9;&#x4E2A;&#x9519;&#x8BEF;&#xFF1A;&#xFF09;&#x867D;&#x7136;&#x4E0D;&#x62A5;&#x9519;&#xFF0C;&#x4F46;&#x662F;&#x6211;&#x4EEC;&#x8FD8;&#x662F;&#x5E94;&#x8BE5;&#x6309;&#x7167;&#x6B63;&#x786E;&#x7684;&#x65B9;&#x5F0F;&#x53BB;&#x4F7F;&#x7528;&#x8FD9;&#x4E9B;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x4EE5;&#x524D;&#x4E5F;&#x5E38;&#x5E38;&#x7528;&#x9519;&#x8BEF;&#x7684;&#x5199;&#x6CD5;&#xFF0C;&#x90A3;&#x770B;&#x5230;&#x8FD9;&#x91CC;&#x8BB0;&#x5F97;&#x4EE5;&#x540E;&#x4E0D;&#x8981;&#x8FD9;&#x4E48;&#x5199;&#x4E86;&#xFF0C;&#x54EA;&#x5929;&#x7F16;&#x8BD1;&#x5668;&#x6012;&#x4E86;&#xFF0C;&#x518D;&#x4E0D;&#x652F;&#x6301;&#x9519;&#x8BEF;&#x7684;&#x5199;&#x6CD5;&#xFF0C;&#x5C31;&#x8981;&#x90C1;&#x95F7;&#x4E86;&#x3002;</p>
+<p>&#x6808;&#x4E2D;&#x6307;&#x9488;&#x9ED8;&#x8BA4;&#x503C;&#x4E3A;nil<br>&#x65E0;&#x8BBA;&#x662F;&#x88AB;strong&#xFF0C;weak&#x8FD8;&#x662F;autoreleasing&#x4FEE;&#x9970;&#xFF0C;&#x58F0;&#x660E;&#x5728;&#x6808;&#x4E2D;&#x7684;&#x6307;&#x9488;&#x9ED8;&#x8BA4;&#x503C;&#x90FD;&#x4F1A;&#x662F;nil&#x3002;&#x6240;&#x6709;&#x8FD9;&#x7C7B;&#x578B;&#x7684;&#x6307;&#x9488;&#x4E0D;&#x7528;&#x518D;&#x521D;&#x59CB;&#x5316;&#x7684;&#x65F6;&#x5019;&#x7F6E;nil&#x4E86;&#x3002;&#x867D;&#x7136;&#x597D;&#x4E60;&#x60EF;&#x662F;&#x6700;&#x91CD;&#x8981;&#x7684;&#xFF0C;&#x4F46;&#x662F;&#x8FD9;&#x4E2A;&#x7279;&#x6027;&#x66F4;&#x52A0;&#x964D;&#x4F4E;&#x4E86;&#x201C;&#x91CE;&#x6307;&#x9488;&#x201D;&#x51FA;&#x73B0;&#x7684;&#x53EF;&#x80FD;&#x6027;&#x3002;</p>
+<p>&#x5728;ARC&#x4E2D;&#xFF0C;&#x4EE5;&#x4E0B;&#x4EE3;&#x7801;&#x4F1A;&#x8F93;&#x51FA;null&#x800C;&#x4E0D;&#x662F;crash:)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void)myMethod 
+{
+    NSString *name;
+    NSLog(@&quot;name: %@&quot;, name);
+}</span><br></pre></td></tr></table></figure></p>
+<h3 id="ARC&#x4E0E;Block">ARC&#x4E0E;Block</h3><p>&#x5728;MRC&#x65F6;&#x4EE3;&#xFF0C;Block&#x4F1A;&#x9690;&#x5F0F;&#x5730;&#x5BF9;&#x8FDB;&#x5165;&#x5176;&#x4F5C;&#x7528;&#x57DF;&#x5185;&#x7684;&#x5BF9;&#x8C61;&#xFF08;&#x6216;&#x8005;&#x8BF4;&#x88AB;Block&#x6355;&#x83B7;&#x7684;&#x6307;&#x9488;&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#xFF09;&#x52A0;retain&#xFF0C;&#x6765;&#x786E;&#x4FDD;Block&#x4F7F;&#x7528;&#x5230;&#x8BE5;&#x5BF9;&#x8C61;&#x65F6;&#xFF0C;&#x80FD;&#x591F;&#x6B63;&#x786E;&#x7684;&#x8BBF;&#x95EE;&#x3002;</p>
+<p>&#x8FD9;&#x4EF6;&#x4E8B;&#x60C5;&#x5728;&#x4E0B;&#x9762;&#x4EE3;&#x7801;&#x5C55;&#x793A;&#x7684;&#x60C5;&#x51B5;&#x4E2D;&#x8981;&#x66F4;&#x52A0;&#x989D;&#x5916;&#x5C0F;&#x5FC3;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#x2026;];
+
+// &#x9690;&#x5F0F;&#x5730;&#x8C03;&#x7528;[myController retain];&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;
+myController.completionHandler =  ^(NSInteger result) {
+   [myController dismissViewControllerAnimated:YES completion:nil];
+};
+
+[self presentViewController:myController animated:YES completion:^{
+   [myController release]; // &#x6CE8;&#x610F;&#xFF0C;&#x8FD9;&#x91CC;&#x8C03;&#x7528;[myController release];&#x662F;&#x5728;MRC&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x5E38;&#x89C4;&#x5199;&#x6CD5;&#xFF0C;&#x5E76;&#x4E0D;&#x80FD;&#x89E3;&#x51B3;&#x4E0A;&#x9762;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x95EE;&#x9898;
+}];</span><br></pre></td></tr></table></figure>
+<p>&#x5728;&#x8FD9;&#x6BB5;&#x4EE3;&#x7801;&#x4E2D;&#xFF0C;myController&#x7684;completionHandler&#x8C03;&#x7528;&#x4E86;myController&#x7684;&#x65B9;&#x6CD5;[dismissViewController&#x2026;]&#xFF0C;&#x8FD9;&#x65F6;completionHandler&#x4F1A;&#x5BF9;myController&#x505A;retain&#x64CD;&#x4F5C;&#x3002;&#x800C;&#x6211;&#x4EEC;&#x77E5;&#x9053;&#xFF0C;myController&#x5BF9;completionHandler&#x4E5F;&#x81F3;&#x5C11;&#x6709;&#x4E00;&#x4E2A;retain&#xFF08;&#x4E00;&#x822C;&#x51C6;&#x786E;&#x8BB2;&#x662F;copy&#xFF09;&#xFF0C;&#x8FD9;&#x65F6;&#x5C31;&#x51FA;&#x73B0;&#x4E86;&#x5728;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x4E2D;&#x6700;&#x7CDF;&#x7CD5;&#x7684;&#x60C5;&#x51B5;&#xFF1A;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF01;&#x7B80;&#x5355;&#x70B9;&#x8BF4;&#x5C31;&#x662F;&#xFF1A;myController retain&#x4E86;completionHandler&#xFF0C;&#x800C;completionHandler&#x4E5F;retain&#x4E86;myController&#x3002;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x5BFC;&#x81F4;&#x4E86;myController&#x548C;completionHandler&#x6700;&#x7EC8;&#x90FD;&#x4E0D;&#x80FD;&#x88AB;&#x91CA;&#x653E;&#x3002;&#x6211;&#x4EEC;&#x5728;delegate&#x5173;&#x7CFB;&#x4E2D;&#xFF0C;&#x5BF9;delegate&#x6307;&#x9488;&#x7528;weak&#x5C31;&#x662F;&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x8FD9;&#x79CD;&#x95EE;&#x9898;&#x3002;</p>
+<p>&#x4E0D;&#x8FC7;&#x597D;&#x5728;&#xFF0C;&#x7F16;&#x8BD1;&#x5668;&#x4F1A;&#x53CA;&#x65F6;&#x5730;&#x7ED9;&#x6211;&#x4EEC;&#x4E00;&#x4E2A;&#x8B66;&#x544A;&#xFF0C;&#x63D0;&#x9192;&#x6211;&#x4EEC;&#x53EF;&#x80FD;&#x4F1A;&#x53D1;&#x751F;&#x8FD9;&#x7C7B;&#x578B;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
+<p>&#x5BF9;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x4E00;&#x822C;&#x7528;&#x5982;&#x4E0B;&#x65B9;&#x6CD5;&#x89E3;&#x51B3;&#xFF1A;&#x7ED9;&#x8981;&#x8FDB;&#x5165;Block&#x7684;&#x6307;&#x9488;&#x52A0;&#x4E00;&#x4E2A;__block&#x4FEE;&#x9970;&#x7B26;&#x3002;</p>
+<p>&#x8FD9;&#x4E2A;__block&#x5728;MRC&#x65F6;&#x4EE3;&#x6709;&#x4E24;&#x4E2A;&#x4F5C;&#x7528;&#xFF1A;</p>
+<p>&#x8BF4;&#x660E;&#x53D8;&#x91CF;&#x53EF;&#x6539;<br>&#x8BF4;&#x660E;&#x6307;&#x9488;&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#x4E0D;&#x505A;&#x8FD9;&#x4E2A;&#x9690;&#x5F0F;&#x7684;retain&#x64CD;&#x4F5C;<br>&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x5982;&#x679C;&#x4E0D;&#x52A0;<strong>block&#xFF0C;&#x662F;&#x4E0D;&#x80FD;&#x5728;Block&#x91CC;&#x9762;&#x4FEE;&#x6539;&#x7684;&#xFF0C;&#x4E0D;&#x8FC7;&#x8FD9;&#x91CC;&#x6709;&#x4E00;&#x4E2A;&#x4F8B;&#x5916;&#xFF1A;static&#x7684;&#x53D8;&#x91CF;&#x548C;&#x5168;&#x5C40;&#x53D8;&#x91CF;&#x4E0D;&#x9700;&#x8981;&#x52A0;</strong>block&#x5C31;&#x53EF;&#x4EE5;&#x5728;Block&#x4E2D;&#x4FEE;&#x6539;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#xFF0C;&#x6211;&#x4EEC;&#x5BF9;&#x4EE3;&#x7801;&#x505A;&#x51FA;&#x4FEE;&#x6539;&#xFF0C;&#x89E3;&#x51B3;&#x4E86;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController * __block myController = [[MyViewController alloc] init&#x2026;];
+// ...
+myController.completionHandler =  ^(NSInteger result) {
+    [myController dismissViewControllerAnimated:YES completion:nil];
+};
+
+//&#x4E4B;&#x540E;&#x6B63;&#x5E38;&#x7684;release&#x6216;&#x8005;retain</span><br></pre></td></tr></table></figure>
+<p>&#x5728;ARC&#x5F15;&#x5165;&#x540E;&#xFF0C;&#x6CA1;&#x6709;&#x4E86;retain&#x548C;release&#x7B49;&#x64CD;&#x4F5C;&#xFF0C;&#x60C5;&#x51B5;&#x4E5F;&#x53D1;&#x751F;&#x4E86;&#x6539;&#x53D8;&#xFF1A;&#x5728;&#x4EFB;&#x4F55;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;<strong>block&#x4FEE;&#x9970;&#x7B26;&#x7684;&#x4F5C;&#x7528;&#x53EA;&#x6709;&#x4E0A;&#x9762;&#x7684;&#x7B2C;&#x4E00;&#x6761;&#xFF1A;&#x8BF4;&#x660E;&#x53D8;&#x91CF;&#x53EF;&#x6539;&#x3002;&#x5373;&#x4F7F;&#x52A0;&#x4E0A;&#x4E86;</strong>block&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x4E00;&#x4E2A;&#x88AB;block&#x6355;&#x83B7;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#x4E5F;&#x4F9D;&#x7136;&#x662F;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#x3002;&#x8FD9;&#x6837;&#x5728;ARC&#x4E0B;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x8FD8;&#x6309;&#x7167;MRC&#x4E0B;&#x7684;&#x5199;&#x6CD5;&#xFF0C;completionHandler&#x5BF9;myController&#x6709;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x800C;myController&#x5BF9;completionHandler&#x6709;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x8FD9;&#x4F9D;&#x7136;&#x662F;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF0C;&#x6CA1;&#x6709;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#xFF1A;&#xFF08;</p>
+<p>&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x8FD8;&#x9700;&#x8981;&#x5BF9;&#x539F;&#x4EE3;&#x7801;&#x505A;&#x4FEE;&#x6539;&#x3002;&#x7B80;&#x5355;&#x7684;&#x60C5;&#x51B5;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x8FD9;&#x6837;&#x5199;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__block MyViewController * myController = [[MyViewController alloc] init&#x2026;];
+// ...
+myController.completionHandler =  ^(NSInteger result) {
+    [myController dismissViewControllerAnimated:YES completion:nil];
+    myController = nil;  // &#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#xFF0C;&#x4FDD;&#x8BC1;&#x4E86;block&#x7ED3;&#x675F;myController&#x5F3A;&#x5F15;&#x7528;&#x7684;&#x89E3;&#x9664;
+};</span><br></pre></td></tr></table></figure>
+<p>&#x5728;completionHandler&#x4E4B;&#x540E;&#x5C06;myController&#x6307;&#x9488;&#x7F6E;nil&#xFF0C;&#x4FDD;&#x8BC1;&#x4E86;completionHandler&#x5BF9;myController&#x5F3A;&#x5F15;&#x7528;&#x7684;&#x89E3;&#x9664;&#xFF0C;&#x4E0D;&#x8FC7;&#x4E5F;&#x540C;&#x65F6;&#x89E3;&#x9664;&#x4E86;myController&#x5BF9;myController&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#x3002;&#x8FD9;&#x79CD;&#x65B9;&#x6CD5;&#x8FC7;&#x4E8E;&#x7B80;&#x5355;&#x7C97;&#x66B4;&#x4E86;&#xFF0C;&#x5728;&#x5927;&#x591A;&#x6570;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6211;&#x4EEC;&#x6709;&#x66F4;&#x597D;&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x8FD9;&#x4E2A;&#x66F4;&#x597D;&#x7684;&#x65B9;&#x6CD5;&#x5C31;&#x662F;&#x4F7F;&#x7528;weak&#x3002;&#xFF08;&#x6216;&#x8005;&#x4E3A;&#x4E86;&#x8003;&#x8651;iOS4&#x7684;&#x517C;&#x5BB9;&#x6027;&#x7528;unsafe_unretained&#xFF0C;&#x5177;&#x4F53;&#x7528;&#x6CD5;&#x548C;weak&#x76F8;&#x540C;&#xFF0C;&#x8003;&#x8651;&#x5230;&#x73B0;&#x5728;iOS4&#x8BBE;&#x5907;&#x53EF;&#x80FD;&#x5DF2;&#x7ECF;&#x7EDD;&#x8FF9;&#x4E86;&#xFF0C;&#x8FD9;&#x91CC;&#x5C31;&#x4E0D;&#x8BB2;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x4E86;&#xFF09;&#xFF08;&#x5173;&#x4E8E;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x7684;&#x672C;&#x8D28;&#x6211;&#x4EEC;&#x540E;&#x9762;&#x4F1A;&#x8C08;&#x5230;&#xFF09;</p>
+<p>&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;completionHandler&#x8FD9;&#x4E2A;Block&#x5BF9;myController&#x6CA1;&#x6709;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x4E34;&#x65F6;&#x7684;&#x5F31;&#x5F15;&#x7528;weakMyViewController&#x6765;&#x6307;&#x5411;&#x539F;myController&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x5E76;&#x628A;&#x8FD9;&#x4E2A;&#x5F31;&#x5F15;&#x7528;&#x4F20;&#x5165;&#x5230;Block&#x5185;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x4FDD;&#x8BC1;&#x4E86;Block&#x5BF9;myController&#x6301;&#x6709;&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x5F31;&#x5F15;&#x7528;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#x3002;&#x5982;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x7EE7;&#x7EED;&#x4FEE;&#x6539;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#x2026;];
+// ...
+MyViewController * __weak weakMyViewController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+    [weakMyViewController dismissViewControllerAnimated:YES completion:nil];
+};</span><br></pre></td></tr></table></figure>
+<p>&#x8FD9;&#x6837;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x95EE;&#x9898;&#x5C31;&#x89E3;&#x51B3;&#x4E86;&#xFF0C;&#x4F46;&#x662F;&#x5374;&#x4E0D;&#x5E78;&#x5730;&#x5F15;&#x5165;&#x4E86;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x95EE;&#x9898;&#xFF1A;&#x7531;&#x4E8E;&#x4F20;&#x5165;completionHandler&#x7684;&#x662F;&#x4E00;&#x4E2A;&#x5F31;&#x5F15;&#x7528;&#xFF0C;&#x90A3;&#x4E48;&#x5F53;myController&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#x5728;completionHandler&#x88AB;&#x8C03;&#x7528;&#x524D;&#x91CA;&#x653E;&#xFF0C;&#x90A3;&#x4E48;completionHandler&#x5C31;&#x4E0D;&#x80FD;&#x6B63;&#x5E38;&#x7684;&#x8FD0;&#x4F5C;&#x4E86;&#x3002;&#x5728;&#x4E00;&#x822C;&#x7684;&#x5355;&#x7EBF;&#x7A0B;&#x73AF;&#x5883;&#x4E2D;&#xFF0C;&#x8FD9;&#x79CD;&#x95EE;&#x9898;&#x51FA;&#x73B0;&#x7684;&#x53EF;&#x80FD;&#x6027;&#x4E0D;&#x5927;&#xFF0C;&#x4F46;&#x662F;&#x5230;&#x4E86;&#x591A;&#x7EBF;&#x7A0B;&#x73AF;&#x5883;&#xFF0C;&#x5C31;&#x5F88;&#x4E0D;&#x597D;&#x8BF4;&#x4E86;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7EE7;&#x7EED;&#x5B8C;&#x5584;&#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x5728;Block&#x5185;&#x80FD;&#x591F;&#x8BBF;&#x95EE;&#x5230;&#x6B63;&#x786E;&#x7684;myController&#xFF0C;&#x6211;&#x4EEC;&#x5728;block&#x5185;&#x65B0;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;strongMyController&#x6765;&#x6307;&#x5411;weakMyController&#x6307;&#x5411;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x8FD9;&#x6837;&#x591A;&#x4E86;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x5C31;&#x80FD;&#x4FDD;&#x8BC1;&#x8FD9;&#x4E2A;myController&#x5BF9;&#x8C61;&#x4E0D;&#x4F1A;&#x5728;completionHandler&#x88AB;&#x8C03;&#x7528;&#x524D;&#x91CA;&#x653E;&#x6389;&#x4E86;&#x3002;&#x4E8E;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x5BF9;&#x4EE3;&#x7801;&#x518D;&#x6B21;&#x505A;&#x51FA;&#x4FEE;&#x6539;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyViewController *myController = [[MyViewController alloc] init&#x2026;];
+// ...
+MyViewController * __weak weakMyController = myController;
+myController.completionHandler =  ^(NSInteger result) {
+    MyViewController *strongMyController = weakMyController;
+
+&#x3000;&#x3000;if (strongMyController) {
+        // ...
+        [strongMyController dismissViewControllerAnimated:YES completion:nil];
+        // ...
+    }
+    else {
+        // Probably nothing...
+    }
+};</span><br></pre></td></tr></table></figure>
+<p>&#x5230;&#x6B64;&#xFF0C;&#x4E00;&#x4E2A;&#x5B8C;&#x5584;&#x7684;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#x5C31;&#x5B8C;&#x6210;&#x4E86;&#xFF1A;&#xFF09;</p>
+<p>&#x5B98;&#x65B9;&#x6587;&#x6863;&#x5BF9;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x7684;&#x8BF4;&#x660E;&#x5230;&#x8FD9;&#x91CC;&#x5C31;&#x7ED3;&#x675F;&#x4E86;&#xFF0C;&#x4F46;&#x662F;&#x53EF;&#x80FD;&#x5F88;&#x591A;&#x670B;&#x53CB;&#x4F1A;&#x6709;&#x7591;&#x95EE;&#xFF0C;&#x4E0D;&#x662F;&#x8BF4;&#x4E0D;&#x5E0C;&#x671B;Block&#x5BF9;&#x539F;myController&#x5BF9;&#x8C61;&#x589E;&#x52A0;&#x5F3A;&#x5F15;&#x7528;&#x4E48;&#xFF0C;&#x8FD9;&#x91CC;&#x4E3A;&#x5565;&#x5802;&#x800C;&#x7687;&#x4E4B;&#x5730;&#x5728;Block&#x5185;&#x65B0;&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x8FD9;&#x4E2A;&#x5F3A;&#x5F15;&#x7528;&#x4E0D;&#x4F1A;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x4E48;&#xFF1F;&#x7406;&#x89E3;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#x7684;&#x5173;&#x952E;&#x5728;&#x4E8E;&#x7406;&#x89E3;&#x88AB;Block&#x6355;&#x83B7;&#x7684;&#x5F15;&#x7528;&#x548C;&#x5728;Block&#x5185;&#x5B9A;&#x4E49;&#x7684;&#x5F15;&#x7528;&#x7684;&#x533A;&#x522B;&#x3002;&#x4E3A;&#x4E86;&#x641E;&#x5F97;&#x660E;&#x767D;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;&#xFF0C;&#x8FD9;&#x91CC;&#x9700;&#x8981;&#x4E86;&#x89E3;&#x4E00;&#x4E9B;Block&#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;&#xFF0C;&#x4F46;&#x7531;&#x4E8E;&#x7BC7;&#x5E45;&#x7684;&#x7F18;&#x6545;&#xFF0C;&#x672C;&#x6587;&#x5728;&#x8FD9;&#x91CC;&#x5C31;&#x4E0D;&#x5C55;&#x5F00;&#x4E86;&#xFF0C;&#x8BE6;&#x7EC6;&#x7684;&#x5185;&#x5BB9;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x5176;&#x4ED6;&#x7684;&#x6587;&#x7AE0;&#xFF0C;&#x8FD9;&#x91CC;&#x7279;&#x522B;&#x63A8;&#x8350;&#x5510;&#x5DE7;&#x7684;&#x6587;&#x7AE0;&#x548C;&#x53E6;&#x5916;2&#x4F4D;&#x4F5C;&#x8005;&#x7684;&#x535A;&#x6587;&#xFF1A;&#x8FD9;&#x4E2A;&#x548C;&#x8FD9;&#x4E2A;&#xFF0C;&#x8BB2;&#x7684;&#x90FD;&#x6BD4;&#x8F83;&#x6E05;&#x695A;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x5047;&#x8BBE;&#x5927;&#x5BB6;&#x5DF2;&#x7ECF;&#x5BF9;Block&#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;&#x6709;&#x6240;&#x4E86;&#x89E3;&#x4E86;&#x3002;&#x6211;&#x4EEC;&#x5C31;&#x76F4;&#x5165;&#x4E3B;&#x9898;&#x4E86;&#xFF01;&#x6CE8;&#x610F;&#x524D;&#x65B9;&#x9AD8;&#x80FD;&#xFF08;=&#x3002;=&#xFF09;</p>
+<p>&#x4E3A;&#x4E86;&#x66F4;&#x6E05;&#x695A;&#x5730;&#x8BF4;&#x660E;&#x95EE;&#x9898;&#xFF0C;&#x8FD9;&#x91CC;&#x7528;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x7A0B;&#x5E8F;&#x4E3E;&#x4F8B;&#x3002;&#x6BD4;&#x5982;&#x6211;&#x4EEC;&#x6709;&#x5982;&#x4E0B;&#x7A0B;&#x5E8F;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;
+
+int main()
+{
+    int b = 10;
+    
+    int *a = &amp;b;
+    
+    void (^blockFunc)() = ^(){
+    
+        int *c = a;
+
+    };
+    
+    blockFunc();
+    
+    return 1;
+}</span><br></pre></td></tr></table></figure>
+<p>&#x7A0B;&#x5E8F;&#x4E2D;&#xFF0C;&#x540C;&#x4E3A;int&#x578B;&#x7684;&#x6307;&#x9488;&#xFF0C;a&#x662F;&#x88AB;Block&#x6355;&#x83B7;&#x7684;&#x53D8;&#x91CF;&#xFF0C;&#x800C;c&#x662F;&#x5728;Block&#x5185;&#x5B9A;&#x4E49;&#x7684;&#x53D8;&#x91CF;&#x3002;&#x6211;&#x4EEC;&#x7528;clang -rewrite-objc&#x5904;&#x7406;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5982;&#x4E0B;&#x4EE3;&#x7801;&#xFF1A;</p>
+<p>&#x539F;main&#x51FD;&#x6570;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int main()
+{
+    int b = 10;
+
+    int *a = &amp;b;
+
+    void (*blockFunc)() = (void (*)())&amp;__main_block_impl_0((void *)__main_block_func_0, &amp;__main_block_desc_0_DATA, a);
+
+    ((void (*)(__block_impl *))((__block_impl *)blockFunc)-&gt;FuncPtr)((__block_impl *)blockFunc);
+
+    return 1;
+}</span><br></pre></td></tr></table></figure>
+<p>Block&#x7684;&#x7ED3;&#x6784;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 {
+  struct __block_impl impl;
+  struct __main_block_desc_0* Desc;
+  
+  int *a; // &#x88AB;&#x6355;&#x83B7;&#x7684;&#x5F15;&#x7528; a &#x51FA;&#x73B0;&#x5728;&#x4E86;block&#x7684;&#x7ED3;&#x6784;&#x4F53;&#x91CC;&#x9762;
+  
+  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) {
+    impl.isa = &amp;_NSConcreteStackBlock;
+    impl.Flags = flags;
+    impl.FuncPtr = fp;
+    Desc = desc;
+  }
+};</span><br></pre></td></tr></table></figure>
+<p>&#x5B9E;&#x9645;&#x6267;&#x884C;&#x7684;&#x51FD;&#x6570;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
+  int *a = __cself-&gt;a; // bound by copy
+
+
+        int *c = a; // &#x5728;block&#x4E2D;&#x58F0;&#x660E;&#x7684;&#x5F15;&#x7528; c &#x5728;&#x51FD;&#x6570;&#x4E2D;&#x58F0;&#x660E;&#xFF0C;&#x5B58;&#x5728;&#x4E8E;&#x51FD;&#x6570;&#x6808;&#x4E0A;
+
+    }</span><br></pre></td></tr></table></figure>
+<p>&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x6E05;&#x695A;&#x5F97;&#x770B;&#x5230;&#xFF0C;a&#x548C;c&#x5B58;&#x5728;&#x7684;&#x4F4D;&#x7F6E;&#x5B8C;&#x5168;&#x4E0D;&#x540C;&#xFF0C;&#x5982;&#x679C;Block&#x5B58;&#x5728;&#x4E8E;&#x5806;&#x4E0A;&#xFF08;&#x5728;ARC&#x4E0B;Block&#x9ED8;&#x8BA4;&#x5728;&#x5806;&#x4E0A;&#xFF09;&#xFF0C;&#x90A3;&#x4E48;a&#x4F5C;&#x4E3A;Block&#x7ED3;&#x6784;&#x4F53;&#x7684;&#x4E00;&#x4E2A;&#x6210;&#x5458;&#xFF0C;&#x4E5F;&#x81EA;&#x7136;&#x4F1A;&#x5B58;&#x5728;&#x4E8E;&#x5806;&#x4E0A;&#xFF0C;&#x800C;c&#x65E0;&#x8BBA;&#x5982;&#x4F55;&#xFF0C;&#x6C38;&#x8FDC;&#x4F4D;&#x4E8E;Block&#x5185;&#x5B9E;&#x9645;&#x6267;&#x884C;&#x4EE3;&#x7801;&#x7684;&#x51FD;&#x6570;&#x6808;&#x5185;&#x3002;&#x8FD9;&#x4E5F;&#x5BFC;&#x81F4;&#x4E86;&#x4E24;&#x4E2A;&#x53D8;&#x91CF;&#x751F;&#x547D;&#x5468;&#x671F;&#x7684;&#x5B8C;&#x5168;&#x4E0D;&#x540C;&#xFF1A;c&#x5728;Block&#x7684;&#x51FD;&#x6570;&#x8FD0;&#x884C;&#x5B8C;&#x6BD5;&#xFF0C;&#x5373;&#x4F1A;&#x88AB;&#x91CA;&#x653E;&#xFF0C;&#x800C;a&#x5462;&#xFF0C;&#x53EA;&#x6709;&#x5728;Block&#x88AB;&#x4ECE;&#x5806;&#x4E0A;&#x91CA;&#x653E;&#x7684;&#x65F6;&#x5019;&#x624D;&#x4F1A;&#x91CA;&#x653E;&#x3002;</p>
+<p>&#x56DE;&#x5230;&#x6211;&#x4EEC;&#x7684;MyViewController&#x7684;&#x4F8B;&#x5B50;&#x4E2D;&#xFF0C;&#x540C;&#x4E0A;&#x7406;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x76F4;&#x63A5;&#x8BA9;Block&#x6355;&#x83B7;&#x6211;&#x4EEC;&#x7684;myController&#x5F15;&#x7528;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x5F15;&#x7528;&#x4F1A;&#x88AB;&#x590D;&#x5236;&#x540E;&#xFF08;&#x5F15;&#x7528;&#x7C7B;&#x578B;&#x4E5F;&#x4F1A;&#x88AB;&#x590D;&#x5236;&#xFF09;&#x4F5C;&#x4E3A;Block&#x7684;&#x6210;&#x5458;&#x53D8;&#x91CF;&#x5B58;&#x5728;&#x4E8E;&#x5176;&#x6240;&#x5728;&#x7684;&#x5806;&#x7A7A;&#x95F4;&#x4E2D;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x4E3A;Block&#x589E;&#x52A0;&#x4E86;&#x4E00;&#x4E2A;&#x6307;&#x5411;myController&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x8FD9;&#x5C31;&#x662F;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x672C;&#x8D28;&#x539F;&#x56E0;&#x3002;&#x5BF9;&#x4E8E;MyViewController&#x7684;&#x4F8B;&#x5B50;&#xFF0C;Block&#x7684;&#x7ED3;&#x6784;&#x4F53;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x662F;&#x8FD9;&#x4E2A;&#x6837;&#x5B50;&#xFF1A;&#xFF08;&#x51C6;&#x786E;&#x7684;&#x7ED3;&#x6784;&#x4F53;&#x80AF;&#x5B9A;&#x548C;&#x4EE5;&#x4E0B;&#x8FD9;&#x4E2A;&#x6709;&#x533A;&#x522B;&#xFF0C;&#x4F46;&#x4E5F;&#x80AF;&#x5B9A;&#x662F;&#x5982;&#x4E0B;&#x8FD9;&#x79CD;&#x5F62;&#x5F0F;&#xFF1A;&#xFF09;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 {
+  struct __block_impl impl;
+  struct __main_block_desc_0* Desc;
+  
+  MyViewController * __strong myController;  // &#x88AB;&#x6355;&#x83B7;&#x7684;&#x5F3A;&#x5F15;&#x7528;myController
+  
+  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) {
+    impl.isa = &amp;_NSConcreteStackBlock;
+    impl.Flags = flags;
+    impl.FuncPtr = fp;
+    Desc = desc;
+  }
+};</span><br></pre></td></tr></table></figure>
+<p>&#x800C;&#x53CD;&#x89C2;&#x6211;&#x4EEC;&#x7ED9;Block&#x4F20;&#x5165;&#x4E00;&#x4E2A;&#x5F31;&#x5F15;&#x7528;weakMyController&#xFF0C;&#x8FD9;&#x65F6;&#x6211;&#x4EEC;Block&#x7684;&#x7ED3;&#x6784;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 {
+  struct __block_impl impl;
+  struct __main_block_desc_0* Desc;
+  
+  MyViewController * __weak weakMyController;  // &#x88AB;&#x6355;&#x83B7;&#x7684;&#x5F31;&#x5F15;&#x7528;weakMyController
+  
+  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int *_a, int flags=0) : a(_a) {
+    impl.isa = &amp;_NSConcreteStackBlock;
+    impl.Flags = flags;
+    impl.FuncPtr = fp;
+    Desc = desc;
+  }
+};</span><br></pre></td></tr></table></figure>
+<p>&#x518D;&#x770B;&#x5728;Block&#x5185;&#x58F0;&#x660E;&#x7684;&#x5F3A;&#x5F15;&#x7528;strongMyController&#xFF0C;&#x5B83;&#x867D;&#x7136;&#x662F;&#x5F3A;&#x5F15;&#x7528;&#xFF0C;&#x4F46;&#x5B58;&#x5728;&#x4E8E;&#x51FD;&#x6570;&#x6808;&#x4E2D;&#xFF0C;&#x5728;&#x51FD;&#x6570;&#x6267;&#x884C;&#x671F;&#x95F4;&#xFF0C;&#x5B83;&#x4E00;&#x76F4;&#x5B58;&#x5728;&#xFF0C;&#x6240;&#x4EE5;myController&#x5BF9;&#x8C61;&#x4E5F;&#x4E00;&#x76F4;&#x5B58;&#x5728;&#xFF0C;&#x4F46;&#x662F;&#x5F53;&#x51FD;&#x6570;&#x6267;&#x884C;&#x5B8C;&#x6BD5;&#xFF0C;strongMyController&#x5373;&#x88AB;&#x9500;&#x6BC1;&#xFF0C;&#x4E8E;&#x662F;&#x5B83;&#x5BF9;myController&#x5BF9;&#x8C61;&#x7684;&#x5F3A;&#x5F15;&#x7528;&#x4E5F;&#x88AB;&#x89E3;&#x9664;&#xFF0C;&#x8FD9;&#x65F6;Block&#x5BF9;myController&#x5BF9;&#x8C61;&#x5C31;&#x4E0D;&#x5B58;&#x5728;&#x5F3A;&#x5F15;&#x7528;&#x5173;&#x7CFB;&#x4E86;&#xFF01;&#x52A0;&#x5165;&#x4E86;strongMyController&#x7684;&#x51FD;&#x6570;&#x5927;&#x4F53;&#x4F1A;&#x662F;&#x8FD9;&#x4E2A;&#x6837;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
+
+  MyViewController * __strong strongMyController = __cself-&gt;weakMyController; 
+
+    // ....
+
+    }</span><br></pre></td></tr></table></figure>
+<p>&#x7EFC;&#x4E0A;&#x6240;&#x8FF0;&#xFF0C;&#x5728;ARC&#x4E0B;&#xFF08;&#x5728;MRC&#x4E0B;&#x4F1A;&#x7565;&#x6709;&#x4E0D;&#x540C;&#xFF09;&#xFF0C;Block&#x6355;&#x83B7;&#x7684;&#x5F15;&#x7528;&#x548C;Block&#x5185;&#x58F0;&#x660E;&#x7684;&#x5F15;&#x7528;&#x65E0;&#x8BBA;&#x662F;&#x5B58;&#x5728;&#x7A7A;&#x95F4;&#x4E0E;&#x751F;&#x547D;&#x5468;&#x671F;&#x90FD;&#x662F;&#x622A;&#x7136;&#x4E0D;&#x540C;&#x7684;&#xFF0C;&#x4E5F;&#x6B63;&#x662F;&#x8FD9;&#x79CD;&#x4E0D;&#x540C;&#xFF0C;&#x9020;&#x6210;&#x4E86;&#x6211;&#x4EEC;&#x5BF9;&#x4ED6;&#x4EEC;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;&#x7684;&#x533A;&#x522B;&#x3002;</p>
+<p>&#x4EE5;&#x4E0A;&#x5C31;&#x89E3;&#x91CA;&#x4E86;&#x4E4B;&#x524D;&#x63D0;&#x5230;&#x7684;&#x6240;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x5E0C;&#x671B;&#x5927;&#x5BB6;&#x80FD;&#x770B;&#x660E;&#x767D;&#xFF1A;&#xFF09;</p>
+<p>&#x597D;&#x7684;&#xFF0C;&#x6700;&#x540E;&#x518D;&#x63D0;&#x4E00;&#x70B9;&#xFF0C;&#x5728;ARC&#x4E2D;&#xFF0C;&#x5BF9;Block&#x6355;&#x83B7;&#x5BF9;&#x8C61;&#x7684;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x5DF2;&#x7ECF;&#x7B80;&#x5316;&#x4E86;&#x5F88;&#x591A;&#xFF0C;&#x7531;&#x4E8E;&#x6CA1;&#x6709;&#x4E86;retain&#x548C;release&#x7B49;&#x64CD;&#x4F5C;&#xFF0C;&#x5B9E;&#x9645;&#x53EA;&#x9700;&#x8981;&#x8003;&#x8651;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x95EE;&#x9898;&#x5C31;&#x884C;&#x4E86;&#x3002;&#x6BD4;&#x5982;&#x4E0B;&#x9762;&#x8FD9;&#x79CD;&#xFF0C;&#x662F;&#x6CA1;&#x6709;&#x5185;&#x5B58;&#x6CC4;&#x9732;&#x7684;&#x95EE;&#x9898;&#x7684;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TestObject *aObject = [[TestObject alloc] init];
+    
+aObject.name = @&quot;hehe&quot;;
+
+self.aBlock = ^(){
+    
+    NSLog(@&quot;aObject&apos;s name = %@&quot;,aObject.name);
+        
+};</span><br></pre></td></tr></table></figure>
+<p>&#x6211;&#x4EEC;&#x4E0A;&#x9762;&#x63D0;&#x5230;&#x7684;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#xFF0C;&#x53EA;&#x662F;&#x9488;&#x5BF9;Block&#x4EA7;&#x751F;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x8BF4;&#x6240;&#x6709;&#x7684;Block&#x6355;&#x83B7;&#x5F15;&#x7528;&#x90FD;&#x8981;&#x8FD9;&#x4E48;&#x5904;&#x7406;&#xFF0C;&#x4E00;&#x5B9A;&#x8981;&#x6CE8;&#x610F;&#xFF01;</p>
+<h3 id="ARC&#x4E0E;Toll-Free_Bridging">ARC&#x4E0E;Toll-Free Bridging</h3><blockquote>
 <p>There are a number of data types in the Core Foundation framework and the Foundation framework that can be used interchangeably. This capability, called toll-free bridging, means that you can use the same data type as the parameter to a Core Foundation function call or as the receiver of an Objective-C message. </p>
 </blockquote>
-<p>Toll-Free Briding保证了在程序中，可以方便和谐的使用Core Foundation类型的对象和Objective-C类型的对象。详细的内容可参考官方文档。以下是官方文档中给出的一些例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSLocale *gbNSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@&#34;en_GB&#34;];&#10;CFLocaleRef gbCFLocale = (CFLocaleRef) gbNSLocale;&#10;CFStringRef cfIdentifier = CFLocaleGetIdentifier (gbCFLocale);&#10;NSLog(@&#34;cfIdentifier: %@&#34;, (NSString *)cfIdentifier);&#10;// logs: &#34;cfIdentifier: en_GB&#34;&#10;CFRelease((CFLocaleRef) gbNSLocale);&#10; &#10;CFLocaleRef myCFLocale = CFLocaleCopyCurrent();&#10;NSLocale * myNSLocale = (NSLocale *) myCFLocale;&#10;[myNSLocale autorelease];&#10;NSString *nsIdentifier = [myNSLocale localeIdentifier];&#10;CFShow((CFStringRef) [@&#34;nsIdentifier: &#34; stringByAppendingString:nsIdentifier]);&#10;// logs identifier for current locale</span><br></pre></td></tr></table></figure>
-<p>在MRC时代，由于Objective-C类型的对象和Core Foundation类型的对象都是相同的release和retain操作规则，所以Toll-Free Bridging的使用比较简单，但是自从ARC加入后，Objective-C类型的对象内存管理规则改变了，而Core Foundation依然是之前的机制，换句话说，Core Foundation不支持ARC。</p>
-<p>这个时候就必须要要考虑一个问题了，在做Core Foundation与Objective-C类型转换的时候，用哪一种规则来管理对象的内存。显然，对于同一个对象，我们不能够同时用两种规则来管理，所以这里就必须要确定一件事情：哪些对象用Objective-C（也就是ARC）的规则，哪些对象用Core Foundation的规则（也就是MRC）的规则。或者说要确定对象类型转换了之后，内存管理的ownership的改变。</p>
+<p>Toll-Free Briding&#x4FDD;&#x8BC1;&#x4E86;&#x5728;&#x7A0B;&#x5E8F;&#x4E2D;&#xFF0C;&#x53EF;&#x4EE5;&#x65B9;&#x4FBF;&#x548C;&#x8C10;&#x7684;&#x4F7F;&#x7528;Core Foundation&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x548C;Objective-C&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x3002;&#x8BE6;&#x7EC6;&#x7684;&#x5185;&#x5BB9;&#x53EF;&#x53C2;&#x8003;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x3002;&#x4EE5;&#x4E0B;&#x662F;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x4E2D;&#x7ED9;&#x51FA;&#x7684;&#x4E00;&#x4E9B;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSLocale *gbNSLocale = [[NSLocale alloc] initWithLocaleIdentifier:@&quot;en_GB&quot;];
+CFLocaleRef gbCFLocale = (CFLocaleRef) gbNSLocale;
+CFStringRef cfIdentifier = CFLocaleGetIdentifier (gbCFLocale);
+NSLog(@&quot;cfIdentifier: %@&quot;, (NSString *)cfIdentifier);
+// logs: &quot;cfIdentifier: en_GB&quot;
+CFRelease((CFLocaleRef) gbNSLocale);
+ 
+CFLocaleRef myCFLocale = CFLocaleCopyCurrent();
+NSLocale * myNSLocale = (NSLocale *) myCFLocale;
+[myNSLocale autorelease];
+NSString *nsIdentifier = [myNSLocale localeIdentifier];
+CFShow((CFStringRef) [@&quot;nsIdentifier: &quot; stringByAppendingString:nsIdentifier]);
+// logs identifier for current locale</span><br></pre></td></tr></table></figure>
+<p>&#x5728;MRC&#x65F6;&#x4EE3;&#xFF0C;&#x7531;&#x4E8E;Objective-C&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x548C;Core Foundation&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x90FD;&#x662F;&#x76F8;&#x540C;&#x7684;release&#x548C;retain&#x64CD;&#x4F5C;&#x89C4;&#x5219;&#xFF0C;&#x6240;&#x4EE5;Toll-Free Bridging&#x7684;&#x4F7F;&#x7528;&#x6BD4;&#x8F83;&#x7B80;&#x5355;&#xFF0C;&#x4F46;&#x662F;&#x81EA;&#x4ECE;ARC&#x52A0;&#x5165;&#x540E;&#xFF0C;Objective-C&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x89C4;&#x5219;&#x6539;&#x53D8;&#x4E86;&#xFF0C;&#x800C;Core Foundation&#x4F9D;&#x7136;&#x662F;&#x4E4B;&#x524D;&#x7684;&#x673A;&#x5236;&#xFF0C;&#x6362;&#x53E5;&#x8BDD;&#x8BF4;&#xFF0C;Core Foundation&#x4E0D;&#x652F;&#x6301;ARC&#x3002;</p>
+<p>&#x8FD9;&#x4E2A;&#x65F6;&#x5019;&#x5C31;&#x5FC5;&#x987B;&#x8981;&#x8981;&#x8003;&#x8651;&#x4E00;&#x4E2A;&#x95EE;&#x9898;&#x4E86;&#xFF0C;&#x5728;&#x505A;Core Foundation&#x4E0E;Objective-C&#x7C7B;&#x578B;&#x8F6C;&#x6362;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x7528;&#x54EA;&#x4E00;&#x79CD;&#x89C4;&#x5219;&#x6765;&#x7BA1;&#x7406;&#x5BF9;&#x8C61;&#x7684;&#x5185;&#x5B58;&#x3002;&#x663E;&#x7136;&#xFF0C;&#x5BF9;&#x4E8E;&#x540C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x80FD;&#x591F;&#x540C;&#x65F6;&#x7528;&#x4E24;&#x79CD;&#x89C4;&#x5219;&#x6765;&#x7BA1;&#x7406;&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x91CC;&#x5C31;&#x5FC5;&#x987B;&#x8981;&#x786E;&#x5B9A;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#xFF1A;&#x54EA;&#x4E9B;&#x5BF9;&#x8C61;&#x7528;Objective-C&#xFF08;&#x4E5F;&#x5C31;&#x662F;ARC&#xFF09;&#x7684;&#x89C4;&#x5219;&#xFF0C;&#x54EA;&#x4E9B;&#x5BF9;&#x8C61;&#x7528;Core Foundation&#x7684;&#x89C4;&#x5219;&#xFF08;&#x4E5F;&#x5C31;&#x662F;MRC&#xFF09;&#x7684;&#x89C4;&#x5219;&#x3002;&#x6216;&#x8005;&#x8BF4;&#x8981;&#x786E;&#x5B9A;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;&#x8F6C;&#x6362;&#x4E86;&#x4E4B;&#x540E;&#xFF0C;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x7684;ownership&#x7684;&#x6539;&#x53D8;&#x3002;</p>
 <blockquote>
 <p>If you cast between Objective-C and Core Foundation-style objects, you need to tell the compiler about the ownership semantics of the object using either a cast (defined in objc/runtime.h) or a Core Foundation-style macro (defined inNSObject.h)</p>
 </blockquote>
-<p>于是苹果在引入ARC之后对Toll-Free Bridging的操作也加入了对应的方法与修饰符，用来指明用哪种规则管理内存，或者说是内存管理权的归属。</p>
-<p>这些方法和修饰符分别是：</p>
-<p>__bridge（修饰符）<br>只是声明类型转变，但是不做内存管理规则的转变。</p>
-<p>比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef s1 = (__bridge CFStringRef) [[NSString alloc] initWithFormat:@&#34;Hello, %@!&#34;, name];</span><br></pre></td></tr></table></figure></p>
-<p>只是做了NSString到CFStringRef的转化，但管理规则未变，依然要用Objective-C类型的ARC来管理s1，你不能用CFRelease()去释放s1。</p>
-<p><strong>__bridge_retained（修饰符） or CFBridgingRetain（函数）</strong><br>表示将指针类型转变的同时，将内存管理的责任由原来的Objective-C交给Core Foundation来处理，也就是，将ARC转变为MRC。</p>
-<p>比如，还是上面那个例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *s1 = [[NSString alloc] initWithFormat:@&#34;Hello, %@!&#34;, name];&#10;&#65532;CFStringRef s2 = (__bridge_retained CFStringRef)s1;&#10;&#65532;// do something with s2&#10;//...&#10;&#65532;CFRelease(s2); // &#27880;&#24847;&#35201;&#22312;&#20351;&#29992;&#32467;&#26463;&#21518;&#21152;&#36825;&#20010;</span><br></pre></td></tr></table></figure>
-<p>我们在第二行做了转化，这时内存管理规则由ARC变为了MRC，我们需要手动的来管理s2的内存，而对于s1，我们即使将其置为nil，也不能释放内存。</p>
-<p>等同的，我们的程序也可以写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *s1 = [[NSString alloc] initWithFormat:@&#34;Hello, %@!&#34;, name];&#10;&#65532;CFStringRef s2 = (CFStringRef)CFBridgingRetain(s1);&#10;&#65532;// do something with s2&#10;//...&#10;&#65532;CFRelease(s2); // &#27880;&#24847;&#35201;&#22312;&#20351;&#29992;&#32467;&#26463;&#21518;&#21152;&#36825;&#20010;</span><br></pre></td></tr></table></figure>
-<p><strong>__bridge_transfer（修饰符） or CFBridgingRelease（函数）</strong><br>这个修饰符和函数的功能和上面那个__bridge_retained相反，它表示将管理的责任由Core Foundation转交给Objective-C，即将管理方式由MRC转变为ARC。</p>
-<p>比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef result = CFURLCreateStringByAddingPercentEscapes(. . .);&#10;&#65532;NSString *s = (__bridge_transfer NSString *)result;&#10;//or NSString *s = (NSString *)CFBridgingRelease(result);&#10;&#65532;return s;</span><br></pre></td></tr></table></figure>
-<p>这里我们将result的管理责任交给了ARC来处理，我们就不需要再显式地将CFRelease()了。</p>
-<p>对了，这里你可能会注意到一个细节，和ARC中那个4个主要的修饰符（<strong>strong,</strong>weak,…）不同，这里修饰符的位置是放在类型前面的，虽然官方文档中没有说明，但看官方的头文件可以知道。小伙伴们，记得别把位置写错哦：）</p>
-<p>呼~ 好了，以上就是本篇文章的主要内容。这次采用了新的排版，感觉比以前有条理得多，希望的大家看的舒服。</p>
-<p>文章中如果有任何错误或者问题，可以在下面留言或者给我发信，期待你们的回复。</p>
-<p>感谢大家的收看。</p>
-<p>ps:感谢作者的分享 </p>
+<p>&#x4E8E;&#x662F;&#x82F9;&#x679C;&#x5728;&#x5F15;&#x5165;ARC&#x4E4B;&#x540E;&#x5BF9;Toll-Free Bridging&#x7684;&#x64CD;&#x4F5C;&#x4E5F;&#x52A0;&#x5165;&#x4E86;&#x5BF9;&#x5E94;&#x7684;&#x65B9;&#x6CD5;&#x4E0E;&#x4FEE;&#x9970;&#x7B26;&#xFF0C;&#x7528;&#x6765;&#x6307;&#x660E;&#x7528;&#x54EA;&#x79CD;&#x89C4;&#x5219;&#x7BA1;&#x7406;&#x5185;&#x5B58;&#xFF0C;&#x6216;&#x8005;&#x8BF4;&#x662F;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x6743;&#x7684;&#x5F52;&#x5C5E;&#x3002;</p>
+<p>&#x8FD9;&#x4E9B;&#x65B9;&#x6CD5;&#x548C;&#x4FEE;&#x9970;&#x7B26;&#x5206;&#x522B;&#x662F;&#xFF1A;</p>
+<p>__bridge&#xFF08;&#x4FEE;&#x9970;&#x7B26;&#xFF09;<br>&#x53EA;&#x662F;&#x58F0;&#x660E;&#x7C7B;&#x578B;&#x8F6C;&#x53D8;&#xFF0C;&#x4F46;&#x662F;&#x4E0D;&#x505A;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x89C4;&#x5219;&#x7684;&#x8F6C;&#x53D8;&#x3002;</p>
+<p>&#x6BD4;&#x5982;&#xFF1A;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef s1 = (__bridge CFStringRef) [[NSString alloc] initWithFormat:@&quot;Hello, %@!&quot;, name];</span><br></pre></td></tr></table></figure></p>
+<p>&#x53EA;&#x662F;&#x505A;&#x4E86;NSString&#x5230;CFStringRef&#x7684;&#x8F6C;&#x5316;&#xFF0C;&#x4F46;&#x7BA1;&#x7406;&#x89C4;&#x5219;&#x672A;&#x53D8;&#xFF0C;&#x4F9D;&#x7136;&#x8981;&#x7528;Objective-C&#x7C7B;&#x578B;&#x7684;ARC&#x6765;&#x7BA1;&#x7406;s1&#xFF0C;&#x4F60;&#x4E0D;&#x80FD;&#x7528;CFRelease()&#x53BB;&#x91CA;&#x653E;s1&#x3002;</p>
+<p><strong>__bridge_retained&#xFF08;&#x4FEE;&#x9970;&#x7B26;&#xFF09; or CFBridgingRetain&#xFF08;&#x51FD;&#x6570;&#xFF09;</strong><br>&#x8868;&#x793A;&#x5C06;&#x6307;&#x9488;&#x7C7B;&#x578B;&#x8F6C;&#x53D8;&#x7684;&#x540C;&#x65F6;&#xFF0C;&#x5C06;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x7684;&#x8D23;&#x4EFB;&#x7531;&#x539F;&#x6765;&#x7684;Objective-C&#x4EA4;&#x7ED9;Core Foundation&#x6765;&#x5904;&#x7406;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#xFF0C;&#x5C06;ARC&#x8F6C;&#x53D8;&#x4E3A;MRC&#x3002;</p>
+<p>&#x6BD4;&#x5982;&#xFF0C;&#x8FD8;&#x662F;&#x4E0A;&#x9762;&#x90A3;&#x4E2A;&#x4F8B;&#x5B50;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *s1 = [[NSString alloc] initWithFormat:@&quot;Hello, %@!&quot;, name];
+&#xFFFC;CFStringRef s2 = (__bridge_retained CFStringRef)s1;
+&#xFFFC;// do something with s2
+//...
+&#xFFFC;CFRelease(s2); // &#x6CE8;&#x610F;&#x8981;&#x5728;&#x4F7F;&#x7528;&#x7ED3;&#x675F;&#x540E;&#x52A0;&#x8FD9;&#x4E2A;</span><br></pre></td></tr></table></figure>
+<p>&#x6211;&#x4EEC;&#x5728;&#x7B2C;&#x4E8C;&#x884C;&#x505A;&#x4E86;&#x8F6C;&#x5316;&#xFF0C;&#x8FD9;&#x65F6;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x89C4;&#x5219;&#x7531;ARC&#x53D8;&#x4E3A;&#x4E86;MRC&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x624B;&#x52A8;&#x7684;&#x6765;&#x7BA1;&#x7406;s2&#x7684;&#x5185;&#x5B58;&#xFF0C;&#x800C;&#x5BF9;&#x4E8E;s1&#xFF0C;&#x6211;&#x4EEC;&#x5373;&#x4F7F;&#x5C06;&#x5176;&#x7F6E;&#x4E3A;nil&#xFF0C;&#x4E5F;&#x4E0D;&#x80FD;&#x91CA;&#x653E;&#x5185;&#x5B58;&#x3002;</p>
+<p>&#x7B49;&#x540C;&#x7684;&#xFF0C;&#x6211;&#x4EEC;&#x7684;&#x7A0B;&#x5E8F;&#x4E5F;&#x53EF;&#x4EE5;&#x5199;&#x6210;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NSString *s1 = [[NSString alloc] initWithFormat:@&quot;Hello, %@!&quot;, name];
+&#xFFFC;CFStringRef s2 = (CFStringRef)CFBridgingRetain(s1);
+&#xFFFC;// do something with s2
+//...
+&#xFFFC;CFRelease(s2); // &#x6CE8;&#x610F;&#x8981;&#x5728;&#x4F7F;&#x7528;&#x7ED3;&#x675F;&#x540E;&#x52A0;&#x8FD9;&#x4E2A;</span><br></pre></td></tr></table></figure>
+<p><strong>__bridge_transfer&#xFF08;&#x4FEE;&#x9970;&#x7B26;&#xFF09; or CFBridgingRelease&#xFF08;&#x51FD;&#x6570;&#xFF09;</strong><br>&#x8FD9;&#x4E2A;&#x4FEE;&#x9970;&#x7B26;&#x548C;&#x51FD;&#x6570;&#x7684;&#x529F;&#x80FD;&#x548C;&#x4E0A;&#x9762;&#x90A3;&#x4E2A;__bridge_retained&#x76F8;&#x53CD;&#xFF0C;&#x5B83;&#x8868;&#x793A;&#x5C06;&#x7BA1;&#x7406;&#x7684;&#x8D23;&#x4EFB;&#x7531;Core Foundation&#x8F6C;&#x4EA4;&#x7ED9;Objective-C&#xFF0C;&#x5373;&#x5C06;&#x7BA1;&#x7406;&#x65B9;&#x5F0F;&#x7531;MRC&#x8F6C;&#x53D8;&#x4E3A;ARC&#x3002;</p>
+<p>&#x6BD4;&#x5982;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFStringRef result = CFURLCreateStringByAddingPercentEscapes(. . .);
+&#xFFFC;NSString *s = (__bridge_transfer NSString *)result;
+//or NSString *s = (NSString *)CFBridgingRelease(result);
+&#xFFFC;return s;</span><br></pre></td></tr></table></figure>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x4EEC;&#x5C06;result&#x7684;&#x7BA1;&#x7406;&#x8D23;&#x4EFB;&#x4EA4;&#x7ED9;&#x4E86;ARC&#x6765;&#x5904;&#x7406;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x4E0D;&#x9700;&#x8981;&#x518D;&#x663E;&#x5F0F;&#x5730;&#x5C06;CFRelease()&#x4E86;&#x3002;</p>
+<p>&#x5BF9;&#x4E86;&#xFF0C;&#x8FD9;&#x91CC;&#x4F60;&#x53EF;&#x80FD;&#x4F1A;&#x6CE8;&#x610F;&#x5230;&#x4E00;&#x4E2A;&#x7EC6;&#x8282;&#xFF0C;&#x548C;ARC&#x4E2D;&#x90A3;&#x4E2A;4&#x4E2A;&#x4E3B;&#x8981;&#x7684;&#x4FEE;&#x9970;&#x7B26;&#xFF08;<strong>strong,</strong>weak,&#x2026;&#xFF09;&#x4E0D;&#x540C;&#xFF0C;&#x8FD9;&#x91CC;&#x4FEE;&#x9970;&#x7B26;&#x7684;&#x4F4D;&#x7F6E;&#x662F;&#x653E;&#x5728;&#x7C7B;&#x578B;&#x524D;&#x9762;&#x7684;&#xFF0C;&#x867D;&#x7136;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x4E2D;&#x6CA1;&#x6709;&#x8BF4;&#x660E;&#xFF0C;&#x4F46;&#x770B;&#x5B98;&#x65B9;&#x7684;&#x5934;&#x6587;&#x4EF6;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x3002;&#x5C0F;&#x4F19;&#x4F34;&#x4EEC;&#xFF0C;&#x8BB0;&#x5F97;&#x522B;&#x628A;&#x4F4D;&#x7F6E;&#x5199;&#x9519;&#x54E6;&#xFF1A;&#xFF09;</p>
+<p>&#x547C;~ &#x597D;&#x4E86;&#xFF0C;&#x4EE5;&#x4E0A;&#x5C31;&#x662F;&#x672C;&#x7BC7;&#x6587;&#x7AE0;&#x7684;&#x4E3B;&#x8981;&#x5185;&#x5BB9;&#x3002;&#x8FD9;&#x6B21;&#x91C7;&#x7528;&#x4E86;&#x65B0;&#x7684;&#x6392;&#x7248;&#xFF0C;&#x611F;&#x89C9;&#x6BD4;&#x4EE5;&#x524D;&#x6709;&#x6761;&#x7406;&#x5F97;&#x591A;&#xFF0C;&#x5E0C;&#x671B;&#x7684;&#x5927;&#x5BB6;&#x770B;&#x7684;&#x8212;&#x670D;&#x3002;</p>
+<p>&#x6587;&#x7AE0;&#x4E2D;&#x5982;&#x679C;&#x6709;&#x4EFB;&#x4F55;&#x9519;&#x8BEF;&#x6216;&#x8005;&#x95EE;&#x9898;&#xFF0C;&#x53EF;&#x4EE5;&#x5728;&#x4E0B;&#x9762;&#x7559;&#x8A00;&#x6216;&#x8005;&#x7ED9;&#x6211;&#x53D1;&#x4FE1;&#xFF0C;&#x671F;&#x5F85;&#x4F60;&#x4EEC;&#x7684;&#x56DE;&#x590D;&#x3002;</p>
+<p>&#x611F;&#x8C22;&#x5927;&#x5BB6;&#x7684;&#x6536;&#x770B;&#x3002;</p>
+<p>ps:&#x611F;&#x8C22;&#x4F5C;&#x8005;&#x7684;&#x5206;&#x4EAB; </p>
 </div></article></div></section><footer><div class="paginator"><a href="/2015/04/03/IOS-Block-之我见/" class="prev">上一篇</a><a href="/2015/04/02/NewZealand-Working-Holiday-Visa-Tips/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

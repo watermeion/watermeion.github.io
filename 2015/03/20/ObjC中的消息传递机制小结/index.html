@@ -1,41 +1,54 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ObjC中的消息传递机制小结 · “More is Different.”</title><meta name="description" content="ObjC中的消息传递机制小结标签（空格分隔）： ObjC
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ObjC中的消息传递机制小结 · “More is Different.”</title><meta name="description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x6807;&amp;#x7B7E;&amp;#xFF08;&amp;#x7A7A;&amp;#x683C;&amp;#x5206;&amp;#x9694;&amp;#xFF09;&amp;#xFF1A; ObjC
 
-原文链接
+&amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;
 
 ###KVO
 
-One to Many: 一个对象的value changes 可以被多个对象监听
-但recipient 必须知道 sender 的生命周期，因为必须在sender对象deallcated之前unregister the observer
-在Core Data 中使用要注意 Core Data的Faulting 机制，因为managed对象变成fault时也会引发KVO监听
-
-###Notifications
-
-Broadcast: sender 和 recipient 不需要知道彼此的生命周期，低相关性；
-可以通过&lt;sp"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/03/20/ObjC中的消息传递机制小结/" class="post-title-link">ObjC中的消息传递机制小结</a></h2><div class="post-meta"><div class="post-time">2015年3月20日</div></div><div class="post-content"><h1 id="ObjC中的消息传递机制小结">ObjC中的消息传递机制小结</h1><p>标签（空格分隔）： ObjC</p>
+One to Many: &amp;#x4E00;&amp;#x4E2A;&amp;#x5BF9;&amp;#x8C61;&amp;#x7684;value changes &amp;#x53EF;&amp;#x4EE5;&amp;#x88AB;&amp;#x591A;&amp;#x4E2A;&amp;#x5BF9;&amp;#x8C61;&amp;#x76D1;&amp;#x542C;
+&lt;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/03/20/ObjC中的消息传递机制小结/" class="post-title-link">ObjC中的消息传递机制小结</a></h2><div class="post-meta"><div class="post-time">2015年3月20日</div></div><div class="post-content"><h1 id="ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;">ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;</h1><p>&#x6807;&#x7B7E;&#xFF08;&#x7A7A;&#x683C;&#x5206;&#x9694;&#xFF09;&#xFF1A; ObjC</p>
 <hr>
-<p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">原文链接</a></p>
+<p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">&#x539F;&#x6587;&#x94FE;&#x63A5;</a></p>
 <a id="more"></a>
 <p>###KVO</p>
 <ol>
-<li>One to Many: 一个对象的value changes 可以被多个对象监听</li>
-<li>但recipient 必须知道 sender 的生命周期，因为必须在sender对象deallcated之前unregister the observer</li>
-<li>在Core Data 中使用要注意 Core Data的Faulting 机制，因为managed对象变成fault时也会引发KVO监听</li>
+<li>One to Many: &#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;value changes &#x53EF;&#x4EE5;&#x88AB;&#x591A;&#x4E2A;&#x5BF9;&#x8C61;&#x76D1;&#x542C;</li>
+<li>&#x4F46;recipient &#x5FC5;&#x987B;&#x77E5;&#x9053; sender &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x56E0;&#x4E3A;&#x5FC5;&#x987B;&#x5728;sender&#x5BF9;&#x8C61;deallcated&#x4E4B;&#x524D;unregister the observer</li>
+<li>&#x5728;Core Data &#x4E2D;&#x4F7F;&#x7528;&#x8981;&#x6CE8;&#x610F; Core Data&#x7684;Faulting &#x673A;&#x5236;&#xFF0C;&#x56E0;&#x4E3A;managed&#x5BF9;&#x8C61;&#x53D8;&#x6210;fault&#x65F6;&#x4E5F;&#x4F1A;&#x5F15;&#x53D1;KVO&#x76D1;&#x542C;</li>
 </ol>
 <p>###Notifications</p>
 <ol>
-<li>Broadcast: sender 和 recipient 不需要知道彼此的生命周期，低相关性；</li>
-<li>可以通过<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#10;###Delegation&#10;1. &#36890;&#36807;&#20989;&#25968;&#21442;&#25968;&#20256;&#36882;&#25968;&#25454;&#10;2. &#26494;&#32806;&#21512;&#65292;&#20351;&#29992;&#24191;&#27867;&#10;&#62; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.&#10;&#10;3. &#32039;&#32806;&#21512;&#19981;&#36866;&#29992; &#65292;&#23481;&#26131;&#36896;&#25104;&#24490;&#29615;&#24341;&#29992;&#65311;&#10;&#10;###Blocks&#10;1. &#28508;&#22312;&#38544;&#24739;&#65306; &#10;&#62; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.&#10;&#22914;&#10;```self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) &#123;&#10;    // handle selection ...&#10;&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>Broadcast: sender &#x548C; recipient &#x4E0D;&#x9700;&#x8981;&#x77E5;&#x9053;&#x5F7C;&#x6B64;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x4F4E;&#x76F8;&#x5173;&#x6027;&#xFF1B;</li>
+<li>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">
+
+###Delegation
+1. &#x901A;&#x8FC7;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x4F20;&#x9012;&#x6570;&#x636E;
+2. &#x677E;&#x8026;&#x5408;&#xFF0C;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;
+&gt; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.
+
+3. &#x7D27;&#x8026;&#x5408;&#x4E0D;&#x9002;&#x7528; &#xFF0C;&#x5BB9;&#x6613;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF1F;
+
+###Blocks
+1. &#x6F5C;&#x5728;&#x9690;&#x60A3;&#xFF1A; 
+&gt; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.
+&#x5982;
+```self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) {
+    // handle selection ...
+};</span><br></pre></td></tr></table></figure></li>
 </ol>
 <blockquote>
-<p>而 如下就不会，原因是operation 执行完后会立即释放</p>
+<p>&#x800C; &#x5982;&#x4E0B;&#x5C31;&#x4E0D;&#x4F1A;&#xFF0C;&#x539F;&#x56E0;&#x662F;operation &#x6267;&#x884C;&#x5B8C;&#x540E;&#x4F1A;&#x7ACB;&#x5373;&#x91CA;&#x653E;</p>
 </blockquote>
-<figure class="highlight"><figcaption><span>= [[NSOperationQueue alloc] init];</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyOperation *operation = [[MyOperation alloc] init];&#10;operation.completionBlock = ^&#123;&#10;    [self finishedOperation];&#10;&#125;;&#10;[self.queue addOperation:operation];</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><figcaption><span>= [[NSOperationQueue alloc] init];</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyOperation *operation = [[MyOperation alloc] init];
+operation.completionBlock = ^{
+    [self finishedOperation];
+};
+[self.queue addOperation:operation];</span><br></pre></td></tr></table></figure>
 <p>###Target-Action</p>
 <ol>
 <li>Target-Action is the typical pattern used to send messages in response to user-interface events.</li>
 <li>A limitation of target-action-based communication is that the messages sent cannot carry any custom payloads. </li>
-<li>非常松耦合，target 和 action 不用知道对方的存在，甚至target=nil ,Action 会沿着响应链一直传递直到找到响应者。On iOS, each control can even be associated with multiple target-action pairs.</li>
+<li>&#x975E;&#x5E38;&#x677E;&#x8026;&#x5408;&#xFF0C;target &#x548C; action &#x4E0D;&#x7528;&#x77E5;&#x9053;&#x5BF9;&#x65B9;&#x7684;&#x5B58;&#x5728;&#xFF0C;&#x751A;&#x81F3;target=nil ,Action &#x4F1A;&#x6CBF;&#x7740;&#x54CD;&#x5E94;&#x94FE;&#x4E00;&#x76F4;&#x4F20;&#x9012;&#x76F4;&#x5230;&#x627E;&#x5230;&#x54CD;&#x5E94;&#x8005;&#x3002;On iOS, each control can even be associated with multiple target-action pairs.</li>
 </ol>
-<p>###何时用哪个</p>
+<p>###&#x4F55;&#x65F6;&#x7528;&#x54EA;&#x4E2A;</p>
 <p><img src="http://www.objc.io/images/issue-7/communication-patterns-flow-chart.png" alt=" recommendation"></p>
 </div></article></div></section><footer><div class="paginator"><a href="/2015/03/21/ios项目中可用的第三方库总结/" class="prev">上一篇</a><a href="/2015/03/19/生命的意义/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

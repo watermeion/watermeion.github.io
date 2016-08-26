@@ -1,34 +1,24 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS 动画之我见 · “More is Different.”</title><meta name="description" content="IOS 动画之我见 (记录)###1. 自定义一个支持动画的属性
-需要：
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS 动画之我见 · “More is Different.”</title><meta name="description" content="IOS &amp;#x52A8;&amp;#x753B;&amp;#x4E4B;&amp;#x6211;&amp;#x89C1; (&amp;#x8BB0;&amp;#x5F55;)###1. &amp;#x81EA;&amp;#x5B9A;&amp;#x4E49;&amp;#x4E00;&amp;#x4E2A;&amp;#x652F;&amp;#x6301;&amp;#x52A8;&amp;#x753B;&amp;#x7684;&amp;#x5C5E;&amp;#x6027;
+&amp;#x9700;&amp;#x8981;&amp;#xFF1A;
 
-重写needsDisplayForKey:方法，支持对某个属性的改变，重绘图层。
+&amp;#x91CD;&amp;#x5199;needsDisplayForKey:&amp;#x65B9;&amp;#x6CD5;&amp;#xFF0C;&amp;#x652F;&amp;#x6301;&amp;#x5BF9;&amp;#x67D0;&amp;#x4E2A;&amp;#x5C5E;&amp;#x6027;&amp;#x7684;&amp;#x6539;&amp;#x53D8;&amp;#xFF0C;&amp;#x91CD;&amp;#x7ED8;&amp;#x56FE;&amp;#x5C42;&amp;#x3002;
 
-重写drawInContext:实现重绘方法
-
-注意需要的化，要修改modelLayer的相关属性，presentationLayer是只读的。
-
-
-###2. 自定义一个动画系统
-需要：
-1. 和一个时间函数绑定。可以使用CADisplayLink，依赖系统触发重绘。
-###3. 时间属性
-
-每个CALayer均有一个时间的@interface CALayer : NSObject &amp;lt;NSCoding, CAMediaTiming&amp;gt;因此可以通过,修改该layer的时间属性speed, beginTime, &lt;co"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2016/08/26/8月26日 Share  动画之我见 (记录)/" class="post-title-link">IOS 动画之我见</a></h2><div class="post-meta"><div class="post-time">2016年8月26日</div></div><div class="post-content"><h2 id="IOS_动画之我见_(记录)">IOS 动画之我见 (记录)</h2><p>###1. 自定义一个支持动画的属性</p>
-<p>需要：</p>
+&amp;#x91CD;&amp;#x5199;drawInContext:&amp;#x5B9E;&amp;#x73B0;&amp;#x91CD;&amp;#x7ED8;&amp;#x65B9;&amp;#x6"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2016/08/26/8月26日 Share  动画之我见 (记录)/" class="post-title-link">IOS 动画之我见</a></h2><div class="post-meta"><div class="post-time">2016年8月26日</div></div><div class="post-content"><h2 id="IOS_&#x52A8;&#x753B;&#x4E4B;&#x6211;&#x89C1;_(&#x8BB0;&#x5F55;)">IOS &#x52A8;&#x753B;&#x4E4B;&#x6211;&#x89C1; (&#x8BB0;&#x5F55;)</h2><p>###1. &#x81EA;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x652F;&#x6301;&#x52A8;&#x753B;&#x7684;&#x5C5E;&#x6027;</p>
+<p>&#x9700;&#x8981;&#xFF1A;</p>
 <ol>
-<li><p>重写<code>needsDisplayForKey:</code>方法，支持对某个属性的改变，重绘图层。</p>
+<li><p>&#x91CD;&#x5199;<code>needsDisplayForKey:</code>&#x65B9;&#x6CD5;&#xFF0C;&#x652F;&#x6301;&#x5BF9;&#x67D0;&#x4E2A;&#x5C5E;&#x6027;&#x7684;&#x6539;&#x53D8;&#xFF0C;&#x91CD;&#x7ED8;&#x56FE;&#x5C42;&#x3002;</p>
 </li>
-<li><p>重写<code>drawInContext:</code>实现重绘方法</p>
+<li><p>&#x91CD;&#x5199;<code>drawInContext:</code>&#x5B9E;&#x73B0;&#x91CD;&#x7ED8;&#x65B9;&#x6CD5;</p>
 </li>
-<li><p>注意需要的化，要修改modelLayer的相关属性，presentationLayer是只读的。</p>
+<li><p>&#x6CE8;&#x610F;&#x9700;&#x8981;&#x7684;&#x5316;&#xFF0C;&#x8981;&#x4FEE;&#x6539;modelLayer&#x7684;&#x76F8;&#x5173;&#x5C5E;&#x6027;&#xFF0C;presentationLayer&#x662F;&#x53EA;&#x8BFB;&#x7684;&#x3002;</p>
 </li>
 </ol>
-<p>###2. 自定义一个动画系统</p>
-<p>需要：</p>
-<pre><code><span class="number">1.</span> 和一个时间函数绑定。可以使用CADisplayLink，依赖系统触发重绘。
-</code></pre><p>###3. 时间属性</p>
+<p>###2. &#x81EA;&#x5B9A;&#x4E49;&#x4E00;&#x4E2A;&#x52A8;&#x753B;&#x7CFB;&#x7EDF;</p>
+<p>&#x9700;&#x8981;&#xFF1A;</p>
+<pre><code><span class="number">1.</span> &#x548C;&#x4E00;&#x4E2A;&#x65F6;&#x95F4;&#x51FD;&#x6570;&#x7ED1;&#x5B9A;&#x3002;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;CADisplayLink&#xFF0C;&#x4F9D;&#x8D56;&#x7CFB;&#x7EDF;&#x89E6;&#x53D1;&#x91CD;&#x7ED8;&#x3002;
+</code></pre><p>###3. &#x65F6;&#x95F4;&#x5C5E;&#x6027;</p>
 <ol>
-<li>每个CALayer均有一个时间的<br><code>@interface CALayer : NSObject &lt;NSCoding, CAMediaTiming&gt;</code><br>因此可以通过,修改该layer的时间属性<code>speed</code>, <code>beginTime</code>, <code>timeOffset</code>，<code>duration</code>,来暂停和改变动画状态。</li>
+<li>&#x6BCF;&#x4E2A;CALayer&#x5747;&#x6709;&#x4E00;&#x4E2A;&#x65F6;&#x95F4;&#x7684;<br><code>@interface CALayer : NSObject &lt;NSCoding, CAMediaTiming&gt;</code><br>&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;,&#x4FEE;&#x6539;&#x8BE5;layer&#x7684;&#x65F6;&#x95F4;&#x5C5E;&#x6027;<code>speed</code>, <code>beginTime</code>, <code>timeOffset</code>&#xFF0C;<code>duration</code>,&#x6765;&#x6682;&#x505C;&#x548C;&#x6539;&#x53D8;&#x52A8;&#x753B;&#x72B6;&#x6001;&#x3002;</li>
 </ol>
-<p>总之，动画的基本要素，时间，静止状态，</p>
-</div></article></div></section><footer><div class="paginator"><a class="prev"> </a><a href="/2015/11/27/IOS-性能优化的几方面/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>
+<p>&#x603B;&#x4E4B;&#xFF0C;&#x52A8;&#x753B;&#x7684;&#x57FA;&#x672C;&#x8981;&#x7D20;&#xFF0C;&#x65F6;&#x95F4;&#xFF0C;&#x9759;&#x6B62;&#x72B6;&#x6001;&#xFF0C;</p>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/08/26/ios-Presented-and-Presenting-VC-备忘/" class="prev">上一篇</a><a href="/2015/11/27/IOS-性能优化的几方面/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

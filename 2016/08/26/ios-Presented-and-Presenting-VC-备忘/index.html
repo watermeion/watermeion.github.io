@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ios Presented and Presenting VC  备忘 · “More is Different.”</title><meta name="description" content="
+IOS presentedViewController and presentingViewController &amp;#x50BB;&amp;#x50BB;&amp;#x5206;&amp;#x4E0D;&amp;#x6E05;&amp;#x695A;
+
+&amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x56DE;&amp;#x53BB;present&amp;#x4E00;&amp;#x4E2A;&amp;#x6216;&amp;#x591A;&amp;#x4E2A;ViewControllers, &amp;#x7136;&amp;#x540E;&amp;#x6211;&amp;#x4EEC;&amp;#x4F1A;&amp;#x901A;&amp;#x8FC7;.&amp;#x53D6;ViewController&amp;#x7684;presented&amp;#x6216;presenting&amp;#x7684;ViewController&amp;#x3002;&amp;#x6BCF;&amp;#x6B21;&amp;#x90FD;&amp;#x5206;&amp;#x4E0D;&amp;#x6E05;&amp;#x695A;&amp;#xFF0C;&amp;#x56E0;&amp;#x6B64;&amp;#x5199;&amp;#x4E2A;&amp;#x5907;&amp;#x5FD8;&amp;#x3002;
+&amp;#x5148;&amp;#x770B;&amp;#x5B98;&amp;#x65B9;&amp;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2016/08/26/ios-Presented-and-Presenting-VC-备忘/" class="post-title-link">ios Presented and Presenting VC  备忘</a></h2><div class="post-meta"><div class="post-time">2016年8月26日</div></div><div class="post-content"><blockquote>
+<p>IOS presentedViewController and presentingViewController &#x50BB;&#x50BB;&#x5206;&#x4E0D;&#x6E05;&#x695A;</p>
+</blockquote>
+<p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x56DE;&#x53BB;present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;.&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>
+<p>&#x5148;&#x770B;&#x5B98;&#x65B9;&#x5B9A;&#x4E49;&#xFF1A;<br>&#x4F5C;&#x4E3A;UIViewController&#x7684;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;:</p>
+<blockquote>
+<p>presentedViewController:</p>
+</blockquote>
+<p> <strong>The view controller</strong> that is presented by <strong>this view controller</strong>, or one of its ancestors in the view controller hierarchy. (read-only)<br>When you present a view controller modally (either explicitly or implicitly) using the presentViewController:animated:completion: method, the view controller that called the method has this property set to the view controller that it presented. If the current view controller did not present another view controller modally, the value in this property is nil.</p>
+<blockquote>
+<p>presentingViewController:</p>
+</blockquote>
+<p><strong>The view controller</strong> that presented <strong>this view controller.</strong></p>
+<p>&#x7384;&#x673A;&#x5C31;&#x5728;<em>The</em>&#x548C;<em>This</em>, &#x4ED4;&#x7EC6;&#x533A;&#x5206;&#x4E00;&#x4E0B; the &#x548C; this: <strong>the</strong> &#x6307;&#x8BE5;&#x5C5E;&#x6027;&#x6307;&#x5411;&#x7684;&#x90A3;&#x4E2A;ViewController; <strong>This</strong> &#x6307;self&#xFF0C;&#x5373;&#x62E5;&#x6709;&#x8BE5;&#x5C5E;&#x6027;&#x7684;VC.</p>
+<p>&#x8FD9;&#x6837;&#x5C31;&#x6BD4;&#x8F83;&#x6E05;&#x6670;&#x4E86;&#x3002;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self = instance Of UIViewController
+
+self.presentedViewController = self &#x4E0A;&#x9762;&#x7684;present(modally)&#x51FA;&#x6765;&#x7684;&#x90A3;&#x4E2A;viewController&#x6216;&#x8005;&#x4E00;&#x4E2A;viewController&#x7C07;&#x4E2D;&#x7684;&#x6839;ViewControllers
+
+self.presentingViewController = self&#x4E0B;&#x9762;&#x7684;ViewController,self&#x662F;&#x88AB;&#x8BE5;VC present&#x8D77;&#x6765;&#x7684;.</span><br></pre></td></tr></table></figure>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x8BF4;&#x660E;&#x4E00;&#x70B9;&#x9898;&#x5916;&#x8BDD;&#xFF0C;&#x591A;&#x5C42;present&#x7684;VC&#x8C03;&#x7528;self dismiss &#xFF0C;&#x4F1A;dismiss &#x8C03;self&#x4E0A;&#x9762;&#x6240;&#x6709;&#x7684;present&#x7684;VC&#x3002;</p>
+<blockquote>
+<p>written by watermeion</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#x914D;&#x4E00;&#x5F20;&#x56FE;&#x8BF4;&#x660E;&#x4E0B;</p>
+
+</div></article></div></section><footer><div class="paginator"><a class="prev"> </a><a href="/2016/08/26/8月26日 Share  动画之我见 (记录)/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

@@ -1,33 +1,50 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ObjC设计模式学习（二） · “More is Different.”</title><meta name="description" content="###单例模式原则要求：
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ObjC设计模式学习（二） · “More is Different.”</title><meta name="description" content="###&amp;#x5355;&amp;#x4F8B;&amp;#x6A21;&amp;#x5F0F;&amp;#x539F;&amp;#x5219;&amp;#x8981;&amp;#x6C42;&amp;#xFF1A;
 
-需要保持控制整个程序生命周期中只有一个实例。“发起调用的对象（calling object）不能以其他方式实例化单例对象，否则有可能创建单例类的多个实例”
-要重载一些方法，保证对单例对象实例化的限制应该和cocoa 框架的引用计数模型保持一致
-
-需要重载的方法：
-1+&amp;#65288;id&amp;#65289;allocWithZone:(NSZone*) zone &amp;#123; return [[self sharedInstance] retain];&amp;#125;&amp;#10;&amp;#10;- (id) copyWithZone:(NSZone*) zone &amp;#123;return self;&amp;#125;&amp;#10;&amp;#10;&amp;#8212;&amp;#65288;id&amp;#65289;retain &amp;#123;return self;&amp;#125;&amp;#10;&amp;#10;-&amp;#65288;NSUInteger"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/03/28/ObjC设计模式学习（二）/" class="post-title-link">ObjC设计模式学习（二）</a></h2><div class="post-meta"><div class="post-time">2015年3月28日</div></div><div class="post-content"><p>###单例模式原则要求：</p>
+&amp;#x9700;&amp;#x8981;&amp;#x4FDD;&amp;#x6301;&amp;#x63A7;&amp;#x5236;&amp;#x6574;&amp;#x4E2A;&amp;#x7A0B;&amp;#x5E8F;&amp;#x751F;&amp;#x547D;&amp;#x5468;&amp;#x671F;&amp;#x4E2D;&amp;#x53EA;&amp;#x6709;&amp;#x4E00;&amp;#x4E2A;&amp;#x5B9E;&amp;#x4F8B;&amp;#x3002;&amp;#x201C;&amp;#x53D1;&amp;#x8D77;&amp;#x8C03;&amp;#x7528;&amp;#x7684;&amp;#x5BF9;&amp;#x8C61;&amp;#xFF08;calling object&amp;#xFF09;&amp;#x4E0D;&amp;#x80FD;&amp;#x4EE5;&amp;#x5176;&amp;#x4ED6;&amp;#x65B9;&amp;#x5F0F;&amp;#x5B9E;&amp;#x4F8B;&amp;#x5316;&amp;#x5355;&amp;#x4F8B;&amp;#x5BF9;&amp;#x8C61;&amp;#xFF0C;&amp;#x5426;&amp;#x5219;&amp;#x6709;&amp;#x53EF;&amp;#x80FD;&amp;#x521B;&amp;#x5EFA;&amp;#x5355;&amp;#x4F8B;&amp;#x7C7B;&amp;#x7684;&amp;#x591A;&amp;#x4E2A;&amp;#x5B9E;&amp;#x4F8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/03/28/ObjC设计模式学习（二）/" class="post-title-link">ObjC设计模式学习（二）</a></h2><div class="post-meta"><div class="post-time">2015年3月28日</div></div><div class="post-content"><p>###&#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#x539F;&#x5219;&#x8981;&#x6C42;&#xFF1A;</p>
 <ol>
-<li>需要保持控制整个程序生命周期中只有一个实例。“发起调用的对象（calling object）不能以其他方式实例化单例对象，否则有可能创建单例类的多个实例”</li>
-<li>要重载一些方法，保证对单例对象实例化的限制应该和cocoa 框架的引用计数模型保持一致</li>
+<li>&#x9700;&#x8981;&#x4FDD;&#x6301;&#x63A7;&#x5236;&#x6574;&#x4E2A;&#x7A0B;&#x5E8F;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E2D;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x3002;&#x201C;&#x53D1;&#x8D77;&#x8C03;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF08;calling object&#xFF09;&#x4E0D;&#x80FD;&#x4EE5;&#x5176;&#x4ED6;&#x65B9;&#x5F0F;&#x5B9E;&#x4F8B;&#x5316;&#x5355;&#x4F8B;&#x5BF9;&#x8C61;&#xFF0C;&#x5426;&#x5219;&#x6709;&#x53EF;&#x80FD;&#x521B;&#x5EFA;&#x5355;&#x4F8B;&#x7C7B;&#x7684;&#x591A;&#x4E2A;&#x5B9E;&#x4F8B;&#x201D;</li>
+<li>&#x8981;&#x91CD;&#x8F7D;&#x4E00;&#x4E9B;&#x65B9;&#x6CD5;&#xFF0C;&#x4FDD;&#x8BC1;&#x5BF9;&#x5355;&#x4F8B;&#x5BF9;&#x8C61;&#x5B9E;&#x4F8B;&#x5316;&#x7684;&#x9650;&#x5236;&#x5E94;&#x8BE5;&#x548C;cocoa &#x6846;&#x67B6;&#x7684;&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x6A21;&#x578B;&#x4FDD;&#x6301;&#x4E00;&#x81F4;</li>
 </ol>
-<p>需要重载的方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+&#65288;id&#65289;allocWithZone:(NSZone*) zone &#123; return [[self sharedInstance] retain];&#125;&#10;&#10;- (id) copyWithZone:(NSZone*) zone &#123;return self;&#125;&#10;&#10;&#8212;&#65288;id&#65289;retain &#123;return self;&#125;&#10;&#10;-&#65288;NSUInteger&#65289;retainCount &#123; return NSUIntegerMax;&#125;&#10;&#10;- (void) release &#123;&#125; &#10;&#10;- (id) autorelease &#123;return self;&#125;</span><br></pre></td></tr></table></figure>
+<p>&#x9700;&#x8981;&#x91CD;&#x8F7D;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+&#xFF08;id&#xFF09;allocWithZone:(NSZone*) zone { return [[self sharedInstance] retain];}
+
+- (id) copyWithZone:(NSZone*) zone {return self;}
+
+&#x2014;&#xFF08;id&#xFF09;retain {return self;}
+
+-&#xFF08;NSUInteger&#xFF09;retainCount { return NSUIntegerMax;}
+
+- (void) release {} 
+
+- (id) autorelease {return self;}</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>###单例模式中的重要问题，</p>
+<p>###&#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#x4E2D;&#x7684;&#x91CD;&#x8981;&#x95EE;&#x9898;&#xFF0C;</p>
 <ol>
-<li>子类化继承</li>
+<li>&#x5B50;&#x7C7B;&#x5316;&#x7EE7;&#x627F;</li>
 </ol>
 <blockquote>
-<p>利用（Foundation）的函数<figure class="highlight"><figcaption><span>NSAllocate (Class aclass, NSUInteger extraBytes, NSZone * zone)``` ,实例化任何一个对象。 </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;&#25913;&#36896;&#21333;&#20363;&#26041;&#27861;&#30340;&#20889;&#27861;&#65306;</span><br></pre></td></tr></table></figure></p>
+<p>&#x5229;&#x7528;&#xFF08;Foundation&#xFF09;&#x7684;&#x51FD;&#x6570;<figure class="highlight"><figcaption><span>NSAllocate (Class aclass, NSUInteger extraBytes, NSZone * zone)``` ,&#x5B9E;&#x4F8B;&#x5316;&#x4EFB;&#x4F55;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x3002; </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">
+&#x6539;&#x9020;&#x5355;&#x4F8B;&#x65B9;&#x6CD5;&#x7684;&#x5199;&#x6CD5;&#xFF1A;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <ul>
 <li><p>(instancetype) sharedInstance<br>{<br> if (_instance==nil)<br> {<br>  _instance=[NSAllocateObject([self class],0,NULL)]init;<br> }</p>
 <p> return _instance;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;2. &#32447;&#31243;&#23433;&#20840;&#10;&#10;&#20351;&#29992;@synchronized() &#25110;NSLock &#23454;&#29616;&#32447;&#31243;&#23433;&#20840;&#10;&#25110;&#32773;&#20351;&#29992; dispatch_once()&#20989;&#25968;&#10;&#10;&#10;&#10;###&#19981;&#21516;&#23618;&#27425;&#30340;&#21333;&#20363;&#20889;&#27861;&#65306;&#10;&#10;1. &#26368;&#24120;&#35265;&#26368;&#26131;&#29702;&#35299;&#20063;&#26368;&#28789;&#27963;&#65292;&#20294;&#27809;&#26377;&#28385;&#36275;&#20197;&#19978;&#20004;&#20010;&#21407;&#21017;&#30340;&#20889;&#27861;&#65292;&#22312;&#35201;&#27714;&#19981;&#20005;&#26684;&#30340;&#24773;&#20917;&#19979;&#19981;&#35201;&#37325;&#36733;&#20854;&#20182;&#26041;&#27861;&#65306;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">
+2. &#x7EBF;&#x7A0B;&#x5B89;&#x5168;
+
+&#x4F7F;&#x7528;@synchronized() &#x6216;NSLock &#x5B9E;&#x73B0;&#x7EBF;&#x7A0B;&#x5B89;&#x5168;
+&#x6216;&#x8005;&#x4F7F;&#x7528; dispatch_once()&#x51FD;&#x6570;
+
+
+
+###&#x4E0D;&#x540C;&#x5C42;&#x6B21;&#x7684;&#x5355;&#x4F8B;&#x5199;&#x6CD5;&#xFF1A;
+
+1. &#x6700;&#x5E38;&#x89C1;&#x6700;&#x6613;&#x7406;&#x89E3;&#x4E5F;&#x6700;&#x7075;&#x6D3B;&#xFF0C;&#x4F46;&#x6CA1;&#x6709;&#x6EE1;&#x8DB3;&#x4EE5;&#x4E0A;&#x4E24;&#x4E2A;&#x539F;&#x5219;&#x7684;&#x5199;&#x6CD5;&#xFF0C;&#x5728;&#x8981;&#x6C42;&#x4E0D;&#x4E25;&#x683C;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x4E0D;&#x8981;&#x91CD;&#x8F7D;&#x5176;&#x4ED6;&#x65B9;&#x6CD5;&#xFF1A;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>static Class *_instance;</p>
 <ul>
-<li><p>（instancetype）sharedInstance<br>{<br> if(_instace==nil)<br> {</p>
+<li><p>&#xFF08;instancetype&#xFF09;sharedInstance<br>{<br> if(_instace==nil)<br> {</p>
 <p>   _instance=[[super allocWithZone:Null] init];</p>
 <p> }<br> return _instance;</p>
 </li>

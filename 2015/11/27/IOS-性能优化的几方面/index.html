@@ -1,60 +1,50 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS 性能优化的几方面 · “More is Different.”</title><meta name="description" content="##2015年07月24日
-IOS程序性能优化
-计算代码运行时间，  BNRtimeBlock NSDate
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IOS 性能优化的几方面 · “More is Different.”</title><meta name="description" content="##2015&amp;#x5E74;07&amp;#x6708;24&amp;#x65E5;
+IOS&amp;#x7A0B;&amp;#x5E8F;&amp;#x6027;&amp;#x80FD;&amp;#x4F18;&amp;#x5316;
+&amp;#x8BA1;&amp;#x7B97;&amp;#x4EE3;&amp;#x7801;&amp;#x8FD0;&amp;#x884C;&amp;#x65F6;&amp;#x95F4;&amp;#xFF0C;  BNRtimeBlock NSDate
 
-善用xcode的性能分析工具
+&amp;#x5584;&amp;#x7528;xcode&amp;#x7684;&amp;#x6027;&amp;#x80FD;&amp;#x5206;&amp;#x6790;&amp;#x5DE5;&amp;#x5177;
 
-图片：优先使用[UIImage imageNamed@&amp;quot;&amp;quot;]  ImageCache类 使用gradient图片代替硬编码实现的gradient;
-
-对于复杂的View,使用drawRect 自绘而不是从nib中载入
-
-对于TableView .重用Cell;减少cell初始化的工作量，延迟装载;定制复杂cell时，使用drawRect自绘。Cache 尽可能多的东西，包括cell高度
-
-在线程中使用 autoreleasepool
-
-将一些不太重要的任务放在idle时运行问：idle是什么时候？
-
-不要再viewWillAppear中做费时的操作，只进行背景色、字体等设置&lt;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/11/27/IOS-性能优化的几方面/" class="post-title-link">IOS 性能优化的几方面</a></h2><div class="post-meta"><div class="post-time">2015年11月27日</div></div><div class="post-content"><p>##2015年07月24日</p>
-<h3 id="IOS程序性能优化">IOS程序性能优化</h3><ol>
-<li><p>计算代码运行时间，  <code>BNRtimeBlock</code> <code>NSDate</code></p>
+&amp;#x56FE;&amp;#x7247;&amp;#xFF1A;&amp;#x4F18;&amp;#x5148;&amp;#x4F7F;&amp;#x7528;[UIImage imageNamed@&amp;quot;&amp;quot;]  ImageCache&amp;#x7C7B; &amp;#x4F7F;&amp;#x7528;gradient&amp;#x56FE;&amp;#x7247;&amp;#x4EE3;&amp;#x66FF;&amp;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/11/27/IOS-性能优化的几方面/" class="post-title-link">IOS 性能优化的几方面</a></h2><div class="post-meta"><div class="post-time">2015年11月27日</div></div><div class="post-content"><p>##2015&#x5E74;07&#x6708;24&#x65E5;</p>
+<h3 id="IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;">IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;</h3><ol>
+<li><p>&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;  <code>BNRtimeBlock</code> <code>NSDate</code></p>
 </li>
-<li><p>善用xcode的性能分析工具</p>
+<li><p>&#x5584;&#x7528;xcode&#x7684;&#x6027;&#x80FD;&#x5206;&#x6790;&#x5DE5;&#x5177;</p>
 </li>
-<li><p>图片：优先使用<code>[UIImage imageNamed@&quot;&quot;]</code>  <code>ImageCache</code>类<br> 使用gradient图片代替硬编码实现的gradient;</p>
+<li><p>&#x56FE;&#x7247;&#xFF1A;&#x4F18;&#x5148;&#x4F7F;&#x7528;<code>[UIImage imageNamed@&quot;&quot;]</code>  <code>ImageCache</code>&#x7C7B;<br> &#x4F7F;&#x7528;gradient&#x56FE;&#x7247;&#x4EE3;&#x66FF;&#x786C;&#x7F16;&#x7801;&#x5B9E;&#x73B0;&#x7684;gradient;</p>
 </li>
-<li><p>对于复杂的View,使用drawRect 自绘而不是从nib中载入</p>
+<li><p>&#x5BF9;&#x4E8E;&#x590D;&#x6742;&#x7684;View,&#x4F7F;&#x7528;drawRect &#x81EA;&#x7ED8;&#x800C;&#x4E0D;&#x662F;&#x4ECE;nib&#x4E2D;&#x8F7D;&#x5165;</p>
 </li>
-<li><p>对于TableView .重用Cell;减少cell初始化的工作量，延迟装载;定制复杂cell时，使用drawRect自绘。Cache 尽可能多的东西，包括cell高度</p>
+<li><p>&#x5BF9;&#x4E8E;TableView .&#x91CD;&#x7528;Cell;&#x51CF;&#x5C11;cell&#x521D;&#x59CB;&#x5316;&#x7684;&#x5DE5;&#x4F5C;&#x91CF;&#xFF0C;&#x5EF6;&#x8FDF;&#x88C5;&#x8F7D;;&#x5B9A;&#x5236;&#x590D;&#x6742;cell&#x65F6;&#xFF0C;&#x4F7F;&#x7528;drawRect&#x81EA;&#x7ED8;&#x3002;Cache &#x5C3D;&#x53EF;&#x80FD;&#x591A;&#x7684;&#x4E1C;&#x897F;&#xFF0C;&#x5305;&#x62EC;cell&#x9AD8;&#x5EA6;</p>
 </li>
-<li><p>在线程中使用 autoreleasepool</p>
+<li><p>&#x5728;&#x7EBF;&#x7A0B;&#x4E2D;&#x4F7F;&#x7528; autoreleasepool</p>
 </li>
-<li><p>将一些不太重要的任务放在idle时运行<br>问：idle是什么时候？</p>
+<li><p>&#x5C06;&#x4E00;&#x4E9B;&#x4E0D;&#x592A;&#x91CD;&#x8981;&#x7684;&#x4EFB;&#x52A1;&#x653E;&#x5728;idle&#x65F6;&#x8FD0;&#x884C;<br>&#x95EE;&#xFF1A;idle&#x662F;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#xFF1F;</p>
 </li>
-<li><p>不要再<code>viewWillAppear</code>中做费时的操作，只进行背景色、字体等设置</p>
+<li><p>&#x4E0D;&#x8981;&#x518D;<code>viewWillAppear</code>&#x4E2D;&#x505A;&#x8D39;&#x65F6;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x53EA;&#x8FDB;&#x884C;&#x80CC;&#x666F;&#x8272;&#x3001;&#x5B57;&#x4F53;&#x7B49;&#x8BBE;&#x7F6E;</p>
 </li>
-<li><p>使用多线程来延迟加载资源、如图片</p>
+<li><p>&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x6765;&#x5EF6;&#x8FDF;&#x52A0;&#x8F7D;&#x8D44;&#x6E90;&#x3001;&#x5982;&#x56FE;&#x7247;</p>
 </li>
-<li><p>关于后台任务<br>系统进入background后，有10分钟的运行时间，因此有很多值得注意的事项：<br>a)尽量减少内存的使用，当内存不足时，IOS将kill那些内存消耗多的app<br>b)释放所有的共享资源，比如Calendar 与 Address bool 当app进入后台时，若果还在使用共享资源，IOS会立即kill掉该应用程序<br>c)正确处理apps生命周期，当进入后台时，赢保持用户数据，以便回到前台时能够恢复，当进入后台时，IOS会保存当前App的一个快照，以便之后在合适的时候呈现给用户以提高用户体检，因此应该避免在屏幕上呈现用户信息，以免西楼用户个人资料。</p>
+<li><p>&#x5173;&#x4E8E;&#x540E;&#x53F0;&#x4EFB;&#x52A1;<br>&#x7CFB;&#x7EDF;&#x8FDB;&#x5165;background&#x540E;&#xFF0C;&#x6709;10&#x5206;&#x949F;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x56E0;&#x6B64;&#x6709;&#x5F88;&#x591A;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x4E8B;&#x9879;&#xFF1A;<br>a)&#x5C3D;&#x91CF;&#x51CF;&#x5C11;&#x5185;&#x5B58;&#x7684;&#x4F7F;&#x7528;&#xFF0C;&#x5F53;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#xFF0C;IOS&#x5C06;kill&#x90A3;&#x4E9B;&#x5185;&#x5B58;&#x6D88;&#x8017;&#x591A;&#x7684;app<br>b)&#x91CA;&#x653E;&#x6240;&#x6709;&#x7684;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;&#x6BD4;&#x5982;Calendar &#x4E0E; Address bool &#x5F53;app&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x82E5;&#x679C;&#x8FD8;&#x5728;&#x4F7F;&#x7528;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;IOS&#x4F1A;&#x7ACB;&#x5373;kill&#x6389;&#x8BE5;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;<br>c)&#x6B63;&#x786E;&#x5904;&#x7406;apps&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x8D62;&#x4FDD;&#x6301;&#x7528;&#x6237;&#x6570;&#x636E;&#xFF0C;&#x4EE5;&#x4FBF;&#x56DE;&#x5230;&#x524D;&#x53F0;&#x65F6;&#x80FD;&#x591F;&#x6062;&#x590D;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;IOS&#x4F1A;&#x4FDD;&#x5B58;&#x5F53;&#x524D;App&#x7684;&#x4E00;&#x4E2A;&#x5FEB;&#x7167;&#xFF0C;&#x4EE5;&#x4FBF;&#x4E4B;&#x540E;&#x5728;&#x5408;&#x9002;&#x7684;&#x65F6;&#x5019;&#x5448;&#x73B0;&#x7ED9;&#x7528;&#x6237;&#x4EE5;&#x63D0;&#x9AD8;&#x7528;&#x6237;&#x4F53;&#x68C0;&#xFF0C;&#x56E0;&#x6B64;&#x5E94;&#x8BE5;&#x907F;&#x514D;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x5448;&#x73B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF0C;&#x4EE5;&#x514D;&#x897F;&#x697C;&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x8D44;&#x6599;&#x3002;</p>
 </li>
-<li><p>如果关键代码使用 C/C++/asm 效率更高就使用 C/C++/asm。</p>
+<li><p>&#x5982;&#x679C;&#x5173;&#x952E;&#x4EE3;&#x7801;&#x4F7F;&#x7528; C/C++/asm &#x6548;&#x7387;&#x66F4;&#x9AD8;&#x5C31;&#x4F7F;&#x7528; C/C++/asm&#x3002;</p>
 </li>
-<li><p>如果一个方法在一个循环次数非常多的循环中使用，在进入循环前使用 methodForSelector 获取该方法 IMP，然后在循环体中直接使用该 IMP。</p>
+<li><p>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x5728;&#x4E00;&#x4E2A;&#x5FAA;&#x73AF;&#x6B21;&#x6570;&#x975E;&#x5E38;&#x591A;&#x7684;&#x5FAA;&#x73AF;&#x4E2D;&#x4F7F;&#x7528;&#xFF0C;&#x5728;&#x8FDB;&#x5165;&#x5FAA;&#x73AF;&#x524D;&#x4F7F;&#x7528; methodForSelector &#x83B7;&#x53D6;&#x8BE5;&#x65B9;&#x6CD5; IMP&#xFF0C;&#x7136;&#x540E;&#x5728;&#x5FAA;&#x73AF;&#x4F53;&#x4E2D;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x8BE5; IMP&#x3002;</p>
 </li>
-<li><p>关于内存释放</p>
+<li><p>&#x5173;&#x4E8E;&#x5185;&#x5B58;&#x91CA;&#x653E;</p>
 </li>
 </ol>
-<p>在 didReceiveMemoryWarning 中释放内存，比如cache 的图像，view 等，并记得调用 [supper didReceiveMemoryWarning]。清理函数 didReceiveMemoryWarning, viewDidUnload 和 dealloc 都是在方法结尾处调用 supper 的方法。 </p>
+<p>&#x5728; didReceiveMemoryWarning &#x4E2D;&#x91CA;&#x653E;&#x5185;&#x5B58;&#xFF0C;&#x6BD4;&#x5982;cache &#x7684;&#x56FE;&#x50CF;&#xFF0C;view &#x7B49;&#xFF0C;&#x5E76;&#x8BB0;&#x5F97;&#x8C03;&#x7528; [supper didReceiveMemoryWarning]&#x3002;&#x6E05;&#x7406;&#x51FD;&#x6570; didReceiveMemoryWarning, viewDidUnload &#x548C; dealloc &#x90FD;&#x662F;&#x5728;&#x65B9;&#x6CD5;&#x7ED3;&#x5C3E;&#x5904;&#x8C03;&#x7528; supper &#x7684;&#x65B9;&#x6CD5;&#x3002; </p>
 <ol>
-<li>提高 APP 加载速度</li>
+<li>&#x63D0;&#x9AD8; APP &#x52A0;&#x8F7D;&#x901F;&#x5EA6;</li>
 </ol>
-<p>避免使用静态初始化，包括静态c++对象，加载时会运行的代码，如+(void) load{} ，会造成在Main函数之前运行额外的代码。</p>
+<p>&#x907F;&#x514D;&#x4F7F;&#x7528;&#x9759;&#x6001;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x5305;&#x62EC;&#x9759;&#x6001;c++&#x5BF9;&#x8C61;&#xFF0C;&#x52A0;&#x8F7D;&#x65F6;&#x4F1A;&#x8FD0;&#x884C;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x5982;+(void) load{} &#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5728;Main&#x51FD;&#x6570;&#x4E4B;&#x524D;&#x8FD0;&#x884C;&#x989D;&#x5916;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
 <ol>
-<li>利用 cache 空间换时间。cache 是一种常见的空间换时间的提供性能的收到，可以用在相当多的场合。</li>
+<li>&#x5229;&#x7528; cache &#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x3002;cache &#x662F;&#x4E00;&#x79CD;&#x5E38;&#x89C1;&#x7684;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x7684;&#x63D0;&#x4F9B;&#x6027;&#x80FD;&#x7684;&#x6536;&#x5230;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x5728;&#x76F8;&#x5F53;&#x591A;&#x7684;&#x573A;&#x5408;&#x3002;</li>
 </ol>
-<p>尽量 cache 那些可重复利用的对象，比如 table cell，date/number formatters，正则表达式，sqlite语句等。</p>
+<p>&#x5C3D;&#x91CF; cache &#x90A3;&#x4E9B;&#x53EF;&#x91CD;&#x590D;&#x5229;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982; table cell&#xFF0C;date/number formatters&#xFF0C;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;sqlite&#x8BED;&#x53E5;&#x7B49;&#x3002;</p>
 <ol>
-<li>关于数据库</li>
+<li>&#x5173;&#x4E8E;&#x6570;&#x636E;&#x5E93;</li>
 </ol>
-<p>缓存经常用到的 sqlite 语句；优化数据库查询语句，用sqlite3_trace和sqlite3_profile来查找性能差的语句；如果可能的话，缓存查询结果缓。</p>
-<p>在使用 sqlite_prepare会将SQL查询编译成字节码，要使用bind，重用那些已经prepared的语句。</p>
+<p>&#x7F13;&#x5B58;&#x7ECF;&#x5E38;&#x7528;&#x5230;&#x7684; sqlite &#x8BED;&#x53E5;&#xFF1B;&#x4F18;&#x5316;&#x6570;&#x636E;&#x5E93;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#xFF0C;&#x7528;sqlite3_trace&#x548C;sqlite3_profile&#x6765;&#x67E5;&#x627E;&#x6027;&#x80FD;&#x5DEE;&#x7684;&#x8BED;&#x53E5;&#xFF1B;&#x5982;&#x679C;&#x53EF;&#x80FD;&#x7684;&#x8BDD;&#xFF0C;&#x7F13;&#x5B58;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x7F13;&#x3002;</p>
+<p>&#x5728;&#x4F7F;&#x7528; sqlite_prepare&#x4F1A;&#x5C06;SQL&#x67E5;&#x8BE2;&#x7F16;&#x8BD1;&#x6210;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x8981;&#x4F7F;&#x7528;bind&#xFF0C;&#x91CD;&#x7528;&#x90A3;&#x4E9B;&#x5DF2;&#x7ECF;prepared&#x7684;&#x8BED;&#x53E5;&#x3002;</p>
 </div></article></div></section><footer><div class="paginator"><a href="/2016/08/26/8月26日 Share  动画之我见 (记录)/" class="prev">上一篇</a><a href="/2015/11/27/Unicode-and-NSString/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>

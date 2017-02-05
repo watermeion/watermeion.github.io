@@ -4,7 +4,7 @@
   <subtitle><![CDATA[-—Philip W. Anderson]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://github.com/watermeion/"/>
-  <updated>2016-08-26T08:51:09.000Z</updated>
+  <updated>2017-01-20T07:29:48.000Z</updated>
   <id>https://github.com/watermeion/</id>
   
   <author>
@@ -15,15 +15,16 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[ios Presented and Presenting VC  备忘]]></title>
+    <title><![CDATA[iOS ViewController 属性区分Presented and Presenting VC  ]]></title>
     <link href="https://github.com/watermeion/2016/08/26/ios-Presented-and-Presenting-VC/"/>
     <id>https://github.com/watermeion/2016/08/26/ios-Presented-and-Presenting-VC/</id>
-    <published>2016-08-26T08:18:43.000Z</published>
-    <updated>2016-08-26T08:51:09.000Z</updated>
+    <published>2016-08-26T08:18:00.000Z</published>
+    <updated>2017-01-20T07:29:48.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>IOS presentedViewController and presentingViewController &#x50BB;&#x50BB;&#x5206;&#x4E0D;&#x6E05;&#x695A;</p>
 </blockquote>
-<p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x56DE;&#x53BB;present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;.&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>
+<p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x4F1A;&#x53BB;Present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;&#x201D;.&#x201D;&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>
+<a id="more"></a>
 <p>&#x5148;&#x770B;&#x5B98;&#x65B9;&#x5B9A;&#x4E49;&#xFF1A;<br>&#x4F5C;&#x4E3A;UIViewController&#x7684;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;:</p>
 <blockquote>
 <p>presentedViewController:</p>
@@ -51,8 +52,13 @@ self.presentingViewController = self&#x4E0B;&#x9762;&#x7684;ViewController,self&
     <![CDATA[<blockquote>
 <p>IOS presentedViewController and presentingViewController &#x50BB;&#x50BB;&#x5206;&#x4E0D;&#x6E05;&#x695A;</p>
 </blockquote>
-]]>
+<p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x4F1A;&#x53BB;Present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;&#x201D;.&#x201D;&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>]]>
+    
     </summary>
+    
+      <category term="ios" scheme="https://github.com/watermeion/tags/ios/"/>
+    
+      <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
     
   </entry>
   

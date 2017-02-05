@@ -1,10 +1,329 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ObjC 设计模式学习笔记（一） · “More is Different.”</title><meta name="description" content="&amp;#x5F00;&amp;#x573A;&amp;#x767D;&amp;#xFF1A;
+<!doctype html>
 
-&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#x7684;&amp;#x4E24;&amp;#x5927;&amp;#x539F;&amp;#x5219;&amp;#xFF1A;1&amp;#x3001;&amp;#x9488;&amp;#x5BF9;&amp;#x63A5;&amp;#x53E3;&amp;#x7F16;&amp;#x7A0B;&amp;#xFF0C;&amp;#x800C;&amp;#x4E0D;&amp;#x662F;&amp;#x9488;&amp;#x5BF9;&amp;#x5B9E;&amp;#x73B0;&amp;#x7F16;&amp;#x7A0B;2&amp;#x3001;&amp;#x4F18;&amp;#x5148;&amp;#x4F7F;&amp;#x7528;&amp;#x5BF9;&amp;#x8C61;&amp;#x7EC4;&amp;#x5408;&amp;#x800C;&amp;#x4E0D;&amp;#x662F;&amp;#x7C7B;&amp;#x7EE7;&amp;#x627F;
 
-###&amp;#x5B66;&amp;#x4E60;&amp;#x5C0F;&amp;#x7ED3;
 
-&amp;#x4E0D;&amp;#x540C;ViewController &amp;#x95F4;&amp;#x7684;&amp;#x4EA4;&amp;#x4E92;&amp;#xFF0C;&amp;#x6BD4;&amp;#x5982;button &amp;#x70B9;&amp;#x51FB;&amp;#x8DF3;&amp;#x8F6C;&amp;"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="stylesheet" href="http://fonts.useso.com/css?family=Source+Sans+Pro:400,600" type="text/css"></head><body><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">博客</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">微博</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li><li class="nav-list-item"><a href="https://github.com/watermeion" target="_blank" class="nav-list-link">GITHUB</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h2 class="post-title"><a href="/2015/03/27/ObjC-设计模式学习笔记（一）/" class="post-title-link">ObjC 设计模式学习笔记（一）</a></h2><div class="post-meta"><div class="post-time">2015年3月27日</div></div><div class="post-content"><p>&#x5F00;&#x573A;&#x767D;&#xFF1A;</p>
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="ObjC," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="“More is Different.”" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x5F00;&amp;#x573A;&amp;#x767D;&amp;#xFF1A;
+
+&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#x7684;&amp;#x4E24;&amp;#x5927;&amp;#x539F;&amp;#x5219;&amp;#xFF1A;1&amp;#x3001;&amp;#x9488;&amp;#x5BF9;&amp;#x63A5;&amp;#x53E3;&amp;#x7F16;&amp;#x7A0B;&amp;#xFF0C;&amp;#x800C;&amp;#x4E0D;&amp;#x66">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ObjC 设计模式学习笔记（一）">
+<meta property="og:url" content="https://github.com/watermeion/2015/03/27/ObjC-设计模式学习笔记（一）/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="&amp;#x5F00;&amp;#x573A;&amp;#x767D;&amp;#xFF1A;
+
+&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#x7684;&amp;#x4E24;&amp;#x5927;&amp;#x539F;&amp;#x5219;&amp;#xFF1A;1&amp;#x3001;&amp;#x9488;&amp;#x5BF9;&amp;#x63A5;&amp;#x53E3;&amp;#x7F16;&amp;#x7A0B;&amp;#xFF0C;&amp;#x800C;&amp;#x4E0D;&amp;#x66">
+<meta property="og:updated_time" content="2015-11-27T11:06:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ObjC 设计模式学习笔记（一）">
+<meta name="twitter:description" content="&amp;#x5F00;&amp;#x573A;&amp;#x767D;&amp;#xFF1A;
+
+&amp;#x8BBE;&amp;#x8BA1;&amp;#x6A21;&amp;#x5F0F;&amp;#x7684;&amp;#x4E24;&amp;#x5927;&amp;#x539F;&amp;#x5219;&amp;#xFF1A;1&amp;#x3001;&amp;#x9488;&amp;#x5BF9;&amp;#x63A5;&amp;#x53E3;&amp;#x7F16;&amp;#x7A0B;&amp;#xFF0C;&amp;#x800C;&amp;#x4E0D;&amp;#x66">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/watermeion/2015/03/27/ObjC-设计模式学习笔记（一）/"/>
+
+
+
+
+
+  <title> ObjC 设计模式学习笔记（一） | “More is Different.” </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">“More is Different.”</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">-—Philip W. Anderson</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            歸檔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            標籤
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2015/03/27/ObjC-设计模式学习笔记（一）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Tad Guo">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="“More is Different.”">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="“More is Different.”" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ObjC 设计模式学习笔记（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-03-27T11:22:27+08:00">
+                2015-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x5F00;&#x573A;&#x767D;&#xFF1A;</p>
 <blockquote>
 <p>&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x7684;&#x4E24;&#x5927;&#x539F;&#x5219;&#xFF1A;<br>1&#x3001;&#x9488;&#x5BF9;&#x63A5;&#x53E3;&#x7F16;&#x7A0B;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x9488;&#x5BF9;&#x5B9E;&#x73B0;&#x7F16;&#x7A0B;<br>2&#x3001;&#x4F18;&#x5148;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x7EC4;&#x5408;&#x800C;&#x4E0D;&#x662F;&#x7C7B;&#x7EE7;&#x627F;</p>
 </blockquote>
@@ -20,4 +339,315 @@
 </li>
 </ol>
 <p>&#x53EF;&#x4EE5;&#x5728;xib&#x4E2D;&#x76F4;&#x63A5;&#x8C03;&#x7528;coordinatingController&#x7684;&#x5DE5;&#x4F5C;&#xFF0C;&#x5C06;&#x5BF9;&#x8C61;&#x7684;&#x8DF3;&#x8F6C;&#x64CD;&#x4F5C;&#x3002;</p>
-</div></article></div></section><footer><div class="paginator"><a href="/2015/03/28/ObjC设计模式学习（二）/" class="prev">上一篇</a><a href="/2015/03/25/Find  A New Way/" class="next">下一篇</a></div></footer><script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?074a5fbc6e6acbb9bccf8b6a19d4a085";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ObjC/" rel="tag"># ObjC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/25/Find  A New Way/" rel="next" title="幸福不只一条路">
+                <i class="fa fa-chevron-left"></i> 幸福不只一条路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/28/ObjC设计模式学习（二）/" rel="prev" title="ObjC设计模式学习（二）">
+                ObjC设计模式学习（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Tad Guo" />
+          <p class="site-author-name" itemprop="name">Tad Guo</p>
+          <p class="site-description motion-element" itemprop="description">watermeion ’s blog</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">文章</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分類</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">標籤</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+</div>
+
+<div class="theme-info">
+  主題 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

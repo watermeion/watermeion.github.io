@@ -92,6 +92,7 @@
 <meta property="og:url" content="https://github.com/watermeion/index.html">
 <meta property="og:site_name" content="“More is Different.”">
 <meta property="og:description" content="watermeion ’s blog">
+<meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="“More is Different.”">
 <meta name="twitter:description" content="watermeion ’s blog">
@@ -108,7 +109,7 @@
     motion: true,
     duoshuo: {
       userId: '0',
-      author: '博主'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -190,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            首頁
+            Startseite
           </a>
         </li>
       
@@ -200,7 +201,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            歸檔
+            Archiv
           </a>
         </li>
       
@@ -210,7 +211,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            標籤
+            Tags
           </a>
         </li>
       
@@ -283,9 +284,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2016-08-26T16:18:00+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-26T16:18:00+08:00">
                 2016-08-26
               </time>
             
@@ -304,7 +305,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分類於</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -351,7 +352,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/08/26/ios-Presented-and-Presenting-VC/#more" rel="contents">
-              閱讀全文 &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -431,9 +432,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2016-08-26T16:00:30+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-26T16:00:30+08:00">
                 2016-08-26
               </time>
             
@@ -567,9 +568,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-11-27T19:41:30+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-11-27T19:41:30+08:00">
                 2015-11-27
               </time>
             
@@ -606,52 +607,15 @@
 
       
         
-          
-            <p>##2015&#x5E74;07&#x6708;24&#x65E5;</p>
-<h3 id="IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;">IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;</h3><ol>
-<li><p>&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;  <code>BNRtimeBlock</code> <code>NSDate</code></p>
-</li>
-<li><p>&#x5584;&#x7528;xcode&#x7684;&#x6027;&#x80FD;&#x5206;&#x6790;&#x5DE5;&#x5177;</p>
-</li>
-<li><p>&#x56FE;&#x7247;&#xFF1A;&#x4F18;&#x5148;&#x4F7F;&#x7528;<code>[UIImage imageNamed@&quot;&quot;]</code>  <code>ImageCache</code>&#x7C7B;<br> &#x4F7F;&#x7528;gradient&#x56FE;&#x7247;&#x4EE3;&#x66FF;&#x786C;&#x7F16;&#x7801;&#x5B9E;&#x73B0;&#x7684;gradient;</p>
-</li>
-<li><p>&#x5BF9;&#x4E8E;&#x590D;&#x6742;&#x7684;View,&#x4F7F;&#x7528;drawRect &#x81EA;&#x7ED8;&#x800C;&#x4E0D;&#x662F;&#x4ECE;nib&#x4E2D;&#x8F7D;&#x5165;</p>
-</li>
-<li><p>&#x5BF9;&#x4E8E;TableView .&#x91CD;&#x7528;Cell;&#x51CF;&#x5C11;cell&#x521D;&#x59CB;&#x5316;&#x7684;&#x5DE5;&#x4F5C;&#x91CF;&#xFF0C;&#x5EF6;&#x8FDF;&#x88C5;&#x8F7D;;&#x5B9A;&#x5236;&#x590D;&#x6742;cell&#x65F6;&#xFF0C;&#x4F7F;&#x7528;drawRect&#x81EA;&#x7ED8;&#x3002;Cache &#x5C3D;&#x53EF;&#x80FD;&#x591A;&#x7684;&#x4E1C;&#x897F;&#xFF0C;&#x5305;&#x62EC;cell&#x9AD8;&#x5EA6;</p>
-</li>
-<li><p>&#x5728;&#x7EBF;&#x7A0B;&#x4E2D;&#x4F7F;&#x7528; autoreleasepool</p>
-</li>
-<li><p>&#x5C06;&#x4E00;&#x4E9B;&#x4E0D;&#x592A;&#x91CD;&#x8981;&#x7684;&#x4EFB;&#x52A1;&#x653E;&#x5728;idle&#x65F6;&#x8FD0;&#x884C;<br>&#x95EE;&#xFF1A;idle&#x662F;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#xFF1F;</p>
-</li>
-<li><p>&#x4E0D;&#x8981;&#x518D;<code>viewWillAppear</code>&#x4E2D;&#x505A;&#x8D39;&#x65F6;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x53EA;&#x8FDB;&#x884C;&#x80CC;&#x666F;&#x8272;&#x3001;&#x5B57;&#x4F53;&#x7B49;&#x8BBE;&#x7F6E;</p>
-</li>
-<li><p>&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x6765;&#x5EF6;&#x8FDF;&#x52A0;&#x8F7D;&#x8D44;&#x6E90;&#x3001;&#x5982;&#x56FE;&#x7247;</p>
-</li>
-<li><p>&#x5173;&#x4E8E;&#x540E;&#x53F0;&#x4EFB;&#x52A1;<br>&#x7CFB;&#x7EDF;&#x8FDB;&#x5165;background&#x540E;&#xFF0C;&#x6709;10&#x5206;&#x949F;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x56E0;&#x6B64;&#x6709;&#x5F88;&#x591A;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x4E8B;&#x9879;&#xFF1A;<br>a)&#x5C3D;&#x91CF;&#x51CF;&#x5C11;&#x5185;&#x5B58;&#x7684;&#x4F7F;&#x7528;&#xFF0C;&#x5F53;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#xFF0C;IOS&#x5C06;kill&#x90A3;&#x4E9B;&#x5185;&#x5B58;&#x6D88;&#x8017;&#x591A;&#x7684;app<br>b)&#x91CA;&#x653E;&#x6240;&#x6709;&#x7684;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;&#x6BD4;&#x5982;Calendar &#x4E0E; Address bool &#x5F53;app&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x82E5;&#x679C;&#x8FD8;&#x5728;&#x4F7F;&#x7528;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;IOS&#x4F1A;&#x7ACB;&#x5373;kill&#x6389;&#x8BE5;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;<br>c)&#x6B63;&#x786E;&#x5904;&#x7406;apps&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x8D62;&#x4FDD;&#x6301;&#x7528;&#x6237;&#x6570;&#x636E;&#xFF0C;&#x4EE5;&#x4FBF;&#x56DE;&#x5230;&#x524D;&#x53F0;&#x65F6;&#x80FD;&#x591F;&#x6062;&#x590D;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;IOS&#x4F1A;&#x4FDD;&#x5B58;&#x5F53;&#x524D;App&#x7684;&#x4E00;&#x4E2A;&#x5FEB;&#x7167;&#xFF0C;&#x4EE5;&#x4FBF;&#x4E4B;&#x540E;&#x5728;&#x5408;&#x9002;&#x7684;&#x65F6;&#x5019;&#x5448;&#x73B0;&#x7ED9;&#x7528;&#x6237;&#x4EE5;&#x63D0;&#x9AD8;&#x7528;&#x6237;&#x4F53;&#x68C0;&#xFF0C;&#x56E0;&#x6B64;&#x5E94;&#x8BE5;&#x907F;&#x514D;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x5448;&#x73B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF0C;&#x4EE5;&#x514D;&#x897F;&#x697C;&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x8D44;&#x6599;&#x3002;</p>
-</li>
-<li><p>&#x5982;&#x679C;&#x5173;&#x952E;&#x4EE3;&#x7801;&#x4F7F;&#x7528; C/C++/asm &#x6548;&#x7387;&#x66F4;&#x9AD8;&#x5C31;&#x4F7F;&#x7528; C/C++/asm&#x3002;</p>
-</li>
-<li><p>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x5728;&#x4E00;&#x4E2A;&#x5FAA;&#x73AF;&#x6B21;&#x6570;&#x975E;&#x5E38;&#x591A;&#x7684;&#x5FAA;&#x73AF;&#x4E2D;&#x4F7F;&#x7528;&#xFF0C;&#x5728;&#x8FDB;&#x5165;&#x5FAA;&#x73AF;&#x524D;&#x4F7F;&#x7528; methodForSelector &#x83B7;&#x53D6;&#x8BE5;&#x65B9;&#x6CD5; IMP&#xFF0C;&#x7136;&#x540E;&#x5728;&#x5FAA;&#x73AF;&#x4F53;&#x4E2D;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x8BE5; IMP&#x3002;</p>
-</li>
-<li><p>&#x5173;&#x4E8E;&#x5185;&#x5B58;&#x91CA;&#x653E;</p>
-</li>
-</ol>
-<p>&#x5728; didReceiveMemoryWarning &#x4E2D;&#x91CA;&#x653E;&#x5185;&#x5B58;&#xFF0C;&#x6BD4;&#x5982;cache &#x7684;&#x56FE;&#x50CF;&#xFF0C;view &#x7B49;&#xFF0C;&#x5E76;&#x8BB0;&#x5F97;&#x8C03;&#x7528; [supper didReceiveMemoryWarning]&#x3002;&#x6E05;&#x7406;&#x51FD;&#x6570; didReceiveMemoryWarning, viewDidUnload &#x548C; dealloc &#x90FD;&#x662F;&#x5728;&#x65B9;&#x6CD5;&#x7ED3;&#x5C3E;&#x5904;&#x8C03;&#x7528; supper &#x7684;&#x65B9;&#x6CD5;&#x3002; </p>
-<ol>
-<li>&#x63D0;&#x9AD8; APP &#x52A0;&#x8F7D;&#x901F;&#x5EA6;</li>
-</ol>
-<p>&#x907F;&#x514D;&#x4F7F;&#x7528;&#x9759;&#x6001;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x5305;&#x62EC;&#x9759;&#x6001;c++&#x5BF9;&#x8C61;&#xFF0C;&#x52A0;&#x8F7D;&#x65F6;&#x4F1A;&#x8FD0;&#x884C;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x5982;+(void) load{} &#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5728;Main&#x51FD;&#x6570;&#x4E4B;&#x524D;&#x8FD0;&#x884C;&#x989D;&#x5916;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
-<ol>
-<li>&#x5229;&#x7528; cache &#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x3002;cache &#x662F;&#x4E00;&#x79CD;&#x5E38;&#x89C1;&#x7684;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x7684;&#x63D0;&#x4F9B;&#x6027;&#x80FD;&#x7684;&#x6536;&#x5230;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x5728;&#x76F8;&#x5F53;&#x591A;&#x7684;&#x573A;&#x5408;&#x3002;</li>
-</ol>
-<p>&#x5C3D;&#x91CF; cache &#x90A3;&#x4E9B;&#x53EF;&#x91CD;&#x590D;&#x5229;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982; table cell&#xFF0C;date/number formatters&#xFF0C;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;sqlite&#x8BED;&#x53E5;&#x7B49;&#x3002;</p>
-<ol>
-<li>&#x5173;&#x4E8E;&#x6570;&#x636E;&#x5E93;</li>
-</ol>
-<p>&#x7F13;&#x5B58;&#x7ECF;&#x5E38;&#x7528;&#x5230;&#x7684; sqlite &#x8BED;&#x53E5;&#xFF1B;&#x4F18;&#x5316;&#x6570;&#x636E;&#x5E93;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#xFF0C;&#x7528;sqlite3_trace&#x548C;sqlite3_profile&#x6765;&#x67E5;&#x627E;&#x6027;&#x80FD;&#x5DEE;&#x7684;&#x8BED;&#x53E5;&#xFF1B;&#x5982;&#x679C;&#x53EF;&#x80FD;&#x7684;&#x8BDD;&#xFF0C;&#x7F13;&#x5B58;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x7F13;&#x3002;</p>
-<p>&#x5728;&#x4F7F;&#x7528; sqlite_prepare&#x4F1A;&#x5C06;SQL&#x67E5;&#x8BE2;&#x7F16;&#x8BD1;&#x6210;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x8981;&#x4F7F;&#x7528;bind&#xFF0C;&#x91CD;&#x7528;&#x90A3;&#x4E9B;&#x5DF2;&#x7ECF;prepared&#x7684;&#x8BED;&#x53E5;&#x3002;</p>
-
-          
+          <p>##2015&#x5E74;07&#x6708;24&#x65E5;</p>
+<p>&#x6027;&#x80FD;&#x8C03;&#x4F18;&#xFF0C;&#x662F;&#x4E00;&#x4E2A;&#x6C38;&#x6052;&#x7684;&#x8BDD;&#x9898;&#x3002;&#x672C;&#x6587;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E86;IOS&#x5E38;&#x89C1;&#x7684;&#x6027;&#x80FD;&#x8003;&#x8651;&#x7684;&#x65B9;&#x9762;<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/11/27/IOS-性能优化的几方面/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -728,9 +692,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-11-27T19:29:01+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-11-27T19:29:01+08:00">
                 2015-11-27
               </time>
             
@@ -767,166 +731,14 @@
 
       
         
-          
-            <h2 id="NSString_&#x548C;_Unicode_&#x5C0F;&#x7ED3;">NSString &#x548C; Unicode &#x5C0F;&#x7ED3;</h2><ol>
-<li><p><strong>Unicode </strong> &#x901A;&#x7528;&#x5B57;&#x7B26;&#x7F16;&#x7801;  21&#x4F4D;&#x8868;&#x793A; 17&#x4E2A;&#x5E73;&#x9762; &#xFF0C;&#x6BCF;&#x4E2A;&#x5E73;&#x9762;&#x5305;&#x62EC; <strong>65536</strong> &#x4E2A;&#x5B57;&#x7B26; &#xFF0C;&#x5E38;&#x7528;&#x7684;&#x662F;BMF &#x57FA;&#x672C;&#x5E73;&#x9762;</p>
-</li>
-<li><p><strong>UTF8</strong>  &#x7528;1&#x5230;4&#x4E2A;&#x5B57;&#x8282;&#x7684;&#x7801;&#x5143;&#x8868;&#x793A;&#x5BF9;&#x5E94;&#x7684; <strong>unicode</strong> &#x7801;&#x70B9;&#xFF0C;1-127&#x53F7;&#x7801;&#x5143;&#x7528;&#x4E00;&#x4E2A;&#x5B57;&#x8282;&#x8868;&#x793A;&#xFF0C;&#x6B63;&#x597D;&#x662F;ASCII&#x7801;&#xFF0C;&#x5E76;&#x4E14;&#x6709;&#x5229;&#x4E8E;&#x7F51;&#x7EDC;&#x4F20;&#x8F93;&#x3002; </p>
-</li>
-<li><p><strong>UTF16 </strong> &#x56FA;&#x5B9A;&#x7528; <strong>2</strong> &#x4E2A;&#x5B57;&#x8282;(16bits)&#x7684;&#x7801;&#x5143;&#xFF0C;&#x7528;1&#x4E2A;&#x6216;&#x8005;&#x4E24;&#x7801;&#x5143; &#xFF0C;&#x8868;&#x793A;unicode&#x7684;21&#x4F4D;&#x7684;&#x7801;&#x5B57;. &#x56E0;&#x6B64;&#xFF0C;&#x4E00;&#x4E2A;&#x7801;&#x5143;&#x7531;&#x4E24;&#x4E2A;&#x5B57;&#x8282;&#xFF0C;&#x6240;&#x4EE5;&#x5B58;&#x5728;&#x5B57;&#x8282;&#x5E8F;&#x7684;&#x95EE;&#x9898;&#x3002;&#x540C;&#x65F6;2&#x4E2A;&#x7801;&#x5143;&#x5171;32bits &#x8868;&#x793A;21bits&#x7684;unicode&#x7801;&#x5B57;&#xFF0C;&#x6709;&#x4E9B;&#x6D6A;&#x8D39;&#x3002;&#x5728;&#x7F51;&#x7EDC;&#x4F20;&#x8F93;&#x7B49;&#x8FC7;&#x7A0B;&#x4E2D;&#x4E0D;&#x592A;&#x9002;&#x7528; </p>
-</li>
-</ol>
-<ol>
-<li><p><strong>NSString</strong> length &#x672C;&#x8D28;&#x662F;&#x8868;&#x793A;&#x7684;UTF16&#x7F16;&#x7801;&#x7684;&#x7801;&#x5143;&#x4E2A;&#x6570;&#xFF0C;&#x7531;&#x4E8E;&#x6709;&#x7684;&#x7279;&#x6B8A;&#x5B57;&#x7B26;&#x9700;&#x8981;2&#x4E2A;&#x7801;&#x5143;&#x6765;&#x8868;&#x793A;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;<code>NSString length</code> &#x5F97;&#x5230;&#x7684;&#x4E2A;&#x6570;&#x5B58;&#x5728;&#x548C;&#x771F;&#x5B9E;&#x5B57;&#x7B26;&#x6570;&#x4E0D;&#x7B49;&#x7684;&#x53EF;&#x80FD;&#x6027;</p>
-</li>
-<li><p><strong>&#x6B63;&#x89C4;&#x5316;</strong> &#x5145;&#x5206;&#x8003;&#x8651;&#x4E0D;&#x540C;&#x56FD;&#x5BB6;&#x4E0D;&#x540C;&#x6587;&#x5316;&#x7684;&#x6587;&#x5B57;&#x7684;&#x4E0D;&#x540C;&#xFF0C;&#x76F8;&#x540C;&#x7684;&#x542B;&#x4E49;&#x5B8C;&#x5168;&#x53EF;&#x80FD;&#x7528;&#x4E0D;&#x540C;&#x7684; <strong>unicode </strong> &#x7684;&#x7801;&#x5B57;&#x8868;&#x793A;&#x3002; &#x4E3A;&#x4E86;&#x4FBF;&#x4E8E;&#x6BD4;&#x8F83;&#xFF0C;&#x6709;&#x65F6;&#x9700;&#x8981;&#x91C7;&#x7528;unicode &#x76F8;&#x5BB9;&#x7B49;&#x4EF7;&#x6216;&#x8005;&#x6807;&#x51C6;&#x7B49;&#x4EF7;&#x7684;&#x65B9;&#x5F0F; &#x8FDB;&#x884C;&#x6B63;&#x89C4;&#x5316;&#x5904;&#x7406;&#x3002;&#x5728;<strong>NSString</strong> &#x9ED8;&#x8BA4;&#x662F;&#x4E0D;&#x8FDB;&#x884C;&#x6B63;&#x89C4;&#x5316;&#x5904;&#x7406;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x5728;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x662F;&#x5426;&#x5B57;&#x9762;&#x548C;&#x5B9E;&#x9645;&#x8BED;&#x4E49;&#x5B8C;&#x5168;&#x76F8;&#x540C;&#x65F6;&#xFF0C;&#x5E94;&#x8BE5;&#x624B;&#x52A8;&#x6B63;&#x89C4;&#x5316;&#x4E4B;&#x540E;&#xFF0C;&#x5904;&#x7406;</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2015/11/27/New-Photo-Blog/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Tad Guo">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="“More is Different.”">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="“More is Different.”" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/27/New-Photo-Blog/" itemprop="url">
-                  Gallery Post
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">發表於</span>
-              
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-11-27T19:06:29+08:00">
-                2015-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-          
-          
-            <div class="post-gallery-row">
-              <a class="post-gallery-img fancybox"
-                 href="http://i.minus.com/ibobbTlfxZgITW.jpg" rel="gallery_ciyst4mrc000p12h75x8lesxq"
-                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
-                <img src="http://i.minus.com/ibobbTlfxZgITW.jpg" itemprop="contentUrl"/>
-              </a>
-            
-          
-            
-              <a class="post-gallery-img fancybox"
-                 href="http://i.minus.com/iedpg90Y0exFS.jpg" rel="gallery_ciyst4mrc000p12h75x8lesxq"
-                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
-                <img src="http://i.minus.com/iedpg90Y0exFS.jpg" itemprop="contentUrl"/>
-              </a>
-            
-          
-
-          
+          <p>NSString &#x548C; Unicode &#x5C0F;&#x7ED3;</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/11/27/Unicode-and-NSString/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
           </div>
-        </div>
-      
-
-      
-        
-          
-            <p>hello New photo</p>
-
-          
+          <!--/noindex-->
         
       
     </div>
@@ -1003,9 +815,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-04-12T10:52:16+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-04-12T10:52:16+08:00">
                 2015-04-12
               </time>
             
@@ -1048,7 +860,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/04/12/Loved-Ted-Vedio-4-a-m/#more" rel="contents">
-              閱讀全文 &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1128,9 +940,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-04-03T09:44:42+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-04-03T09:44:42+08:00">
                 2015-04-03
               </time>
             
@@ -1180,7 +992,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/04/03/IOS-Block-之我见/#more" rel="contents">
-              閱讀全文 &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1260,9 +1072,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-04-02T23:12:22+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-04-02T23:12:22+08:00">
                 2015-04-02
               </time>
             
@@ -1299,7 +1111,7 @@
 
       
         
-          <p>&#x6587;&#x7AE0;&#x51FA;&#x5904;&#xFF1A;<a href="http://www.cnblogs.com/flyFreeZn/p/4264220.html">&#x4E0D;&#x5FD8;&#x521D;&#x201C;&#x8F9B;&#x201D;</a></p>
+          <p>&#x6587;&#x7AE0;&#x51FA;&#x5904;&#xFF1A;<a href="http://www.cnblogs.com/flyFreeZn/p/4264220.html" target="_blank" rel="external">&#x4E0D;&#x5FD8;&#x521D;&#x201C;&#x8F9B;&#x201D;</a></p>
 <blockquote>
 <p>&#x672C;&#x6587;&#x6765;&#x6E90;&#x4E8E;&#x6211;&#x4E2A;&#x4EBA;&#x7684;ARC&#x5B66;&#x4E60;&#x7B14;&#x8BB0;&#xFF0C;&#x65E8;&#x5728;&#x901A;&#x8FC7;&#x7B80;&#x660E;&#x627C;&#x8981;&#x7684;&#x65B9;&#x5F0F;&#x603B;&#x7ED3;&#x51FA;iOS&#x5F00;&#x53D1;&#x4E2D;ARC(Automatic Reference Counting&#xFF0C;&#x81EA;&#x52A8;&#x5F15;&#x7528;&#x8BA1;&#x6570;)&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x6280;&#x672F;&#x7684;&#x8981;&#x70B9;&#xFF0C;&#x6240;&#x4EE5;&#x4E0D;&#x4F1A;&#x6D89;&#x53CA;&#x5168;&#x90E8;&#x7EC6;&#x8282;&#x3002;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;&#x4E0D;&#x662F;&#x4E00;&#x7BC7;&#x6807;&#x51C6;&#x7684;ARC&#x4F7F;&#x7528;&#x6559;&#x7A0B;&#xFF0C;&#x5E76;&#x5047;&#x5B9A;&#x8BFB;&#x8005;&#x5DF2;&#x7ECF;&#x5BF9;ARC&#x6709;&#x4E86;&#x4E00;&#x5B9A;&#x4E86;&#x89E3;&#x548C;&#x4F7F;&#x7528;&#x7ECF;&#x9A8C;&#x3002;&#x8BE6;&#x7EC6;&#x7684;&#x5173;&#x4E8E;ARC&#x7684;&#x4FE1;&#x606F;&#x8BF7;&#x53C2;&#x89C1;&#x82F9;&#x679C;&#x7684;&#x5B98;&#x65B9;&#x6587;&#x6863;&#x4E0E;&#x7F51;&#x4E0A;&#x7684;&#x5176;&#x4ED6;&#x6559;&#x7A0B;&#xFF1A;&#xFF09;</p>
 </blockquote>
@@ -1315,7 +1127,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/04/02/IOS开发ARC技术要点（转载）/#more" rel="contents">
-              閱讀全文 &raquo;
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1395,9 +1207,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-04-02T11:18:25+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-04-02T11:18:25+08:00">
                 2015-04-02
               </time>
             
@@ -1514,9 +1326,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">發表於</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-03-28T10:09:43+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-03-28T10:09:43+08:00">
                 2015-03-28
               </time>
             
@@ -1553,27 +1365,137 @@
 
       
         
-          <p>###&#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#x539F;&#x5219;&#x8981;&#x6C42;&#xFF1A;</p>
-<ol>
-<li>&#x9700;&#x8981;&#x4FDD;&#x6301;&#x63A7;&#x5236;&#x6574;&#x4E2A;&#x7A0B;&#x5E8F;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E2D;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x5B9E;&#x4F8B;&#x3002;&#x201C;&#x53D1;&#x8D77;&#x8C03;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF08;calling object&#xFF09;&#x4E0D;&#x80FD;&#x4EE5;&#x5176;&#x4ED6;&#x65B9;&#x5F0F;&#x5B9E;&#x4F8B;&#x5316;&#x5355;&#x4F8B;&#x5BF9;&#x8C61;&#xFF0C;&#x5426;&#x5219;&#x6709;&#x53EF;&#x80FD;&#x521B;&#x5EFA;&#x5355;&#x4F8B;&#x7C7B;&#x7684;&#x591A;&#x4E2A;&#x5B9E;&#x4F8B;&#x201D;</li>
-<li>&#x8981;&#x91CD;&#x8F7D;&#x4E00;&#x4E9B;&#x65B9;&#x6CD5;&#xFF0C;&#x4FDD;&#x8BC1;&#x5BF9;&#x5355;&#x4F8B;&#x5BF9;&#x8C61;&#x5B9E;&#x4F8B;&#x5316;&#x7684;&#x9650;&#x5236;&#x5E94;&#x8BE5;&#x548C;cocoa &#x6846;&#x67B6;&#x7684;&#x5F15;&#x7528;&#x8BA1;&#x6570;&#x6A21;&#x578B;&#x4FDD;&#x6301;&#x4E00;&#x81F4;</li>
-</ol>
-<p>&#x9700;&#x8981;&#x91CD;&#x8F7D;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+&#xFF08;id&#xFF09;allocWithZone:(NSZone*) zone { return [[self sharedInstance] retain];}
-
-- (id) copyWithZone:(NSZone*) zone {return self;}
-
-&#x2014;&#xFF08;id&#xFF09;retain {return self;}
-
--&#xFF08;NSUInteger&#xFF09;retainCount { return NSUIntegerMax;}
-
-- (void) release {} 
-
-- (id) autorelease {return self;}</span><br></pre></td></tr></table></figure>
+          <p> &#x5355;&#x4F8B;&#x6A21;&#x5F0F;<br></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2015/03/28/ObjC设计模式学习（二）/#more" rel="contents">
-              閱讀全文 &raquo;
+              Weiterlesen &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2015/03/27/ObjC-设计模式学习笔记（一）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Tad Guo">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="“More is Different.”">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="“More is Different.”" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/03/27/ObjC-设计模式学习笔记（一）/" itemprop="url">
+                  ObjC 设计模式学习笔记（一）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-03-27T11:22:27+08:00">
+                2015-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>&#x5F00;&#x573A;&#x767D;&#xFF1A;</p>
+<blockquote>
+<p>&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x7684;&#x4E24;&#x5927;&#x539F;&#x5219;&#xFF1A;<br>1&#x3001;&#x9488;&#x5BF9;&#x63A5;&#x53E3;&#x7F16;&#x7A0B;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x9488;&#x5BF9;&#x5B9E;&#x73B0;&#x7F16;&#x7A0B;<br>2&#x3001;&#x4F18;&#x5148;&#x4F7F;&#x7528;&#x5BF9;&#x8C61;&#x7EC4;&#x5408;&#x800C;&#x4E0D;&#x662F;&#x7C7B;&#x7EE7;&#x627F;</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/03/27/ObjC-设计模式学习笔记（一）/#more" rel="contents">
+              Weiterlesen &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1651,8 +1573,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">16</span>
-                <span class="site-state-item-name">文章</span>
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -1661,7 +1583,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">分類</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1670,7 +1592,7 @@
             <div class="site-state-item site-state-tags">
               <a href="/tags">
                 <span class="site-state-item-count">7</span>
-                <span class="site-state-item-name">標籤</span>
+                <span class="site-state-item-name">Tags</span>
               </a>
             </div>
           
@@ -1725,11 +1647,11 @@
 
 
 <div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 強力驅動
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主題 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT.Muse
   </a>

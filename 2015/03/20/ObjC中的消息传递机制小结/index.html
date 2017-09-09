@@ -86,19 +86,19 @@
 
 
 
-<meta name="description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x6807;&amp;#x7B7E;&amp;#xFF08;&amp;#x7A7A;&amp;#x683C;&amp;#x5206;&amp;#x9694;&amp;#xFF09;&amp;#xFF1A; ObjC  &amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
+<meta name="description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
 <meta name="keywords" content="ObjC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ObjC中的消息传递机制小结">
 <meta property="og:url" content="https://github.com/watermeion/2015/03/20/ObjC中的消息传递机制小结/index.html">
 <meta property="og:site_name" content="“More is Different.”">
-<meta property="og:description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x6807;&amp;#x7B7E;&amp;#xFF08;&amp;#x7A7A;&amp;#x683C;&amp;#x5206;&amp;#x9694;&amp;#xFF09;&amp;#xFF1A; ObjC  &amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
+<meta property="og:description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.objc.io/images/issue-7/communication-patterns-flow-chart.png">
-<meta property="og:updated_time" content="2015-11-27T11:06:29.000Z">
+<meta property="og:updated_time" content="2017-09-09T07:25:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ObjC中的消息传递机制小结">
-<meta name="twitter:description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x6807;&amp;#x7B7E;&amp;#xFF08;&amp;#x7A7A;&amp;#x683C;&amp;#x5206;&amp;#x9694;&amp;#xFF09;&amp;#xFF1A; ObjC  &amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
+<meta name="twitter:description" content="ObjC&amp;#x4E2D;&amp;#x7684;&amp;#x6D88;&amp;#x606F;&amp;#x4F20;&amp;#x9012;&amp;#x673A;&amp;#x5236;&amp;#x5C0F;&amp;#x7ED3;&amp;#x539F;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;">
 <meta name="twitter:image" content="http://www.objc.io/images/issue-7/communication-patterns-flow-chart.png">
 
 
@@ -348,6 +348,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tech-Memo/" itemprop="url" rel="index">
+                    <span itemprop="name">Tech Memo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -378,9 +400,7 @@
       
 
       
-        <h1 id="ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;">ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;</h1><p>&#x6807;&#x7B7E;&#xFF08;&#x7A7A;&#x683C;&#x5206;&#x9694;&#xFF09;&#xFF1A; ObjC</p>
-<hr>
-<p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">&#x539F;&#x6587;&#x94FE;&#x63A5;</a></p>
+        <h1 id="ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;">ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x5C0F;&#x7ED3;</h1><p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">&#x539F;&#x6587;&#x94FE;&#x63A5;</a></p>
 <a id="more"></a>
 <p>###KVO</p>
 <ol>
@@ -391,7 +411,7 @@
 <p>###Notifications</p>
 <ol>
 <li>Broadcast: sender &#x548C; recipient &#x4E0D;&#x9700;&#x8981;&#x77E5;&#x9053;&#x5F7C;&#x6B64;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x4F4E;&#x76F8;&#x5173;&#x6027;&#xFF1B;</li>
-<li>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">###Delegation</div><div class="line">1. &#x901A;&#x8FC7;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x4F20;&#x9012;&#x6570;&#x636E;</div><div class="line">2. &#x677E;&#x8026;&#x5408;&#xFF0C;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;</div><div class="line">&gt; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.</div><div class="line"></div><div class="line">3. &#x7D27;&#x8026;&#x5408;&#x4E0D;&#x9002;&#x7528; &#xFF0C;&#x5BB9;&#x6613;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF1F;</div><div class="line"></div><div class="line">###Blocks</div><div class="line">1. &#x6F5C;&#x5728;&#x9690;&#x60A3;&#xFF1A; </div><div class="line">&gt; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.</div><div class="line">&#x5982;</div><div class="line">```self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) {</div><div class="line">    // handle selection ...</div><div class="line">};</div></pre></td></tr></table></figure></li>
+<li>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">###Delegation</div><div class="line">1. &#x901A;&#x8FC7;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x4F20;&#x9012;&#x6570;&#x636E;</div><div class="line">2. &#x677E;&#x8026;&#x5408;&#xFF0C;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;</div><div class="line">&gt; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.</div><div class="line"></div><div class="line">3. &#x7D27;&#x8026;&#x5408;&#x4E0D;&#x9002;&#x7528; &#xFF0C;&#x5BB9;&#x6613;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF1F;</div><div class="line"></div><div class="line">###Blocks</div><div class="line">1. &#x6F5C;&#x5728;&#x9690;&#x60A3;&#xFF1A;</div><div class="line">&gt; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.</div><div class="line">&#x5982;</div><div class="line">```self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) {</div><div class="line">    // handle selection ...</div><div class="line">};</div></pre></td></tr></table></figure></li>
 </ol>
 <blockquote>
 <p>&#x800C; &#x5982;&#x4E0B;&#x5C31;&#x4E0D;&#x4F1A;&#xFF0C;&#x539F;&#x56E0;&#x662F;operation &#x6267;&#x884C;&#x5B8C;&#x540E;&#x4F1A;&#x7ACB;&#x5373;&#x91CA;&#x653E;</p>
@@ -400,7 +420,7 @@
 <p>###Target-Action</p>
 <ol>
 <li>Target-Action is the typical pattern used to send messages in response to user-interface events.</li>
-<li>A limitation of target-action-based communication is that the messages sent cannot carry any custom payloads. </li>
+<li>A limitation of target-action-based communication is that the messages sent cannot carry any custom payloads.</li>
 <li>&#x975E;&#x5E38;&#x677E;&#x8026;&#x5408;&#xFF0C;target &#x548C; action &#x4E0D;&#x7528;&#x77E5;&#x9053;&#x5BF9;&#x65B9;&#x7684;&#x5B58;&#x5728;&#xFF0C;&#x751A;&#x81F3;target=nil ,Action &#x4F1A;&#x6CBF;&#x7740;&#x54CD;&#x5E94;&#x94FE;&#x4E00;&#x76F4;&#x4F20;&#x9012;&#x76F4;&#x5230;&#x627E;&#x5230;&#x54CD;&#x5E94;&#x8005;&#x3002;On iOS, each control can even be associated with multiple target-action pairs.</li>
 </ol>
 <p>###&#x4F55;&#x65F6;&#x7528;&#x54EA;&#x4E2A;</p>
@@ -519,7 +539,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -528,7 +548,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -537,7 +557,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

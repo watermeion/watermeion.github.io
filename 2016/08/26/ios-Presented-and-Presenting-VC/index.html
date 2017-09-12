@@ -86,19 +86,19 @@
 
 
 
-<meta name="description" content="IOS presentedViewController and presentingViewController &amp;#x50BB;&amp;#x50BB;&amp;#x5206;&amp;#x4E0D;&amp;#x6E05;&amp;#x695A;  &amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Pres">
+<meta name="description" content="&amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Present&amp;#x4E00;&amp;#x4E2A;&amp;#x6216;&amp;#x591A;&amp;#x4E2A;ViewControllers, &amp;#x7136;&amp;#x540E;&amp;#x6211;&amp;#x4EEC;&amp;#x4F1A;&amp;#x901A;">
 <meta name="keywords" content="IOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS ViewController 属性区分Presented and Presenting VC  ">
 <meta property="og:url" content="https://github.com/watermeion/2016/08/26/ios-Presented-and-Presenting-VC/index.html">
 <meta property="og:site_name" content="“More is Different.”">
-<meta property="og:description" content="IOS presentedViewController and presentingViewController &amp;#x50BB;&amp;#x50BB;&amp;#x5206;&amp;#x4E0D;&amp;#x6E05;&amp;#x695A;  &amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Pres">
+<meta property="og:description" content="&amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Present&amp;#x4E00;&amp;#x4E2A;&amp;#x6216;&amp;#x591A;&amp;#x4E2A;ViewControllers, &amp;#x7136;&amp;#x540E;&amp;#x6211;&amp;#x4EEC;&amp;#x4F1A;&amp;#x901A;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ovua3w2l8.bkt.clouddn.com/static/images/presentedAndPresenting.jpg?imageView2/2/w/600">
-<meta property="og:updated_time" content="2017-09-09T06:42:14.000Z">
+<meta property="og:updated_time" content="2017-09-12T07:37:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS ViewController 属性区分Presented and Presenting VC  ">
-<meta name="twitter:description" content="IOS presentedViewController and presentingViewController &amp;#x50BB;&amp;#x50BB;&amp;#x5206;&amp;#x4E0D;&amp;#x6E05;&amp;#x695A;  &amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Pres">
+<meta name="twitter:description" content="&amp;#x5728;&amp;#x5F00;&amp;#x53D1;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6211;&amp;#x4EEC;&amp;#x7ECF;&amp;#x5E38;&amp;#x4F1A;&amp;#x53BB;Present&amp;#x4E00;&amp;#x4E2A;&amp;#x6216;&amp;#x591A;&amp;#x4E2A;ViewControllers, &amp;#x7136;&amp;#x540E;&amp;#x6211;&amp;#x4EEC;&amp;#x4F1A;&amp;#x901A;">
 <meta name="twitter:image" content="http://ovua3w2l8.bkt.clouddn.com/static/images/presentedAndPresenting.jpg?imageView2/2/w/600">
 
 
@@ -400,12 +400,9 @@
       
 
       
-        <blockquote>
-<p>IOS presentedViewController and presentingViewController &#x50BB;&#x50BB;&#x5206;&#x4E0D;&#x6E05;&#x695A;</p>
-</blockquote>
-<p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x4F1A;&#x53BB;Present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;&#x201D;.&#x201D;&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>
+        <p>&#x5728;&#x5F00;&#x53D1;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x4F1A;&#x53BB;Present&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;ViewControllers, &#x7136;&#x540E;&#x6211;&#x4EEC;&#x4F1A;&#x901A;&#x8FC7;&#x201D;.&#x201D;&#x53D6;ViewController&#x7684;presented&#x6216;presenting&#x7684;ViewController&#x3002;&#x6BCF;&#x6B21;&#x90FD;&#x5206;&#x4E0D;&#x6E05;&#x695A;&#xFF0C;&#x56E0;&#x6B64;&#x5199;&#x4E2A;&#x5907;&#x5FD8;&#x3002;</p>
 <a id="more"></a>
-<p>&#x5148;&#x770B;&#x5B98;&#x65B9;&#x5B9A;&#x4E49;&#xFF1A;<br>&#x4F5C;&#x4E3A;UIViewController&#x7684;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;:</p>
+<h2 id="&#x5B98;&#x65B9;&#x5B9A;&#x4E49;">&#x5B98;&#x65B9;&#x5B9A;&#x4E49;</h2><p>&#x4F5C;&#x4E3A;UIViewController&#x7684;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;:</p>
 <blockquote>
 <p>presentedViewController:</p>
 </blockquote>
@@ -414,14 +411,11 @@
 <p>presentingViewController:</p>
 </blockquote>
 <p><strong>The view controller</strong> that presented <strong>this view controller.</strong></p>
-<p>&#x7384;&#x673A;&#x5C31;&#x5728;<em>The</em>&#x548C;<em>This</em>, &#x4ED4;&#x7EC6;&#x533A;&#x5206;&#x4E00;&#x4E0B; the &#x548C; this: <strong>the</strong> &#x6307;&#x8BE5;&#x5C5E;&#x6027;&#x6307;&#x5411;&#x7684;&#x90A3;&#x4E2A;ViewController; <strong>This</strong> &#x6307;self&#xFF0C;&#x5373;&#x62E5;&#x6709;&#x8BE5;&#x5C5E;&#x6027;&#x7684;VC.</p>
+<h2 id="&#x7384;&#x673A;">&#x7384;&#x673A;</h2><p>&#x7384;&#x673A;&#x5C31;&#x5728;<em>The</em>&#x548C;<em>This</em>, &#x4ED4;&#x7EC6;&#x533A;&#x5206;&#x4E00;&#x4E0B; the &#x548C; this: <strong>the</strong> &#x6307;&#x8BE5;&#x5C5E;&#x6027;&#x6307;&#x5411;&#x7684;&#x90A3;&#x4E2A;ViewController; <strong>This</strong> &#x6307;self&#xFF0C;&#x5373;&#x62E5;&#x6709;&#x8BE5;&#x5C5E;&#x6027;&#x7684;VC.</p>
 <p>&#x8FD9;&#x6837;&#x5C31;&#x6BD4;&#x8F83;&#x6E05;&#x6670;&#x4E86;&#x3002;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">self = instance Of UIViewController</div><div class="line"></div><div class="line">self.presentedViewController = self &#x4E0A;&#x9762;&#x7684;present(modally)&#x51FA;&#x6765;&#x7684;&#x90A3;&#x4E2A;viewController&#x6216;&#x8005;&#x4E00;&#x4E2A;viewController&#x7C07;&#x4E2D;&#x7684;&#x6839;ViewControllers</div><div class="line"></div><div class="line">self.presentingViewController = self&#x4E0B;&#x9762;&#x7684;ViewController,self&#x662F;&#x88AB;&#x8BE5;VC present&#x8D77;&#x6765;&#x7684;.</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span> = instance Of <span class="built_in">UIViewController</span></div><div class="line"></div><div class="line"><span class="keyword">self</span>.presentedViewController = <span class="keyword">self</span> &#x4E0A;&#x9762;&#x7684;present(modally)&#x51FA;&#x6765;&#x7684;&#x90A3;&#x4E2A;viewController&#x6216;&#x8005;&#x4E00;&#x4E2A;viewController&#x7C07;&#x4E2D;&#x7684;&#x6839;ViewControllers</div><div class="line"></div><div class="line"><span class="keyword">self</span>.presentingViewController = <span class="keyword">self</span>&#x4E0B;&#x9762;&#x7684;ViewController,<span class="keyword">self</span>&#x662F;&#x88AB;&#x8BE5;VC present&#x8D77;&#x6765;&#x7684;.</div></pre></td></tr></table></figure>
 <p>&#x6700;&#x540E;&#x914D;&#x4E00;&#x5F20;&#x56FE;&#x8BF4;&#x660E;&#x4E0B;<br><img title="&#x56FE;&#x7247;&#x6807;&#x9898;" alt="&#x56FE;&#x7247;&#x8BF4;&#x660E;" src="http://ovua3w2l8.bkt.clouddn.com/static/images/presentedAndPresenting.jpg?imageView2/2/w/600"></p>
-<p>&#x53E6;&#x5916;&#xFF0C;&#x8BF4;&#x660E;&#x4E00;&#x70B9;&#x9898;&#x5916;&#x8BDD;&#xFF0C;&#x591A;&#x5C42;present&#x7684;VC&#x8C03;&#x7528;self dismiss &#xFF0C;&#x4F1A;dismiss &#x8C03;self&#x4E0A;&#x9762;&#x6240;&#x6709;&#x7684;present&#x7684;VC&#x3002;</p>
-<blockquote>
-<p>written by watermeion</p>
-</blockquote>
+<h2 id="&#x540E;&#x8BB0;">&#x540E;&#x8BB0;</h2><p>&#x53E6;&#x5916;&#xFF0C;&#x8BF4;&#x660E;&#x4E00;&#x70B9;&#x9898;&#x5916;&#x8BDD;&#xFF0C;&#x591A;&#x5C42;present&#x7684;VC&#x8C03;&#x7528;self dismiss &#xFF0C;&#x4F1A;dismiss &#x8C03;self&#x4E0A;&#x9762;&#x6240;&#x6709;&#x7684;present&#x7684;VC&#x3002;</p>
 
       
     </div>
@@ -463,6 +457,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/12/Machine-Learning-Resources-List/" rel="prev" title="Machine Learning Resources List">
+                Machine Learning Resources List <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -509,8 +507,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200"
@@ -523,7 +530,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -541,7 +548,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -584,6 +591,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#官方定义"><span class="nav-number">1.</span> <span class="nav-text">官方定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#玄机"><span class="nav-number">2.</span> <span class="nav-text">玄机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>

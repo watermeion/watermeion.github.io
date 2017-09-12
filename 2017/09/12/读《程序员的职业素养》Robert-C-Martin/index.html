@@ -1,0 +1,967 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="文摘,素养,Robert C Martin," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="“More is Different.”" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x201C;&amp;#x8EAB;&amp;#x4E3A;&amp;#x4E00;&amp;#x540D;&amp;#x5DE5;&amp;#x7A0B;&amp;#x5E08;&amp;#xFF0C;&amp;#x4F60;&amp;#x6BD4;&amp;#x4EFB;&amp;#x4F55;&amp;#x7BA1;&amp;#x7406;&amp;#x8005;&amp;#x53EF;&amp;#x80FD;&amp;#x90FD;&amp;#x4E86;&amp;#x89E3;&amp;#x5F97;&amp;#x66F4;&amp;#x900F;&amp;#x5F7B">
+<meta name="keywords" content="文摘,素养,Robert C Martin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读《程序员的职业素养》Robert C Martin">
+<meta property="og:url" content="https://github.com/watermeion/2017/09/12/读《程序员的职业素养》Robert-C-Martin/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="&amp;#x201C;&amp;#x8EAB;&amp;#x4E3A;&amp;#x4E00;&amp;#x540D;&amp;#x5DE5;&amp;#x7A0B;&amp;#x5E08;&amp;#xFF0C;&amp;#x4F60;&amp;#x6BD4;&amp;#x4EFB;&amp;#x4F55;&amp;#x7BA1;&amp;#x7406;&amp;#x8005;&amp;#x53EF;&amp;#x80FD;&amp;#x90FD;&amp;#x4E86;&amp;#x89E3;&amp;#x5F97;&amp;#x66F4;&amp;#x900F;&amp;#x5F7B">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-12T07:42:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="读《程序员的职业素养》Robert C Martin">
+<meta name="twitter:description" content="&amp;#x201C;&amp;#x8EAB;&amp;#x4E3A;&amp;#x4E00;&amp;#x540D;&amp;#x5DE5;&amp;#x7A0B;&amp;#x5E08;&amp;#xFF0C;&amp;#x4F60;&amp;#x6BD4;&amp;#x4EFB;&amp;#x4F55;&amp;#x7BA1;&amp;#x7406;&amp;#x8005;&amp;#x53EF;&amp;#x80FD;&amp;#x90FD;&amp;#x4E86;&amp;#x89E3;&amp;#x5F97;&amp;#x66F4;&amp;#x900F;&amp;#x5F7B">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/watermeion/2017/09/12/读《程序员的职业素养》Robert-C-Martin/"/>
+
+
+
+
+
+  <title> 读《程序员的职业素养》Robert C Martin | “More is Different.” </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-106013373-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">“More is Different.”</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">-—Philip W. Anderson</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2017/09/12/读《程序员的职业素养》Robert-C-Martin/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Tad Guo">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="“More is Different.”">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="“More is Different.”" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                读《程序员的职业素养》Robert C Martin
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-12T14:17:18+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o">本文总阅读量</i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>&#x201C;&#x8EAB;&#x4E3A;&#x4E00;&#x540D;&#x5DE5;&#x7A0B;&#x5E08;&#xFF0C;&#x4F60;&#x6BD4;&#x4EFB;&#x4F55;&#x7BA1;&#x7406;&#x8005;&#x53EF;&#x80FD;&#x90FD;&#x4E86;&#x89E3;&#x5F97;&#x66F4;&#x900F;&#x5F7B;&#xFF0C;&#x4E86;&#x89E3;&#x8FD9;&#x4E9B;&#x4E5F;&#x610F;&#x5473;&#x7740;&#x4F60;&#x80A9;&#x8D1F;&#x7740;&#x8981;&#x6562;&#x4E8E;&#x884C;&#x52A8;&#x7684;&#x91CD;&#x5927;&#x8D23;&#x4EFB;&#x201D;</p>
+</blockquote>
+<p>&#x534A;&#x5E74;&#x524D;&#xFF0C;&#x8BFB;&#x5230;Robert C Martin&#x7684;&#x300A;&#x7A0B;&#x5E8F;&#x5458;&#x7684;&#x804C;&#x4E1A;&#x7D20;&#x517B;&#x300B;&#x6574;&#x7406;&#x7684;&#x4E00;&#x4E9B;&#x6709;&#x611F;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x5982;&#x4ECA;&#x6574;&#x7406;&#x5728;&#x8FD9;&#x91CC;&#x2026;</p>
+<a id="more"></a>
+<h2 id="&#x8981;&#x70B9;">&#x8981;&#x70B9;</h2><ol>
+<li><p>&#x9996;&#x5148;&#x8981;&#x610F;&#x8BC6;&#x5230;&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;&#x804C;&#x4E1A;&#x90FD;&#x6709;&#x8981;&#x804C;&#x4E1A;&#x7D20;&#x517B;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x5E94;&#x8BE5;&#x8BA4;&#x771F;&#x5BF9;&#x5F85;&#xFF0C;&#x4E0D;&#x80FD;&#x56E0;&#x4E3A;&#x5176;&#x4ED6;&#x539F;&#x56E0;&#xFF0C;&#x5F71;&#x54CD;&#x4E13;&#x4E1A;&#x6027;</p>
+</li>
+<li><p>&#x4E13;&#x4E1A;&#x4E3B;&#x4E49;&#xFF0C;&#x610F;&#x5473;&#x7740;&#x8981;&#x5BF9;&#x5199;&#x51FA;&#x7684;&#x4EE3;&#x7801;&#x8D1F;&#x8D23;&#xFF0C;&#x62C5;&#x5F53;&#x8D23;&#x4EFB;&#x3002;&#x4E0D;&#x80FD;&#x4E3A;&#x4E86;&#x8D76;&#x5DE5;&#x671F;&#x800C;&#x5077;&#x5DE5;&#x51CF;&#x6599;&#xFF0C;&#x7F29;&#x5C0F;&#x6D4B;&#x8BD5;&#x65F6;&#x95F4;&#x548C;&#x6D4B;&#x8BD5;&#x7528;&#x4F8B;.</p>
+</li>
+<li><p>&#x4E0D;&#x8BA9;QA&#x627E;&#x4E0D;&#x51FA;&#x4EFB;&#x4F55;&#x95EE;&#x9898;&#x3002;&#x5728;&#x53D1;&#x5E03;&#x8F6F;&#x4EF6;&#x65F6;&#xFF0C;&#x628A;&#x81EA;&#x5DF1;&#x6CA1;&#x6709;&#x628A;&#x63E1;&#x7684;&#x4EE3;&#x7801;&#x53D1;&#x9001;&#x7ED9;QA&#xFF0C;&#x672C;&#x8EAB;&#x5C31;&#x662F;&#x4E0D;&#x4E13;&#x4E1A;&#x7684;&#x884C;&#x4E3A;&#x3002;</p>
+</li>
+<li><p>&#x786E;&#x4FE1;&#x4EE3;&#x7801;&#x6B63;&#x5E38;&#x8FD0;&#x884C;&#xFF0C;&#x5199;&#x5355;&#x5143;&#x6D4B;&#x8BD5;&#x3002;&#x4F5C;&#x4E3A;&#x4E13;&#x4E1A;&#x7684;&#x5F00;&#x53D1;&#x4EBA;&#x58EB;&#xFF0C;&#x4F60;&#x8981;&#x6709;&#x4E2A;&#x6027;&#x5BF9;&#x8FC5;&#x6377;&#x53EF;&#x9760;&#x7684;&#x673A;&#x5236;&#xFF0C;&#x4EE5;&#x6B64;&#x5224;&#x65AD;&#x6240;&#x5199;&#x7684;&#x4EE3;&#x7801;&#x53EF;&#x5426;&#x6B63;&#x5E38;&#x5DE5;&#x4F5C;&#xFF0C;&#x5E76;&#x4E14;&#x4E0D;&#x4F1A;&#x5E72;&#x6270;&#x7CFB;&#x7EDF;&#x7684;&#x5176;&#x4ED6;&#x90E8;&#x5206;&#x3002;</p>
+</li>
+<li><p>&#x8F6F;&#x4EF6;&#x9879;&#x76EE;&#x7684;&#x6839;&#x672C;&#x4E4B;&#x9053;&#x539F;&#x5219;&#x662F;&#xFF0C;&#x8F6F;&#x4EF6;&#x8981;&#x6613;&#x4E8E;&#x4FEE;&#x6539;</p>
+</li>
+<li><p>&#x804C;&#x4E1A;&#x53D1;&#x5C55;&#x662F;&#x4F60;&#x81EA;&#x5DF1;&#x7684;&#x4E8B;&#xFF0C;&#x5C06;&#x81EA;&#x5DF1;&#x7684;&#x804C;&#x4E1A;&#x53D1;&#x5C55;&#x5BC4;&#x5E0C;&#x671B;&#x4E8E;&#x96C7;&#x4E3B;&#x7684;&#x8F6F;&#x4EF6;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x5C06;&#x4F1A;&#x5F88;&#x60E8;&#x3002;</p>
+</li>
+<li><p>&#x4E0D;&#x53EF;&#x80FD;&#x6216;&#x8005;&#x5F88;&#x5C11;&#x53EF;&#x80FD;&#xFF0C;&#x627E;&#x5230;&#x4E00;&#x4E2A;&#x804C;&#x4E1A;&#x76EE;&#x6807;&#x6216;&#x8005;&#x751F;&#x6D3B;&#x65B9;&#x5F0F;&#x5C31;&#x4ECE;&#x4E00;&#x800C;&#x7EC8;&#xFF0C;&#x4EBA;&#x90FD;&#x662F;&#x4E0D;&#x65AD;&#x53D8;&#x5316;&#x7684;&#xFF0C;&#x73AF;&#x5883;&#x53D8;&#x5316;&#x7684;&#x66F4;&#x5FEB;&#xFF0C;&#x56E0;&#x6B64;&#x5BF9;&#x4E8E;&#x5F53;&#x4E0B;&#x6700;&#x5B9E;&#x7528;&#xFF0C;&#x6700;&#x4FDD;&#x5B88;&#x7684;&#x7B56;&#x7565;&#x5C31;&#x662F;&#xFF0C;&#x52AA;&#x529B;&#x53BB;&#x505A;&#xFF0C;&#x505A;&#x60F3;&#x505A;&#x7684;&#x4E8B;&#xFF0C;&#x627E;&#x60F3;&#x8981;&#x627E;&#x7684;&#x4EBA;&#xFF0C;&#x66F4;&#x591A;&#x7684;&#x4E8B;&#xFF0C;&#x5219;&#x66F4;&#x591A;&#x7684;&#x6536;&#x83B7;&#xFF0C;&#x4EBA;&#x751F;&#x4E5F;&#x66F4;&#x52A0;&#x5E78;&#x798F;&#x3002;</p>
+</li>
+<li><p>&#x6BCF;&#x5468;40&#x5C0F;&#x65F6;&#x662F;&#x66FF;&#x96C7;&#x4E3B;&#x89E3;&#x51B3;&#x95EE;&#x9898;&#x7684;&#xFF0C;&#x5269;&#x4F59;20&#x5C0F;&#x65F6;&#x662F;&#x7559;&#x7ED9;&#x81EA;&#x5DF1;&#x7684;&#x3002;&#x4E00;&#x5468;&#x6709;168&#x5C0F;&#x65F6;&#xFF0C;56&#x5C0F;&#x65F6;&#x7761;&#x7720;&#xFF0C;&#x5269;&#x4E0B;52&#x5C0F;&#x65F6;&#x53EF;&#x505A;&#x5176;&#x4ED6;&#x7684;&#x4E8B;&#x3002;</p>
+</li>
+<li><p>&#x4E13;&#x4E1A;&#x8F6F;&#x4EF6;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x5FC5;&#x987B;&#x7CBE;&#x901A;&#x7684;&#x4E8B;&#x9879;&#xFF1A;<br> &#xB7; &#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#xFF0C;&#x5FC5;&#x987B;&#x80FD;&#x591F;&#x63CF;&#x8FF0;GOF&#x4E2D;24&#x79CD;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#xFF0C;&#x540C;&#x65F6;&#x8FD8;&#x8981;&#x6709;POSA&#x4E66;&#x4E2D;&#x591A;&#x6570;&#x6A21;&#x5F0F;&#x7684;&#x5B9E;&#x6218;&#x7ECF;&#x9A8C;<br> &#xB7; &#x8BBE;&#x8BA1;&#x539F;&#x5219;&#xFF0C;&#x5FC5;&#x987B;&#x6765;&#x53CA;SOLID&#x539F;&#x5219;<br> &#xB7; &#x65B9;&#x6CD5;&#xFF0C;&#x5FC5;&#x987B;&#x7406;&#x89E3;XP&#xFF0C;scrum&#xFF0C;&#x656C;&#x610F;&#xFF0C;&#x770B;&#x677F;&#xFF0C;&#x7011;&#x5E03;&#xFF0C;&#x7ED3;&#x6784;&#x5316;&#x5206;&#x6790;&#x548C;&#x7ED3;&#x6784;&#x5316;&#x8BBE;&#x8BA1;<br> &#xB7; &#x5B9E;&#x8DF5;&#xFF0C;&#x5FC5;&#x987B;&#x638C;&#x63E1;&#x6D4B;&#x8BD5;&#x9A71;&#x52A8;&#x5F00;&#x53D1;&#xFF0C;&#x9762;&#x5BF9;&#x50CF;&#x8BBE;&#x8BA1;&#xFF0C;&#x7ED3;&#x6784;&#x5316;&#x7F16;&#x7A0B;&#xFF0C;&#x6301;&#x7EED;&#x96C6;&#x6210;&#x548C;&#x7ED3;&#x5BF9;&#x7F16;&#x7A0B;<br> &#xB7; &#x5DE5;&#x4EF6;&#xFF0C;&#x5FC5;&#x987B;&#x4E86;&#x89E3;&#x5982;&#x4F55;&#x4F7F;&#x7528;UML&#xFF0C;DFD&#x56FE;&#xFF0C;&#x7ED3;&#x6784;&#x56FE;&#xFF0C;Petri&#x7F51;&#x7EDC;&#x56FE;&#xFF0C;&#x72B6;&#x6001;&#x8FC1;&#x79FB;&#x56FE;&#x8868;&#xFF0C;&#x6D41;&#x7A0B;&#x56FE;&#x548C;&#x51B3;&#x7B56;&#x8868;</p>
+</li>
+<li><p>&#x4FDD;&#x6301;&#x7EC3;&#x4E60;&#xFF0C;&#x5EFA;&#x8BAE;&#x6BCF;&#x5929;&#x90FD;&#x505A;&#x5BC4;&#x5230;kata</p>
+</li>
+<li>&#x6562;&#x4E8E;&#x8BF4;&#x4E0D;</li>
+<li>&#x4E3A;&#x4EC0;&#x4E48;&#x8FDC;&#x4E0D;&#x5982;&#x4E8B;&#x5B9E;&#x91CD;&#x8981;&#x3002;</li>
+<li>&#x8D8A;&#x662F;&#x9AD8;&#x98CE;&#x9669;&#x65F6;&#x523B;&#xFF0C;&#x8BF4;&#x4E0D;&#x5F97;&#x91CD;&#x8981;&#x6027;&#x8D8A;&#x5927;&#x3002;</li>
+</ol>
+<p>#&#x5173;&#x4E8E;&#x627F;&#x8BFA;&#x7684;&#x4E09;&#x70B9;&#x8C28;&#x8BB0;</p>
+<ol>
+<li><p>&#x5B66;&#x4F1A;&#x4ECE;&#x4ED6;&#x4EBA;&#x7684;&#x8A00;&#x8BED;&#x4E2D;&#x5206;&#x8FA8;&#x54EA;&#x4E9B;&#x662F;&#x7F3A;&#x4E4F;&#x627F;&#x8BFA;&#x7684;&#x8A00;&#x8F9E;&#xFF0C;&#x6BD4;&#x5982;&#xFF0C;&#x9700;&#x8981;&#x3001;&#x5E94;&#x5F53;&#x3001;&#x4F46;&#x613F;&#x3001;&#x5E0C;&#x671B;&#x3001;&#x8BA9;&#x6211;&#x4EEC;&#x7B49;&#xFF0C;&#x5E76;&#x4ECE;&#x4E2D;&#x89C4;&#x907F;&#xFF0C;&#x81EA;&#x5DF1;&#x4E5F;&#x8981;&#x907F;&#x514D;&#x9700;&#x8981;&#x7F3A;&#x4E4F;&#x627F;&#x8BFA;</p>
+<p>&#x627F;&#x8BFA;&#x7684;&#x4E09;&#x8981;&#x7D20;&#xFF1A;</p>
+<pre><code>a) &#x53E3;&#x5934;&#x4E0A;&#x8868;&#x8FBE;&#x627F;&#x8BFA;
+<span class="keyword">b) </span>&#x5FC3;&#x91CC;&#x8BA4;&#x540C;&#x627F;&#x8BFA;&#xFF0C;&#x5E76;&#x8BA4;&#x771F;&#x5BF9;&#x5F85;
+c) &#x771F;&#x6B63;&#x4ED8;&#x51FA;&#x884C;&#x52A8;
+</code></pre></li>
+<li><p>&#x4F60;&#x6CA1;&#x80FD;&#x6210;&#x529F;&#x5C65;&#x884C;&#x627F;&#x8BFA;&#x7684;&#x4E09;&#x4E2A;&#x53EF;&#x80FD;&#x56E0;&#x7D20;&#x4EE5;&#x53CA;&#x5982;&#x4F55;&#x5E94;&#x5BF9;&#xFF1A;</p>
+<pre><code>a) &#x5BC4;&#x5E0C;&#x671B;&#x4E8E;&#x67D0;&#x67D0;&#x5176;&#x4ED6;&#x4EBA;&#x53BB;&#x5B8C;&#x6210;&#x627F;&#x8BFA; &#x2014;&#x2014; &#x4F60;&#x7684;&#x76EE;&#x6807;&#x9700;&#x8981;&#x4F9D;&#x8D56;&#x5176;&#x4ED6;&#x4EBA;&#x5B8C;&#x6210;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x91C7;&#x53D6;&#x5C3D;&#x53EF;&#x80FD;&#x7684;&#x5177;&#x4F53;&#x884C;&#x52A8;&#x53BB;&#x63A5;&#x8FD1;&#x76EE;&#x6807;
+<span class="keyword">b) </span>&#x4E0D;&#x592A;&#x786E;&#x4FE1;&#x81EA;&#x5DF1;&#x662F;&#x5426;&#x80FD;&#x591F;&#x771F;&#x6B63;&#x5B8C;&#x6210;&#x76EE;&#x6807;&#xFF0C;&#x4F60;&#x66F4;&#x5E94;&#x8BE5;&#x91C7;&#x53D6;&#x5177;&#x4F53;&#x7684;&#x884C;&#x52A8;&#xFF0C;&#x80FD;&#x63A5;&#x8FD1;&#x591A;&#x5C11;&#x5B8C;&#x6210;&#x591A;&#x5C11;
+c) &#x6709;&#x65F6;&#x771F;&#x7684;&#x662F;&#x65E0;&#x80FD;&#x4E3A;&#x529B;&#x3002;&#x8FD9;&#x4E2A;&#x65F6;&#x5019;&#xFF0C;&#x4F60;&#x9700;&#x8981;&#x5C3D;&#x5FEB;&#x8C03;&#x6574;&#x522B;&#x4EBA;&#x5BF9;&#x4F60;&#x7684;&#x671F;&#x671B;&#xFF0C;&#x8D8A;&#x5FEB;&#x8D8A;&#x597D;&#x3002;
+
+&#x6700;&#x540E;&#xFF0C;&#x6700;&#x91CD;&#x8981;&#x7684;&#x4E00;&#x6761;&#x662F;&#xFF1A;&#x5982;&#x679C;&#x4F60;&#x65E0;&#x6CD5;&#x5151;&#x73B0;&#x627F;&#x8BFA;&#xFF0C;&#x6700;&#x91CD;&#x8981;&#x7684;&#x5C31;&#x662F;&#x5C3D;&#x65E9;&#x5411;&#x4F60;&#x7684;&#x627F;&#x8BFA;&#x5BF9;&#x8C61;&#x53D1;&#x51FA;&#x9884;&#x8B66;&#xFF0C;&#x8D8A;&#x5FEB;&#x8D8A;&#x597D;&#xFF0C;&#x8D8A;&#x65E9;&#x8D8A;&#x597D;&#x3002; &#x5982;&#x679C;&#x4F60;&#x4E0D;&#x5C3D;&#x65E9;&#x7684;&#x544A;&#x8BC9;&#x4ED6;&#x4EBA;&#x53EF;&#x80FD;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x5C31;&#x9519;&#x5931;&#x4E86;&#x8BA9;&#x4ED6;&#x4EEC;&#x5E2E;&#x52A9;&#x4F60;&#x8FBE;&#x6210;&#x76EE;&#x6807;&#xFF0C;&#x5151;&#x73B0;&#x627F;&#x8BFA;&#x7684;&#x673A;&#x4F1A;
+
+        &#x4F5C;&#x4E3A;&#x4E13;&#x4E1A;&#x4EBA;&#x58EB;&#x5FC5;&#x987B;&#x4EE3;&#x7801;&#x5FC5;&#x987B;&#x6D4B;&#x8BD5;&#xFF0C;&#x5FC5;&#x987B;&#x6709;&#x6D4B;&#x8BD5;&#x4EE3;&#x7801;&#xFF0C;&#x5728;&#x6D4B;&#x8BD5;&#x4E0A;&#x5077;&#x5DE5;&#x51CF;&#x6599;&#x5FC5;&#x7136;&#x4F1A;&#x62D6;&#x6162;&#x5DE5;&#x671F;
+</code></pre></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/文摘/" rel="tag"># 文摘</a>
+          
+            <a href="/tags/素养/" rel="tag"># 素养</a>
+          
+            <a href="/tags/Robert-C-Martin/" rel="tag"># Robert C Martin</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/12/Machine-Learning-Resources-List/" rel="next" title="Machine Learning Resources List">
+                <i class="fa fa-chevron-left"></i> Machine Learning Resources List
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/12/Tips-for-Debug-0/" rel="prev" title="Tips for Debug">
+                Tips for Debug <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200"
+               alt="Tad Guo" />
+          <p class="site-author-name" itemprop="name">Tad Guo</p>
+          <p class="site-description motion-element" itemprop="description">watermeion ’s blog</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/watermeion" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#要点"><span class="nav-number">1.</span> <span class="nav-text">要点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user">本站访客</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>人次</span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="IOS," />
+  <meta name="keywords" content="IOS,优化," />
 
 
 
@@ -86,18 +86,18 @@
 
 
 
-<meta name="description" content="##2015&amp;#x5E74;07&amp;#x6708;24&amp;#x65E5; &amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E">
-<meta name="keywords" content="IOS">
+<meta name="description" content="&amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E86;IOS&amp;#x5E38;&amp;#x89C1;&amp;#x7684;&amp;#x60">
+<meta name="keywords" content="IOS,优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IOS 性能优化的几方面">
 <meta property="og:url" content="https://github.com/watermeion/2015/11/27/IOS-性能优化的几方面/index.html">
 <meta property="og:site_name" content="“More is Different.”">
-<meta property="og:description" content="##2015&amp;#x5E74;07&amp;#x6708;24&amp;#x65E5; &amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E">
+<meta property="og:description" content="&amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E86;IOS&amp;#x5E38;&amp;#x89C1;&amp;#x7684;&amp;#x60">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-09T07:26:54.000Z">
+<meta property="og:updated_time" content="2017-09-12T07:12:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IOS 性能优化的几方面">
-<meta name="twitter:description" content="##2015&amp;#x5E74;07&amp;#x6708;24&amp;#x65E5; &amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E">
+<meta name="twitter:description" content="&amp;#x6027;&amp;#x80FD;&amp;#x8C03;&amp;#x4F18;&amp;#xFF0C;&amp;#x662F;&amp;#x4E00;&amp;#x4E2A;&amp;#x6C38;&amp;#x6052;&amp;#x7684;&amp;#x8BDD;&amp;#x9898;&amp;#x3002;&amp;#x672C;&amp;#x6587;&amp;#x7B80;&amp;#x5355;&amp;#x8BB0;&amp;#x5F55;&amp;#x4E86;IOS&amp;#x5E38;&amp;#x89C1;&amp;#x7684;&amp;#x60">
 
 
 
@@ -398,51 +398,54 @@
       
 
       
-        <p>##2015&#x5E74;07&#x6708;24&#x65E5;</p>
-<p>&#x6027;&#x80FD;&#x8C03;&#x4F18;&#xFF0C;&#x662F;&#x4E00;&#x4E2A;&#x6C38;&#x6052;&#x7684;&#x8BDD;&#x9898;&#x3002;&#x672C;&#x6587;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E86;IOS&#x5E38;&#x89C1;&#x7684;&#x6027;&#x80FD;&#x8003;&#x8651;&#x7684;&#x65B9;&#x9762;<br><a id="more"></a></p>
-<h3 id="IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;">IOS&#x7A0B;&#x5E8F;&#x6027;&#x80FD;&#x4F18;&#x5316;</h3><ol>
-<li><p>&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;  <code>BNRtimeBlock</code> <code>NSDate</code></p>
-</li>
-<li><p>&#x5584;&#x7528;xcode&#x7684;&#x6027;&#x80FD;&#x5206;&#x6790;&#x5DE5;&#x5177;</p>
-</li>
-<li><p>&#x56FE;&#x7247;&#xFF1A;&#x4F18;&#x5148;&#x4F7F;&#x7528;<code>[UIImage imageNamed@&quot;&quot;]</code>  <code>ImageCache</code>&#x7C7B;<br> &#x4F7F;&#x7528;gradient&#x56FE;&#x7247;&#x4EE3;&#x66FF;&#x786C;&#x7F16;&#x7801;&#x5B9E;&#x73B0;&#x7684;gradient;</p>
-</li>
-<li><p>&#x5BF9;&#x4E8E;&#x590D;&#x6742;&#x7684;View,&#x4F7F;&#x7528;drawRect &#x81EA;&#x7ED8;&#x800C;&#x4E0D;&#x662F;&#x4ECE;nib&#x4E2D;&#x8F7D;&#x5165;</p>
-</li>
-<li><p>&#x5BF9;&#x4E8E;TableView .&#x91CD;&#x7528;Cell;&#x51CF;&#x5C11;cell&#x521D;&#x59CB;&#x5316;&#x7684;&#x5DE5;&#x4F5C;&#x91CF;&#xFF0C;&#x5EF6;&#x8FDF;&#x88C5;&#x8F7D;;&#x5B9A;&#x5236;&#x590D;&#x6742;cell&#x65F6;&#xFF0C;&#x4F7F;&#x7528;drawRect&#x81EA;&#x7ED8;&#x3002;Cache &#x5C3D;&#x53EF;&#x80FD;&#x591A;&#x7684;&#x4E1C;&#x897F;&#xFF0C;&#x5305;&#x62EC;cell&#x9AD8;&#x5EA6;</p>
-</li>
-<li><p>&#x5728;&#x7EBF;&#x7A0B;&#x4E2D;&#x4F7F;&#x7528; autoreleasepool</p>
-</li>
-<li><p>&#x5C06;&#x4E00;&#x4E9B;&#x4E0D;&#x592A;&#x91CD;&#x8981;&#x7684;&#x4EFB;&#x52A1;&#x653E;&#x5728;idle&#x65F6;&#x8FD0;&#x884C;<br>&#x95EE;&#xFF1A;idle&#x662F;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#xFF1F;</p>
-</li>
-<li><p>&#x4E0D;&#x8981;&#x518D;<code>viewWillAppear</code>&#x4E2D;&#x505A;&#x8D39;&#x65F6;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x53EA;&#x8FDB;&#x884C;&#x80CC;&#x666F;&#x8272;&#x3001;&#x5B57;&#x4F53;&#x7B49;&#x8BBE;&#x7F6E;</p>
-</li>
-<li><p>&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x6765;&#x5EF6;&#x8FDF;&#x52A0;&#x8F7D;&#x8D44;&#x6E90;&#x3001;&#x5982;&#x56FE;&#x7247;</p>
-</li>
-<li><p>&#x5173;&#x4E8E;&#x540E;&#x53F0;&#x4EFB;&#x52A1;<br>&#x7CFB;&#x7EDF;&#x8FDB;&#x5165;background&#x540E;&#xFF0C;&#x6709;10&#x5206;&#x949F;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x56E0;&#x6B64;&#x6709;&#x5F88;&#x591A;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x4E8B;&#x9879;&#xFF1A;<br>a)&#x5C3D;&#x91CF;&#x51CF;&#x5C11;&#x5185;&#x5B58;&#x7684;&#x4F7F;&#x7528;&#xFF0C;&#x5F53;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#xFF0C;IOS&#x5C06;kill&#x90A3;&#x4E9B;&#x5185;&#x5B58;&#x6D88;&#x8017;&#x591A;&#x7684;app<br>b)&#x91CA;&#x653E;&#x6240;&#x6709;&#x7684;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;&#x6BD4;&#x5982;Calendar &#x4E0E; Address bool &#x5F53;app&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x82E5;&#x679C;&#x8FD8;&#x5728;&#x4F7F;&#x7528;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;IOS&#x4F1A;&#x7ACB;&#x5373;kill&#x6389;&#x8BE5;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;<br>c)&#x6B63;&#x786E;&#x5904;&#x7406;apps&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x8D62;&#x4FDD;&#x6301;&#x7528;&#x6237;&#x6570;&#x636E;&#xFF0C;&#x4EE5;&#x4FBF;&#x56DE;&#x5230;&#x524D;&#x53F0;&#x65F6;&#x80FD;&#x591F;&#x6062;&#x590D;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;IOS&#x4F1A;&#x4FDD;&#x5B58;&#x5F53;&#x524D;App&#x7684;&#x4E00;&#x4E2A;&#x5FEB;&#x7167;&#xFF0C;&#x4EE5;&#x4FBF;&#x4E4B;&#x540E;&#x5728;&#x5408;&#x9002;&#x7684;&#x65F6;&#x5019;&#x5448;&#x73B0;&#x7ED9;&#x7528;&#x6237;&#x4EE5;&#x63D0;&#x9AD8;&#x7528;&#x6237;&#x4F53;&#x68C0;&#xFF0C;&#x56E0;&#x6B64;&#x5E94;&#x8BE5;&#x907F;&#x514D;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x5448;&#x73B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF0C;&#x4EE5;&#x514D;&#x897F;&#x697C;&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x8D44;&#x6599;&#x3002;</p>
-</li>
-<li><p>&#x5982;&#x679C;&#x5173;&#x952E;&#x4EE3;&#x7801;&#x4F7F;&#x7528; C/C++/asm &#x6548;&#x7387;&#x66F4;&#x9AD8;&#x5C31;&#x4F7F;&#x7528; C/C++/asm&#x3002;</p>
-</li>
-<li><p>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x5728;&#x4E00;&#x4E2A;&#x5FAA;&#x73AF;&#x6B21;&#x6570;&#x975E;&#x5E38;&#x591A;&#x7684;&#x5FAA;&#x73AF;&#x4E2D;&#x4F7F;&#x7528;&#xFF0C;&#x5728;&#x8FDB;&#x5165;&#x5FAA;&#x73AF;&#x524D;&#x4F7F;&#x7528; methodForSelector &#x83B7;&#x53D6;&#x8BE5;&#x65B9;&#x6CD5; IMP&#xFF0C;&#x7136;&#x540E;&#x5728;&#x5FAA;&#x73AF;&#x4F53;&#x4E2D;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x8BE5; IMP&#x3002;</p>
-</li>
-<li><p>&#x5173;&#x4E8E;&#x5185;&#x5B58;&#x91CA;&#x653E;</p>
-</li>
+        <p>&#x6027;&#x80FD;&#x8C03;&#x4F18;&#xFF0C;&#x662F;&#x4E00;&#x4E2A;&#x6C38;&#x6052;&#x7684;&#x8BDD;&#x9898;&#x3002;&#x672C;&#x6587;&#x7B80;&#x5355;&#x8BB0;&#x5F55;&#x4E86;IOS&#x5E38;&#x89C1;&#x7684;&#x6027;&#x80FD;&#x8003;&#x8651;&#x7684;&#x65B9;&#x9762;&#x3002;</p>
+<a id="more"></a>
+<h2 id="&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;">&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x3002;</h2><pre><code><span class="number">1</span>.&#x5229;&#x7528;<span class="escape">`B</span>NRtimeBlock<span class="escape">` </span><span class="escape">`N</span>SDate<span class="escape">`&#x7C7B;</span>&#x8BA1;&#x7B97;&#x4EE3;&#x7801;&#x8FD0;&#x7B97;&#x65F6;&#x95F4;&#x3002;
+</code></pre><h2 id="&#x5584;&#x7528;xcode&#x7684;&#x6027;&#x80FD;&#x5206;&#x6790;&#x5DE5;&#x5177;">&#x5584;&#x7528;xcode&#x7684;&#x6027;&#x80FD;&#x5206;&#x6790;&#x5DE5;&#x5177;</h2><h2 id="&#x56FE;&#x7247;&#x7B49;&#x591A;&#x5A92;&#x4F53;&#x8D44;&#x6E90;">&#x56FE;&#x7247;&#x7B49;&#x591A;&#x5A92;&#x4F53;&#x8D44;&#x6E90;</h2><pre><code><span class="number">1</span>. &#x4F18;&#x5148;&#x4F7F;&#x7528;<span class="escape">`[</span>UIImage imageNamed@<span class="string">&quot;&quot;</span>]<span class="escape">` </span> <span class="escape">`I</span>mageCache<span class="escape">`&#x7C7B;</span>
+</code></pre><ol>
+<li>&#x4F7F;&#x7528;gradient&#x56FE;&#x7247;&#x4EE3;&#x66FF;&#x786C;&#x7F16;&#x7801;&#x5B9E;&#x73B0;&#x7684;gradient;</li>
+<li>&#x4F7F;&#x7528;&#x591A;&#x7EBF;&#x7A0B;&#x6765;&#x5EF6;&#x8FDF;&#x52A0;&#x8F7D;&#x8D44;&#x6E90;&#x3001;&#x5982;&#x56FE;&#x7247;.</li>
 </ol>
-<p>&#x5728; didReceiveMemoryWarning &#x4E2D;&#x91CA;&#x653E;&#x5185;&#x5B58;&#xFF0C;&#x6BD4;&#x5982;cache &#x7684;&#x56FE;&#x50CF;&#xFF0C;view &#x7B49;&#xFF0C;&#x5E76;&#x8BB0;&#x5F97;&#x8C03;&#x7528; [supper didReceiveMemoryWarning]&#x3002;&#x6E05;&#x7406;&#x51FD;&#x6570; didReceiveMemoryWarning, viewDidUnload &#x548C; dealloc &#x90FD;&#x662F;&#x5728;&#x65B9;&#x6CD5;&#x7ED3;&#x5C3E;&#x5904;&#x8C03;&#x7528; supper &#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
-<ol>
-<li>&#x63D0;&#x9AD8; APP &#x52A0;&#x8F7D;&#x901F;&#x5EA6;</li>
-</ol>
-<p>&#x907F;&#x514D;&#x4F7F;&#x7528;&#x9759;&#x6001;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x5305;&#x62EC;&#x9759;&#x6001;c++&#x5BF9;&#x8C61;&#xFF0C;&#x52A0;&#x8F7D;&#x65F6;&#x4F1A;&#x8FD0;&#x884C;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x5982;+(void) load{} &#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5728;Main&#x51FD;&#x6570;&#x4E4B;&#x524D;&#x8FD0;&#x884C;&#x989D;&#x5916;&#x7684;&#x4EE3;&#x7801;&#x3002;</p>
-<ol>
-<li>&#x5229;&#x7528; cache &#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x3002;cache &#x662F;&#x4E00;&#x79CD;&#x5E38;&#x89C1;&#x7684;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x7684;&#x63D0;&#x4F9B;&#x6027;&#x80FD;&#x7684;&#x6536;&#x5230;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x5728;&#x76F8;&#x5F53;&#x591A;&#x7684;&#x573A;&#x5408;&#x3002;</li>
-</ol>
-<p>&#x5C3D;&#x91CF; cache &#x90A3;&#x4E9B;&#x53EF;&#x91CD;&#x590D;&#x5229;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982; table cell&#xFF0C;date/number formatters&#xFF0C;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;sqlite&#x8BED;&#x53E5;&#x7B49;&#x3002;</p>
-<ol>
-<li>&#x5173;&#x4E8E;&#x6570;&#x636E;&#x5E93;</li>
-</ol>
-<p>&#x7F13;&#x5B58;&#x7ECF;&#x5E38;&#x7528;&#x5230;&#x7684; sqlite &#x8BED;&#x53E5;&#xFF1B;&#x4F18;&#x5316;&#x6570;&#x636E;&#x5E93;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#xFF0C;&#x7528;sqlite3_trace&#x548C;sqlite3_profile&#x6765;&#x67E5;&#x627E;&#x6027;&#x80FD;&#x5DEE;&#x7684;&#x8BED;&#x53E5;&#xFF1B;&#x5982;&#x679C;&#x53EF;&#x80FD;&#x7684;&#x8BDD;&#xFF0C;&#x7F13;&#x5B58;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;&#x7F13;&#x3002;</p>
-<p>&#x5728;&#x4F7F;&#x7528; sqlite_prepare&#x4F1A;&#x5C06;SQL&#x67E5;&#x8BE2;&#x7F16;&#x8BD1;&#x6210;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x8981;&#x4F7F;&#x7528;bind&#xFF0C;&#x91CD;&#x7528;&#x90A3;&#x4E9B;&#x5DF2;&#x7ECF;prepared&#x7684;&#x8BED;&#x53E5;&#x3002;</p>
+<h2 id="&#x590D;&#x6742;&#x7684;UIView">&#x590D;&#x6742;&#x7684;UIView</h2><pre><code><span class="number">1.</span>&#x5BF9;&#x4E8E;&#x590D;&#x6742;&#x7684;View&#xFF1A;
 
+    &#x4F7F;&#x7528;drawRect &#x81EA;&#x7ED8;&#x800C;&#x4E0D;&#x662F;&#x4ECE;nib&#x4E2D;&#x8F7D;&#x5165;&#x3002;
+
+<span class="number">2.</span>&#x5BF9;&#x4E8E;TableView&#xFF1A;
+
+    &#x91CD;&#x7528;Cell;
+
+    &#x51CF;&#x5C11;cell&#x521D;&#x59CB;&#x5316;&#x7684;&#x5DE5;&#x4F5C;&#x91CF;&#xFF0C;&#x5EF6;&#x8FDF;&#x88C5;&#x8F7D;;
+
+    &#x5B9A;&#x5236;&#x590D;&#x6742;cell&#x65F6;&#xFF0C;&#x4F7F;&#x7528;drawRect&#x81EA;&#x7ED8;&#xFF1B;
+
+    Cache &#x5C3D;&#x53EF;&#x80FD;&#x591A;&#x7684;&#x4E1C;&#x897F;&#xFF0C;&#x5305;&#x62EC;cell&#x9AD8;&#x5EA6;&#x3002;
+</code></pre><h2 id="&#x591A;&#x7EBF;&#x7A0B;">&#x591A;&#x7EBF;&#x7A0B;</h2><pre><code><span class="bullet">1. </span>&#x5728;&#x7EBF;&#x7A0B;&#x4E2D;&#x4F7F;&#x7528;<span class="code">`autoreleasepool`</span>&#x7BA1;&#x7406;&#x5185;&#x5B58;
+<span class="bullet">2. </span>&#x5C06;&#x4E00;&#x4E9B;&#x4E0D;&#x592A;&#x91CD;&#x8981;&#x7684;&#x4EFB;&#x52A1;&#x653E;&#x5728;idle&#x65F6;&#x8FD0;&#x884C;
+
+&gt;&#x95EE;&#xFF1A;idle&#x662F;&#x4EC0;&#x4E48;&#x65F6;&#x5019;&#xFF1F;
+&gt;idle &#x6839;&#x636E;&#x81EA;&#x5DF1;&#x5E94;&#x7528;&#x7684;&#x4E1A;&#x52A1;&#x9700;&#x6C42;&#x4E0D;&#x540C;&#xFF0C;&#x4E00;&#x822C;&#x6765;&#x8BB2;&#x662F;&#x4EFB;&#x52A1;&#x4E0D;&#x591A;&#x7684;&#x65F6;&#x5019;
+</code></pre><h2 id="&#x6CE8;&#x610F;&#x65F6;&#x673A;">&#x6CE8;&#x610F;&#x65F6;&#x673A;</h2><pre><code>&#x4E0D;&#x8981;&#x518D;<span class="escape">`v</span>iewWillAppear<span class="escape">`&#x4E2D;</span>&#x505A;&#x8D39;&#x65F6;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x53EA;&#x8FDB;&#x884C;&#x80CC;&#x666F;&#x8272;&#x3001;&#x5B57;&#x4F53;&#x7B49;&#x8BBE;&#x7F6E;
+</code></pre><h2 id="&#x5173;&#x4E8E;&#x540E;&#x53F0;&#x4EFB;&#x52A1;">&#x5173;&#x4E8E;&#x540E;&#x53F0;&#x4EFB;&#x52A1;</h2><pre><code>&#x7CFB;&#x7EDF;&#x8FDB;&#x5165;<span class="keyword">background&#x540E;&#xFF0C;&#x6709;10&#x5206;&#x949F;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#xFF0C;&#x56E0;&#x6B64;&#x6709;&#x5F88;&#x591A;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x4E8B;&#x9879;&#xFF1A;
+</span>
+a)&#x5C3D;&#x91CF;&#x51CF;&#x5C11;&#x5185;&#x5B58;&#x7684;&#x4F7F;&#x7528;&#xFF0C;&#x5F53;&#x5185;&#x5B58;&#x4E0D;&#x8DB3;&#x65F6;&#xFF0C;IOS&#x5C06;kill&#x90A3;&#x4E9B;&#x5185;&#x5B58;&#x6D88;&#x8017;&#x591A;&#x7684;app
+
+<span class="keyword">b)&#x91CA;&#x653E;&#x6240;&#x6709;&#x7684;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;&#x6BD4;&#x5982;Calendar </span>&#x4E0E; <span class="keyword">Address </span><span class="keyword">bool </span>&#x5F53;app&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x82E5;&#x679C;&#x8FD8;&#x5728;&#x4F7F;&#x7528;&#x5171;&#x4EAB;&#x8D44;&#x6E90;&#xFF0C;IOS&#x4F1A;&#x7ACB;&#x5373;kill&#x6389;&#x8BE5;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;
+
+c)&#x6B63;&#x786E;&#x5904;&#x7406;apps&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;&#x8D62;&#x4FDD;&#x6301;&#x7528;&#x6237;&#x6570;&#x636E;&#xFF0C;&#x4EE5;&#x4FBF;&#x56DE;&#x5230;&#x524D;&#x53F0;&#x65F6;&#x80FD;&#x591F;&#x6062;&#x590D;&#xFF0C;&#x5F53;&#x8FDB;&#x5165;&#x540E;&#x53F0;&#x65F6;&#xFF0C;IOS&#x4F1A;&#x4FDD;&#x5B58;&#x5F53;&#x524D;App&#x7684;&#x4E00;&#x4E2A;&#x5FEB;&#x7167;&#xFF0C;&#x4EE5;&#x4FBF;&#x4E4B;&#x540E;&#x5728;&#x5408;&#x9002;&#x7684;&#x65F6;&#x5019;&#x5448;&#x73B0;&#x7ED9;&#x7528;&#x6237;&#x4EE5;&#x63D0;&#x9AD8;&#x7528;&#x6237;&#x4F53;&#x68C0;&#xFF0C;&#x56E0;&#x6B64;&#x5E94;&#x8BE5;&#x907F;&#x514D;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x5448;&#x73B0;&#x7528;&#x6237;&#x4FE1;&#x606F;&#xFF0C;&#x4EE5;&#x514D;&#x897F;&#x697C;&#x7528;&#x6237;&#x4E2A;&#x4EBA;&#x8D44;&#x6599;&#x3002;
+</code></pre><h2 id="&#x7F16;&#x7801;&#x65B9;&#x5F0F;">&#x7F16;&#x7801;&#x65B9;&#x5F0F;</h2><pre><code><span class="number">1.</span> &#x6DF7;&#x5408;&#x7F16;&#x7801;&#x3002;&#x5173;&#x952E;&#x4EE3;&#x7801;&#x4F7F;&#x7528; <span class="keyword">C</span>/<span class="keyword">C</span>++/asm &#x6548;&#x7387;&#x66F4;&#x9AD8;&#x5C31;&#x4F7F;&#x7528; <span class="keyword">C</span>/<span class="keyword">C</span>++/asm&#x3002;
+</code></pre><ol>
+<li>&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x65B9;&#x6CD5;&#x5728;&#x4E00;&#x4E2A;&#x5FAA;&#x73AF;&#x6B21;&#x6570;&#x975E;&#x5E38;&#x591A;&#x7684;&#x5FAA;&#x73AF;&#x4E2D;&#x4F7F;&#x7528;&#xFF0C;&#x5728;&#x8FDB;&#x5165;&#x5FAA;&#x73AF;&#x524D;&#x4F7F;&#x7528; methodForSelector &#x83B7;&#x53D6;&#x8BE5;&#x65B9;&#x6CD5; IMP&#xFF0C;&#x7136;&#x540E;&#x5728;&#x5FAA;&#x73AF;&#x4F53;&#x4E2D;&#x76F4;&#x63A5;&#x4F7F;&#x7528;&#x8BE5; IMP&#x3002;</li>
+</ol>
+<h2 id="&#x5173;&#x4E8E;&#x5185;&#x5B58;&#x91CA;&#x653E;">&#x5173;&#x4E8E;&#x5185;&#x5B58;&#x91CA;&#x653E;</h2><pre><code>&#x5728; didReceiveMemoryWarning &#x4E2D;&#x91CA;&#x653E;&#x5185;&#x5B58;&#xFF0C;&#x6BD4;&#x5982;<span class="operator"><span class="keyword">cache</span> &#x7684;&#x56FE;&#x50CF;&#xFF0C;<span class="keyword">view</span> &#x7B49;&#xFF0C;&#x5E76;&#x8BB0;&#x5F97;&#x8C03;&#x7528; [supper didReceiveMemoryWarning]&#x3002;&#x6E05;&#x7406;&#x51FD;&#x6570; didReceiveMemoryWarning, viewDidUnload &#x548C; dealloc &#x90FD;&#x662F;&#x5728;&#x65B9;&#x6CD5;&#x7ED3;&#x5C3E;&#x5904;&#x8C03;&#x7528; supper &#x7684;&#x65B9;&#x6CD5;&#x3002;</span>
+</code></pre><h2 id="&#x63D0;&#x9AD8;APP&#x542F;&#x52A8;&#x52A0;&#x8F7D;&#x901F;&#x5EA6;">&#x63D0;&#x9AD8;APP&#x542F;&#x52A8;&#x52A0;&#x8F7D;&#x901F;&#x5EA6;</h2><pre><code><span class="number">1.</span>&#x907F;&#x514D;&#x4F7F;&#x7528;&#x9759;&#x6001;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x5305;&#x62EC;&#x9759;&#x6001;c++&#x5BF9;&#x8C61;&#xFF0C;&#x52A0;&#x8F7D;&#x65F6;&#x4F1A;&#x8FD0;&#x884C;&#x7684;&#x4EE3;&#x7801;&#xFF0C;&#x5982;+(<span class="keyword">void</span>) load{} &#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5728;Main&#x51FD;&#x6570;&#x4E4B;&#x524D;&#x8FD0;&#x884C;&#x989D;&#x5916;&#x7684;&#x4EE3;&#x7801;&#x3002;
+<span class="number">2.</span>&#x51CF;&#x5C11;ddl&#x7B49;&#x52A8;&#x6001;&#x94FE;&#x63A5;&#x5E93;&#x7684;&#x6570;&#x91CF;&#x3002;
+</code></pre><h2 id="&#x5584;&#x7528;cache&#xFF0C;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x3002;">&#x5584;&#x7528;cache&#xFF0C;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x3002;</h2><pre><code>1.cache &#x662F;&#x4E00;&#x79CD;&#x5E38;&#x89C1;&#x7684;&#x7A7A;&#x95F4;&#x6362;&#x65F6;&#x95F4;&#x7684;&#x63D0;&#x4F9B;&#x6027;&#x80FD;&#x7684;&#x6536;&#x5230;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;&#x5728;&#x76F8;&#x5F53;&#x591A;&#x7684;&#x573A;&#x5408;&#x3002;
+2.&#x5C3D;&#x91CF;<span class="operator"><span class="keyword">cache</span> &#x90A3;&#x4E9B;&#x53EF;&#x91CD;&#x590D;&#x5229;&#x7528;&#x7684;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982; <span class="keyword">table</span> cell&#xFF0C;<span class="built_in">date</span>/<span class="built_in">number</span> formatters&#xFF0C;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;sqlite&#x8BED;&#x53E5;&#x7B49;&#x3002;</span>
+</code></pre><h2 id="&#x6570;&#x636E;&#x5E93;">&#x6570;&#x636E;&#x5E93;</h2><pre><code><span class="number">1.</span>&#x7F13;&#x5B58;&#x7ECF;&#x5E38;&#x7528;&#x5230;&#x7684; sqlite&#x8BED;&#x53E5;&#xFF1B;
+<span class="number">2.</span>&#x4F18;&#x5316;&#x6570;&#x636E;&#x5E93;&#x67E5;&#x8BE2;&#x8BED;&#x53E5;&#xFF0C;&#x7528;sqlite3_trace&#x548C;sqlite3_profile&#x6765;&#x67E5;&#x627E;&#x6027;&#x80FD;&#x5DEE;&#x7684;&#x8BED;&#x53E5;&#xFF1B;
+<span class="number">3.</span>&#x5982;&#x679C;&#x53EF;&#x80FD;&#x7684;&#x8BDD;&#xFF0C;&#x7F13;&#x5B58;&#x67E5;&#x8BE2;&#x7ED3;&#x679C;;
+<span class="number">3.</span>&#x5728;&#x4F7F;&#x7528; sqlite_prepare&#x4F1A;&#x5C06;SQL&#x67E5;&#x8BE2;&#x7F16;&#x8BD1;&#x6210;&#x5B57;&#x8282;&#x7801;&#xFF0C;&#x8981;&#x4F7F;&#x7528;bind&#xFF0C;&#x91CD;&#x7528;&#x90A3;&#x4E9B;&#x5DF2;&#x7ECF;prepared&#x7684;&#x8BED;&#x53E5;&#x3002;
+</code></pre>
       
     </div>
 
@@ -467,6 +470,8 @@
           
             <a href="/tags/IOS/" rel="tag"># IOS</a>
           
+            <a href="/tags/优化/" rel="tag"># 优化</a>
+          
         </div>
       
 
@@ -474,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/11/27/Unicode-and-NSString/" rel="next" title="Unicode and NSString">
-                <i class="fa fa-chevron-left"></i> Unicode and NSString
+              <a href="/2015/11/27/Unicode-and-NSString/" rel="next" title="NSString 与 Unicode">
+                <i class="fa fa-chevron-left"></i> NSString 与 Unicode
               </a>
             
           </div>
@@ -556,7 +561,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -574,7 +579,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -627,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#IOS程序性能优化"><span class="nav-number">1.</span> <span class="nav-text">IOS程序性能优化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算代码运行时间。"><span class="nav-number">1.</span> <span class="nav-text">计算代码运行时间。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#善用xcode的性能分析工具"><span class="nav-number">2.</span> <span class="nav-text">善用xcode的性能分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片等多媒体资源"><span class="nav-number">3.</span> <span class="nav-text">图片等多媒体资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复杂的UIView"><span class="nav-number">4.</span> <span class="nav-text">复杂的UIView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程"><span class="nav-number">5.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意时机"><span class="nav-number">6.</span> <span class="nav-text">注意时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于后台任务"><span class="nav-number">7.</span> <span class="nav-text">关于后台任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码方式"><span class="nav-number">8.</span> <span class="nav-text">编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于内存释放"><span class="nav-number">9.</span> <span class="nav-text">关于内存释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提高APP启动加载速度"><span class="nav-number">10.</span> <span class="nav-text">提高APP启动加载速度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#善用cache，空间换时间。"><span class="nav-number">11.</span> <span class="nav-text">善用cache，空间换时间。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">12.</span> <span class="nav-text">数据库</span></a></li></ol></div>
             
 
           </div>

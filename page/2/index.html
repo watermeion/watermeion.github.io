@@ -2,13 +2,15 @@
 
 
 
+  
 
-<html class="theme-next muse" lang="zh-Hans">
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="theme-color" content="">
+<meta name="theme-color" content="#222">
 
 
 
@@ -20,7 +22,6 @@
 
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-
 
 
 
@@ -74,7 +75,7 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="Hexo, NexT" />
@@ -88,7 +89,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -113,13 +114,12 @@
   var CONFIG = {
     root: '/',
     scheme: 'Muse',
-    version: '5.1.0',
-    sidebar: {"position":"left","display":"post"},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
-    tabs: ,
-    motion: "",
+    tabs: true,
+    motion: true,
     duoshuo: {
-      userId: 'undefined',
+      userId: '0',
       author: '博主'
     },
     algolia: {
@@ -159,6 +159,12 @@
 
 
 
+
+
+
+
+
+
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -169,7 +175,8 @@
   
 
   <div class="container sidebar-position-left 
-  page-home">
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -208,7 +215,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
           </a>
@@ -216,9 +223,9 @@
       
         
         <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+          <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
           </a>
@@ -226,9 +233,9 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
+          <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
             关于
           </a>
@@ -236,9 +243,9 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
+          <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
           </a>
@@ -246,9 +253,9 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+          <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
           </a>
@@ -388,6 +395,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/08/26/ios-Presented-and-Presenting-VC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/26/ios-Presented-and-Presenting-VC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -399,13 +417,11 @@
             <div class="post-wordcount">
               
                 
-                  <span class="post-meta-divider">|</span>
-                
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
+                  <span class="post-meta-item-text">字数统计:</span>
                 
                 <span title="字数统计">
                   262 字
@@ -421,8 +437,7 @@
                   <i class="fa fa-clock-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">阅读时长
-                   :</span>
+                  <span class="post-meta-item-text">阅读时长:</span>
                 
                 <span title="阅读时长">
                   1 分钟
@@ -568,6 +583,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/08/26/8月26日 Share  动画之我见 (记录)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/26/8月26日 Share  动画之我见 (记录)/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -579,13 +605,11 @@
             <div class="post-wordcount">
               
                 
-                  <span class="post-meta-divider">|</span>
-                
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
+                  <span class="post-meta-item-text">字数统计:</span>
                 
                 <span title="字数统计">
                   195 字
@@ -601,8 +625,7 @@
                   <i class="fa fa-clock-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">阅读时长
-                   :</span>
+                  <span class="post-meta-item-text">阅读时长:</span>
                 
                 <span title="阅读时长">
                   1 分钟
@@ -757,13 +780,11 @@
             <div class="post-wordcount">
               
                 
-                  <span class="post-meta-divider">|</span>
-                
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
+                  <span class="post-meta-item-text">字数统计:</span>
                 
                 <span title="字数统计">
                   1,041 字
@@ -779,8 +800,7 @@
                   <i class="fa fa-clock-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">阅读时长
-                   :</span>
+                  <span class="post-meta-item-text">阅读时长:</span>
                 
                 <span title="阅读时长">
                   4 分钟
@@ -930,6 +950,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/27/IOS-性能优化的几方面/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/27/IOS-性能优化的几方面/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -941,13 +972,11 @@
             <div class="post-wordcount">
               
                 
-                  <span class="post-meta-divider">|</span>
-                
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
+                  <span class="post-meta-item-text">字数统计:</span>
                 
                 <span title="字数统计">
                   813 字
@@ -963,8 +992,7 @@
                   <i class="fa fa-clock-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">阅读时长
-                   :</span>
+                  <span class="post-meta-item-text">阅读时长:</span>
                 
                 <span title="阅读时长">
                   3 分钟
@@ -1110,6 +1138,17 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/11/27/Unicode-and-NSString/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/11/27/Unicode-and-NSString/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -1121,13 +1160,11 @@
             <div class="post-wordcount">
               
                 
-                  <span class="post-meta-divider">|</span>
-                
                 <span class="post-meta-item-icon">
                   <i class="fa fa-file-word-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">字数统计&#58;</span>
+                  <span class="post-meta-item-text">字数统计:</span>
                 
                 <span title="字数统计">
                   355 字
@@ -1143,8 +1180,7 @@
                   <i class="fa fa-clock-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">阅读时长
-                   :</span>
+                  <span class="post-meta-item-text">阅读时长:</span>
                 
                 <span title="阅读时长">
                   1 分钟
@@ -1247,22 +1283,19 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200"
+               alt="Tad Guo" />
+          <p class="site-author-name" itemprop="name">Tad Guo</p>
+           
+              <p class="site-description motion-element" itemprop="description">记录与分享我和世界的交互！</p>
           
-            <img class="site-author-image" itemprop="image"
-              src="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200"
-              alt="Tad Guo" />
-          
-            <p class="site-author-name" itemprop="name">Tad Guo</p>
-            <p class="site-description motion-element" itemprop="description">记录与分享我和世界的交互！</p>
         </div>
-
         <nav class="site-state motion-element">
 
           
             <div class="site-state-item site-state-posts">
-            
-              <a href="/archives">
-            
+              <a href="/archives/">
                 <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
@@ -1308,7 +1341,12 @@
               <span class="links-of-author-item">
                 <a href="https://github.com/watermeion" target="_blank" title="GitHub">
                   
-                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
               </span>
             
           
@@ -1341,22 +1379,25 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy;  2015 &mdash; 
+  &copy;  2015 - 
   <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Tad Guo</span>
-
-  
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
 
-  <span class="post-meta-divider">|</span>
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.0</div>
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
 
 
         
@@ -1379,12 +1420,6 @@
     </span>
   
 </div>
-
-
-
-
-
-
 
 
         
@@ -1451,35 +1486,45 @@
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
-
-
-
-  
-  
-
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
 
 
 
   
+  
+
+  
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
 
 
   
 
 
+  
 
+    
+      <script id="dsq-count-scr" src="https://watermeion.disqus.com/count.js" async></script>
+    
+
+    
+
+  
+
+
+
+
+	
 
 
 
@@ -1703,7 +1748,7 @@
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('');
+                  var upperBound = parseInt('1');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }
@@ -1770,7 +1815,7 @@
             }
           }
 
-          if ('auto' === '') {
+          if ('auto' === 'auto') {
             input.addEventListener('input', inputEventFunction);
           } else {
             $('.search-icon').click(inputEventFunction);
@@ -1858,7 +1903,7 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

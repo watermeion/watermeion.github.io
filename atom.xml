@@ -4,7 +4,7 @@
   <subtitle><![CDATA[-—Philip W. Anderson]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://github.com/watermeion/"/>
-  <updated>2018-10-09T03:29:26.521Z</updated>
+  <updated>2018-10-09T03:34:16.346Z</updated>
   <id>https://github.com/watermeion/</id>
   
   <author>
@@ -19,8 +19,11 @@
     <link href="https://github.com/watermeion/2018/10/09/Linux%E7%A3%81%E7%9B%98%E9%85%8D%E9%A2%9D%E7%AE%A1%E7%90%86/"/>
     <id>https://github.com/watermeion/2018/10/09/Linux磁盘配额管理/</id>
     <published>2018-10-09T03:27:19.000Z</published>
-    <updated>2018-10-09T03:29:26.521Z</updated>
-    <content type="html"><![CDATA[<h3 id="&#x57FA;&#x672C;&#x8BF4;&#x660E;">&#x57FA;&#x672C;&#x8BF4;&#x660E;</h3><h4 id="&#x5FC5;&#x8981;&#x6761;&#x4EF6;">&#x5FC5;&#x8981;&#x6761;&#x4EF6;</h4><ol>
+    <updated>2018-10-09T03:34:16.346Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>&#x6700;&#x8FD1;&#x5728;&#x505A;&#x57FA;&#x4E8E;mesos+marathon &#x7684;docker &#x5BB9;&#x5668;&#x4E91;&#x670D;&#x52A1;&#x9879;&#x76EE;&#x3002;&#x9700;&#x8981;&#x9650;&#x5236;&#x6BCF;&#x4E2A;&#x5BB9;&#x5668;&#x7684;&#x6570;&#x636E;&#x5377;&#x78C1;&#x76D8;&#x4F7F;&#x7528;&#xFF0C;&#x5BF9;&#x6B64;&#x4F5C;&#x4E86;&#x4E00;&#x4E9B;&#x8C03;&#x7814;&#x5DE5;&#x4F5C;&#x3002;<br><a id="more"></a></p>
+</blockquote>
+<h3 id="&#x57FA;&#x672C;&#x8BF4;&#x660E;">&#x57FA;&#x672C;&#x8BF4;&#x660E;</h3><h4 id="&#x5FC5;&#x8981;&#x6761;&#x4EF6;">&#x5FC5;&#x8981;&#x6761;&#x4EF6;</h4><ol>
 <li><code>XFS</code> <code>ext4</code> &#x5747;&#x53EF;&#x652F;&#x6301;<code>Quota</code> &#x64CD;&#x4F5C;</li>
 <li>&#x9700;&#x8981;&#x5185;&#x6838;<code>Linux 2.4 +</code>&#x7684;&#x652F;&#x6301;</li>
 <li>&#x9700;<code>mount</code>&#x65F6;&#x6307;&#x5B9A;<code>quota option</code>, &#x53EF;&#x914D;&#x7F6E; <code>/etc/fstab</code> &#x540E;remount.</li>
@@ -50,7 +53,9 @@
 <h3 id="&#x8D85;&#x989D;&#x5F02;&#x5E38;">&#x8D85;&#x989D;&#x5F02;&#x5E38;</h3><p>&#x65E5;&#x5FD7;&#x76D1;&#x63A7;&#x62A5;&#x8B66;: &#x6839;&#x636E;&#x9700;&#x6C42;&#x76D1;&#x63A7;IO&#x65E5;&#x5FD7;&#xFF0C;&#x5F62;&#x5982;<code>Disk quota exceeds</code></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h3 id="&#x57FA;&#x672C;&#x8BF4;&#x660E;">&#x57FA;&#x672C;&#x8BF4;&#x660E;</h3><h4 id="&#x5FC5;&#x8981;&#x6761;&#x4EF6;">&#x5FC5;&#x8981;&#x]]>
+    <![CDATA[<blockquote>
+<p>&#x6700;&#x8FD1;&#x5728;&#x505A;&#x57FA;&#x4E8E;mesos+marathon &#x7684;docker &#x5BB9;&#x5668;&#x4E91;&#x670D;&#x52A1;&#x9879;&#x76EE;&#x3002;&#x9700;&#x8981;&#x9650;&#x5236;&#x6BCF;&#x4E2A;&#x5BB9;&#x5668;&#x7684;&#x6570;&#x636E;&#x5377;&#x78C1;&#x76D8;&#x4F7F;&#x7528;&#xFF0C;&#x5BF9;&#x6B64;&#x4F5C;&#x4E86;&#x4E00;&#x4E9B;&#x8C03;&#x7814;&#x5DE5;&#x4F5C;&#x3002;<br></p></blockquote>]]>
+    
     </summary>
     
       <category term="运维" scheme="https://github.com/watermeion/tags/%E8%BF%90%E7%BB%B4/"/>

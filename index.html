@@ -328,6 +328,219 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2018/10/09/Linux磁盘配额管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tad Guo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/09/Linux磁盘配额管理/" itemprop="url">Linux磁盘配额管理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T11:27:19+08:00">
+                2018-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/09/Linux磁盘配额管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/09/Linux磁盘配额管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计:</span>
+                
+                <span title="字数统计">
+                  524 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长:</span>
+                
+                <span title="阅读时长">
+                  2 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="&#x57FA;&#x672C;&#x8BF4;&#x660E;">&#x57FA;&#x672C;&#x8BF4;&#x660E;</h3><h4 id="&#x5FC5;&#x8981;&#x6761;&#x4EF6;">&#x5FC5;&#x8981;&#x6761;&#x4EF6;</h4><ol>
+<li><code>XFS</code> <code>ext4</code> &#x5747;&#x53EF;&#x652F;&#x6301;<code>Quota</code> &#x64CD;&#x4F5C;</li>
+<li>&#x9700;&#x8981;&#x5185;&#x6838;<code>Linux 2.4 +</code>&#x7684;&#x652F;&#x6301;</li>
+<li>&#x9700;<code>mount</code>&#x65F6;&#x6307;&#x5B9A;<code>quota option</code>, &#x53EF;&#x914D;&#x7F6E; <code>/etc/fstab</code> &#x540E;remount.</li>
+</ol>
+<h4 id="&#x57FA;&#x672C;&#x539F;&#x7406;">&#x57FA;&#x672C;&#x539F;&#x7406;</h4><p><a href="https://www.ibm.com/developerworks/cn/linux/l-lpic1-v3-104-4/index.html" target="_blank" rel="external">&#x7BA1;&#x7406;&#x78C1;&#x76D8;&#x914D;&#x989D;</a></p>
+<blockquote>
+<p>&#x6709; 3 &#x79CD;&#x4E0D;&#x540C;&#x7684;&#x914D;&#x989D;&#x652F;&#x6301;&#xFF1A;<br>    vfsold&#xFF0C;&#x6216;&#x8005;&#x7248;&#x672C; 1 &#x914D;&#x989D;<br>    vfsv0&#xFF0C;&#x6216;&#x8005;&#x7248;&#x672C; 2 &#x914D;&#x989D;<br>    xfs&#xFF0C;XFS &#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x4E0A;&#x7684;&#x914D;&#x989D;<br>&#x914D;&#x989D;&#x9700;&#x8981; 2.4 &#x5185;&#x6838;&#x4E4B;&#x540E;&#x5F15;&#x5165;&#x7684;&#x5185;&#x6838;&#x652F;&#x6301;&#x3002;2.6 &#x5185;&#x6838;&#x4E5F;&#x6709;&#x60A8;&#x6240;&#x9700;&#x7684;&#x652F;&#x6301;&#x3002;XFS &#x914D;&#x989D;&#x5F80;&#x5F80;&#x662F;&#x65E5;&#x5FD7;&#x5316;&#x7684;&#x3002;&#x5185;&#x6838; 2.6.11 &#x53CA;&#x4EE5;&#x4E0A;&#x7248;&#x672C;&#x652F;&#x6301;&#x65E5;&#x5FD7;&#x5316;&#x7248;&#x672C; 2 &#x914D;&#x989D;&#x3002;</p>
+</blockquote>
+<h4 id="Quota_&#x57FA;&#x672C;&#x4ECB;&#x7ECD;&#xFF1A;">Quota &#x57FA;&#x672C;&#x4ECB;&#x7ECD;&#xFF1A;</h4><p><code>usrquota</code>:(XFS uquota)  &#x9488;&#x5BF9;&#x67D0;&#x4E00;&#x4E2A;User<br><code>grpquota</code>:(XFS gquota)  &#x9488;&#x5BF9;&#x67D0;&#x4E00;&#x4E2A;Group<br><code>prjquota</code>:(XFS pquota)  &#x9488;&#x5BF9;&#x5355;&#x4E00;&#x76EE;&#x5F55;&#xFF0C;&#x4E0D;&#x53EF;&#x4E0E;<code>grpquota</code>&#x540C;&#x65F6;&#x914D;&#x7F6E;</p>
+<p>inode: &#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E2A;&#x6570;&#x9650;&#x989D;<br>disk: &#x914D;&#x7F6E;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#x9650;&#x989D;&#xFF0C;&#x5355;&#x4F4D;1KB</p>
+<p>soft: &#x8F6F;&#x9650;&#x989D;&#xFF0C;&#x8D85;&#x8FC7;&#x4F1A;warn,&#x540C;&#x65F6;&#x542F;&#x52A8;timer&#x5012;&#x8BA1;&#x65F6;<br>hard: &#x786C;&#x9650;&#x989D;&#xFF0C;&#x8D85;&#x8FC7;&#x76F4;&#x63A5;&#x629B;IOERROR: Disk quota exceeds</p>
+<p>timer: &#x8F6F;&#x9650;&#x989D;&#x9884;&#x8B66;&#x5012;&#x8BA1;&#x65F6;&#xFF0C;&#x9ED8;&#x8BA4;7days, &#x5012;&#x8BA1;&#x65F6;&#x622A;&#x6B62;&#x65F6;&#xFF0C;&#x4F7F;&#x7528;&#x91CF;&#x4ECD;&#x8D85;&#x8FC7;soft,&#x5219;soft&#x5347;&#x7EA7;&#x4E3A;hard. &#x5199;&#x5165;&#x5373;Error</p>
+<h4 id="CMD&#x6307;&#x4EE4;&#x7B80;&#x4ECB;">CMD&#x6307;&#x4EE4;&#x7B80;&#x4ECB;</h4><pre><code><span class="attribute">quota</span>: <span class="string">&#x663E;&#x793A;&#x914D;&#x989D;&#x4FE1;&#x606F;</span>
+<span class="attribute">quotacheck</span>: <span class="string">&#x914D;&#x989D;&#x914D;&#x7F6E;&#x68C0;&#x67E5;&#xFF0C;&#x5FC5;&#x8981;&#x65F6;&#x521B;&#x5EFA;&#x6216;&#x4FEE;&#x590D;&#x914D;&#x989D;&#x6587;&#x4EF6;(aquota.user,aquota.group)&#xFF0C; XFS &#x914D;&#x989D;&#x7ED3;&#x6784;&#x5305;&#x542B;&#x5728;&#x5143;&#x6570;&#x636E;&#x548C;&#x65E5;&#x5FD7;&#x5219;&#x8DF3;&#x8FC7;&#x8BE5;&#x68C0;&#x67E5;&#x3002;</span>
+<span class="attribute">repquota</span>: <span class="string">&#x751F;&#x6210;&#x914D;&#x989D;&#x62A5;&#x544A;</span>
+<span class="attribute">quotastats</span>: <span class="string">&#x67E5;&#x770B;&#x914D;&#x989D;&#x7EDF;&#x8BA1;</span>
+
+<span class="http"><span class="attribute">edquota</span>: <span class="string"> &#x8BBE;&#x7F6E;&#x914D;&#x989D;</span>
+<span class="attribute">quotaon</span>: <span class="string"> &#x542F;&#x7528;&#x78C1;&#x76D8;quota</span>
+<span class="attribute">quotaoff</span>: <span class="string">&#x542F;&#x7528;&#x78C1;&#x76D8;quota</span></span>
+</code></pre><h3 id="&#x529F;&#x80FD;&#x8BBE;&#x8BA1;">&#x529F;&#x80FD;&#x8BBE;&#x8BA1;</h3><p>&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x6709;&#xFF1A;<br>1&#xB7; &#x78C1;&#x76D8;&#x914D;&#x989D;&#x8BBE;&#x5B9A;\&#x8C03;&#x6574;&#xFF0C;&#x751F;\&#x5931;&#x6548;<br>2&#xB7; &#x78C1;&#x76D8;&#x4F7F;&#x7528;&#x60C5;&#x51B5;&#x67E5;&#x8BE2;,&#x53CD;&#x9988;<br>3&#xB7; &#x914D;&#x989D;&#x8D85;soft&#x9650;&#x62A5;&#x8B66;&#xFF0C;&#x65F6;&#x9650;&#x63D0;&#x9192;<br>4&#xB7; &#x914D;&#x989D;&#x8D85;hard&#x9650;&#x5F02;&#x5E38;&#x62A5;&#x8B66;</p>
+<h4 id="&#x914D;&#x989D;&#x914D;&#x7F6E;&#xFF0C;&#x751F;&#x6548;\&#x5931;&#x6548;&#x63A5;&#x53E3;">&#x914D;&#x989D;&#x914D;&#x7F6E;&#xFF0C;&#x751F;&#x6548;\&#x5931;&#x6548;&#x63A5;&#x53E3;</h4><p>&#x5B9E;&#x73B0;&#x914D;&#x5408;&#x8C03;&#x6574;&#x4EE5;&#x53CA;&#x751F;&#x6548;&#x548C;&#x5931;&#x6548;&#x529F;&#x80FD;</p>
+<h4 id="&#x914D;&#x989D;&#x67E5;&#x8BE2;&#xFF0C;&#x5360;&#x7528;&#x67E5;&#x8BE2;">&#x914D;&#x989D;&#x67E5;&#x8BE2;&#xFF0C;&#x5360;&#x7528;&#x67E5;&#x8BE2;</h4><p>&#x8BBE;&#x8BA1;&#x63A5;&#x53E3;&#xFF0C;&#x67E5;&#x8BE2;&#x5404;&#x4E2A;&#x5BB9;&#x5668;&#x78C1;&#x76D8;&#x914D;&#x989D;&#x4F7F;&#x7528;&#x60C5;&#x51B5;&#x3002;&#x5982;&#x4F55;&#x843D;&#x5730;&#x5230;&#x7269;&#x7406;&#x673A;</p>
+<h4 id="&#x8D85;&#x989D;&#x62A5;&#x8B66;">&#x8D85;&#x989D;&#x62A5;&#x8B66;</h4><p>&#x7CFB;&#x7EDF;&#x65E5;&#x5FD7;&#x76D1;&#x63A7;&#x6216;&#x5B9A;&#x65F6;&#x4EFB;&#x52A1;</p>
+<p>1.&#x8D85;soft&#x914D;&#x989D;&#x63D0;&#x9192;&#xFF1A;</p>
+<p>2.&#x8D85;soft&#x65F6;&#x9650;&#x63D0;&#x9192;&#xFF1A;</p>
+<h3 id="&#x8D85;&#x989D;&#x5F02;&#x5E38;">&#x8D85;&#x989D;&#x5F02;&#x5E38;</h3><p>&#x65E5;&#x5FD7;&#x76D1;&#x63A7;&#x62A5;&#x8B66;: &#x6839;&#x636E;&#x9700;&#x6C42;&#x76D1;&#x63A7;IO&#x65E5;&#x5FD7;&#xFF0C;&#x5F62;&#x5982;<code>Disk quota exceeds</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2017/12/25/Java面试题汇总大全-md/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1056,192 +1269,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2017/09/12/Tips-for-Debug-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Tad Guo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/7624793?v=4&amp;u=c33037efe472708ef32b21112327f2cedd56b872&amp;s=200">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="“More is Different.”">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/12/Tips-for-Debug-0/" itemprop="url">Tips for Debug</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T14:40:30+08:00">
-                2017-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Tech-Memo/" itemprop="url" rel="index">
-                    <span itemprop="name">Tech Memo</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                  <span class="post-meta-divider">|</span>
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计:</span>
-                
-                <span title="字数统计">
-                  425 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长:</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="&#x5F15;&#x5B50;">&#x5F15;&#x5B50;</h2><blockquote>
-<p>&#x5DE5;&#x4F5C;&#x4E86;&#x4E00;&#x6BB5;&#x65F6;&#x95F4;&#x4E4B;&#x540E;&#xFF0C;&#x96BE;&#x514D;&#x4F1A;&#x6709;&#x4E00;&#x4E9B;&#x7ECF;&#x9A8C;&#x548C;&#x6280;&#x672F;&#x9700;&#x8981;&#x603B;&#x7ED3;&#x63D0;&#x70BC;&#x4E00;&#x4E0B;&#xFF0C;&#x624D;&#x80FD;&#x63D0;&#x9AD8;&#x6548;&#x7387;&#x8282;&#x7EA6;&#x65F6;&#x95F4;&#xFF0C;&#x6240;&#x8C13;&#x201C;&#x672F;&#x201D;&#x3002;&#x4F46;&#x662F;&#x8FD9;&#x4E9B;&#x4E0D;&#x4EC5;&#x662F;Tips,&#x8FD8;&#x8574;&#x542B;&#x4E00;&#x4E0B;&#x7ED3;&#x6784;&#x5316;&#x601D;&#x7EF4;&#x7684;&#x201C;&#x9053;&#x201D;&#x5728;&#x91CC;&#x9762;, &#x65F6;&#x4E0D;&#x65F6;&#x56DE;&#x5F52;&#x4E00;&#x4E0B;&#x5427;&#x3002;</p>
-</blockquote>
-<p>Debug&#x7684;&#x4E00;&#x4E9B;tips.</p>
-<blockquote>
-<ol>
-<li>&#x4FDD;&#x6301;&#x7CFB;&#x7EDF;&#x6027;&#xFF0C;&#x8BB0;&#x5F55;&#x505A;&#x8FC7;&#x7684;&#x5C1D;&#x8BD5;&#xFF0C;&#x4E0D;&#x8981;&#x6D6A;&#x8D39;&#x65F6;&#x95F4;&#x4E00;&#x904D;&#x904D;&#x5C1D;&#x8BD5;&#x540C;&#x6837;&#x7684;&#x4E1C;&#x897F;&#x3002;</li>
-<li>&#x4E00;&#x540D;&#x6709;&#x7ECF;&#x9A8C;&#x7684;&#x7A0B;&#x5E8F;&#x5458;&#xFF0C;&#x4F1A;&#x8BB0;&#x5F55;&#x81EA;&#x5DF1;&#x7ECF;&#x5E38;&#x72AF;&#x8FC7;&#x7684;&#x9519;&#x8BEF;&#xFF0C;debug&#x7684;&#x65F6;&#x5019;&#x4F5C;&#x4E3A;&#x4F9D;&#x636E;&#x8FDB;&#x884C;&#x3002;Keep trace of the mistakes you makes,</li>
-</ol>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/12/Tips-for-Debug-0/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1292,7 +1319,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1303,7 +1330,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1314,7 +1341,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1376,7 +1403,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

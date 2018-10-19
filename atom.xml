@@ -4,7 +4,7 @@
   <subtitle><![CDATA[-—Philip W. Anderson]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://github.com/watermeion/"/>
-  <updated>2018-10-12T07:21:29.020Z</updated>
+  <updated>2018-10-19T02:13:50.466Z</updated>
   <id>https://github.com/watermeion/</id>
   
   <author>
@@ -13,6 +13,64 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[一次Http请求的Debug记]]></title>
+    <link href="https://github.com/watermeion/2018/10/19/%E4%B8%80%E6%AC%A1Http%E8%AF%B7%E6%B1%82%E7%9A%84Debug%E8%AE%B0/"/>
+    <id>https://github.com/watermeion/2018/10/19/一次Http请求的Debug记/</id>
+    <published>2018-10-19T02:12:19.000Z</published>
+    <updated>2018-10-19T02:13:50.466Z</updated>
+    <content type="html"><![CDATA[<p>&#x6700;&#x8FD1;&#x9047;&#x5230;http&#x8BF7;&#x6C42;&#x4E00;&#x4E2A;&#x8F83;&#x5927;&#x7684;json&#x65F6;&#xFF0C;&#x8FD4;&#x56DE;&#x88AB;&#x622A;&#x65AD;&#x7684;&#x95EE;&#x9898;. json&#x89C4;&#x6A21;&#xFF0C;&#x5B57;&#x7B26;&#x6570;200k+&#xFF0C;&#x5927;&#x5C0F;300-500KB.&#x8FD9;&#x91CC;&#x8BB0;&#x5F55;&#x4E0B;&#x89E3;&#x51B3;&#x601D;&#x8DEF;&#x548C;&#x8FC7;&#x7A0B;.<br><a id="more"></a></p>
+<p>####&#x73B0;&#x8C61;&#xFF1A;</p>
+<table>
+<thead>
+<tr>
+<th>UA</th>
+<th>&#x622A;&#x65AD;&#x5426;</th>
+<th>accept-encoding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chrome,FireFox</td>
+<td>&#x5426;</td>
+<td>gzip, deflate,compress</td>
+</tr>
+<tr>
+<td>python request lib</td>
+<td>&#x5426;</td>
+<td>gzip, deflate</td>
+</tr>
+<tr>
+<td>Java commons-httpclient</td>
+<td>&#x662F;</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>####&#x521D;&#x6B65;&#x5B9A;&#x4F4D;&#xFF1A;</p>
+<ol>
+<li>java client&#x7EF4;&#x5EA6;</li>
+<li>http &#x534F;&#x8BAE;&#x53C2;&#x6570;&#x7EF4;&#x5EA6;</li>
+<li>&#x670D;&#x52A1;&#x7AEF;&#x5B9E;&#x73B0;&#x914D;&#x7F6E;&#x7EF4;&#x5EA6;&#xFF08;&#x672A;&#x77E5;&#xFF0C;&#x7B2C;&#x4E09;&#x65B9;&#x670D;&#x52A1;&#xFF09;</li>
+</ol>
+<p>####&#x65B9;&#x6CD5;&#x8BBA;&#xFF1A;</p>
+<ol>
+<li>&#x4ED4;&#x7EC6;&#x5BF9;&#x6BD4;java , python ,web browser&#x4E09;&#x4E2A;client&#xFF0C;&#x5728;&#x8FD9;&#x4E09;&#x4E2A;&#x7EF4;&#x5EA6;&#x4E0A;&#x7684;&#x5DEE;&#x5F02;.</li>
+<li>&#x6293;&#x5305;&#xFF0C;&#x4ECE;&#x6EAF;&#x6E90;&#x800C;&#x4E0A;&#x6392;&#x67E5;Http&#x3001;TCP&#x7684;&#x8BF7;&#x6C42;&#x6574;&#x4E2A;&#x8FC7;&#x7A0B;.</li>
+</ol>
+<p>####&#x7ED3;&#x8BBA;<br>&#x95EE;&#x9898;&#x8F83;&#x5E38;&#x89C1;&#xFF0C;&#x4E5F;&#x6BD4;&#x8F83;&#x5BB9;&#x6613;&#x5C31;&#x5B9A;&#x4F4D;&#x5230;&#x4E86;&#x95EE;&#x9898;&#xFF1A;&#xFF1A;&#x670D;&#x52A1;&#x5668;close&#x7684;&#x6CA1;&#x6709;&#x53D1;&#x5B8C;&#x7684;chunk&#x6570;&#x636E;&#x5305;&#x3002;&#x5177;&#x4F53;&#x670D;&#x52A1;&#x7AEF;&#x5982;&#x4F55;&#x9650;&#x5236;&#x7684;&#x4E0D;&#x5F97;&#x800C;&#x77E5;&#xFF08;&#x4F30;&#x8BA1;&#x662F;nginx&#x7684;&#x7F3A;&#x7701;&#x914D;&#x7F6E;&#xFF09;&#x3002;&#x6539;&#x8FDB;&#x662F;:&#x5BA2;&#x6237;&#x7AEF;&#x58F0;&#x660E;&#x63A5;&#x53D7;gzip,deflate&#x7684;&#x538B;&#x7F29;&#x7F16;&#x7801;&#x6570;&#x636E;&#xFF0C;&#x964D;&#x4F4E;&#x6570;&#x636E;&#x4F20;&#x8F93;&#x91CF;&#x3002;&#x4E00;&#x79CD;&#x6CBB;&#x6807;&#x4E0D;&#x6CBB;&#x672C;&#x7684;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#x3002;</p>
+<p>&#x5BF9;&#x4E8E;&#x5927;&#x6570;&#x636E;&#x8FD4;&#x56DE;&#xFF0C;&#x9996;&#x5148;&#x5E94;&#x8BE5;&#x8003;&#x8651;&#x538B;&#x7F29;&#x3002;&#x670D;&#x52A1;&#x5668;&#x9700;&#x8981;&#x5F00;&#x542F;gzip&#xFF0C;deflate&#x7B49;&#x538B;&#x7F29;&#x7279;&#x6027;&#x3002;&#x6BD4;&#x5982;nginx &#x4F1A;&#x914D;&#x7F6E;gzip &#x538B;&#x7F29;&#xFF0C;gzip_buffer&#x7B49;&#x53C2;&#x6570;<br>&#x5BA2;&#x6237;&#x7AEF;&#x4E5F;&#x5E94;&#x91C7;&#x7528;&#x5BF9;&#x5E94;&#x7684;&#x538B;&#x7F29;&#x89E3;&#x538B;&#x5B9E;&#x73B0;&#x3002;</p>
+<p>&#x672C;&#x4F8B;&#x4E2D;&#xFF0C;java:apache.common.httpclient 3.1 &#x8FD9;&#x4E2A;&#x662F;&#x9ED8;&#x8BA4;&#x4E0D;&#x652F;&#x6301;&#x89E3;&#x538B;&#x7684;&#xFF0C;&#x5728;http&#x5934;&#x90E8;&#x4E0D;&#x4F1A;&#x52A0;&#x5165;&#x652F;&#x6301;&#x538B;&#x7F29;&#x7F16;&#x7801;&#x7684;&#x53C2;&#x6570;(accept-encoding), &#x800C;&#x73B0;&#x4EE3;&#x6D4F;&#x89C8;&#x5668;&#xFF0C;&#x5176;&#x4ED6;&#x8F83;&#x65B0;&#x7684;&#x8F6F;&#x4EF6;&#x5305;&#x90FD;&#x4F1A;&#x9ED8;&#x8BA4;&#x652F;&#x6301;&#x8FD9;&#x4E2A;&#x529F;&#x80FD;&#x3002;<br>&#x56E0;&#x6B64;&#xFF0C;&#x5347;&#x7EA7;&#x4E0B;java httpclient &#x5305;&#x5C31;&#x5706;&#x6EE1;&#x89E3;&#x51B3;&#x4E86;</p>
+<p>####&#x5347;&#x534E;</p>
+<p>&#x5173;&#x4E8E;http&#x5E38;&#x6709;&#x5934;&#x90E8;&#x53C2;&#x6570;&#x542B;&#x4E49;&#xFF0C;&#x6574;&#x7406;&#x4E00;&#x4E0B;&#xFF0C;&#x8BE6;&#x7EC6;&#x53EF;&#x53C2;&#x770B;<a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC2616</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>&#x6700;&#x8FD1;&#x9047;&#x5230;http&#x8BF7;&#x6C42;&#x4E00;&#x4E2A;&#x8F83;&#x5927;&#x7684;json&#x65F6;&#xFF0C;&#x8FD4;&#x56DE;&#x88AB;&#x622A;&#x65AD;&#x7684;&#x95EE;&#x9898;. json&#x89C4;&#x6A21;&#xFF0C;&#x5B57;&#x7B26;&#x6570;200k+&#xFF0C;&#x5927;&#x5C0F;300-500KB.&#x8FD9;&#x91CC;&#x8BB0;&#x5F55;&#x4E0B;&#x89E3;&#x51B3;&#x601D;&#x8DEF;&#x548C;&#x8FC7;&#x7A0B;.<br></p>]]>
+    
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Linux磁盘配额管理]]></title>
@@ -1761,47 +1819,6 @@ c)&#x6B63;&#x786E;&#x5904;&#x7406;apps&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#
       <category term="IOS" scheme="https://github.com/watermeion/tags/IOS/"/>
     
       <category term="Library" scheme="https://github.com/watermeion/tags/Library/"/>
-    
-      <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[ObjC中的消息传递机制小结]]></title>
-    <link href="https://github.com/watermeion/2015/03/20/ObjC%E4%B8%AD%E7%9A%84%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E6%9C%BA%E5%88%B6%E5%B0%8F%E7%BB%93/"/>
-    <id>https://github.com/watermeion/2015/03/20/ObjC中的消息传递机制小结/</id>
-    <published>2015-03-20T02:36:55.000Z</published>
-    <updated>2017-09-12T07:29:03.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="&#x5F15;&#x5B50;">&#x5F15;&#x5B50;</h2><p>&#x672C;&#x6587;&#x662F;&#x5B66;&#x4E60;ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x7684;&#x4E00;&#x7BC7;&#x5C0F;&#x7ED3;&#x5C0F;&#x7ED3;</p>
-<a id="more"></a>
-<h2 id="KVO">KVO</h2><ol>
-<li>One to Many: &#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;value changes &#x53EF;&#x4EE5;&#x88AB;&#x591A;&#x4E2A;&#x5BF9;&#x8C61;&#x76D1;&#x542C;</li>
-<li>&#x4F46;recipient &#x5FC5;&#x987B;&#x77E5;&#x9053; sender &#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x56E0;&#x4E3A;&#x5FC5;&#x987B;&#x5728;sender&#x5BF9;&#x8C61;deallcated&#x4E4B;&#x524D;unregister the observer</li>
-<li>&#x5728;Core Data &#x4E2D;&#x4F7F;&#x7528;&#x8981;&#x6CE8;&#x610F; Core Data&#x7684;Faulting &#x673A;&#x5236;&#xFF0C;&#x56E0;&#x4E3A;managed&#x5BF9;&#x8C61;&#x53D8;&#x6210;fault&#x65F6;&#x4E5F;&#x4F1A;&#x5F15;&#x53D1;KVO&#x76D1;&#x542C;</li>
-</ol>
-<h2 id="Notifications">Notifications</h2><ol>
-<li>Broadcast: sender &#x548C; recipient &#x4E0D;&#x9700;&#x8981;&#x77E5;&#x9053;&#x5F7C;&#x6B64;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#xFF0C;&#x4F4E;&#x76F8;&#x5173;&#x6027;&#xFF1B;</li>
-<li>&#x53EF;&#x4EE5;&#x901A;&#x8FC7;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">Delegation</div><div class="line">----</div><div class="line">1. &#x901A;&#x8FC7;&#x51FD;&#x6570;&#x53C2;&#x6570;&#x4F20;&#x9012;&#x6570;&#x636E;</div><div class="line">2. &#x677E;&#x8026;&#x5408;&#xFF0C;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;</div><div class="line">&gt; Delegation is very flexible and straightforward communication pattern if you only need to communicate between two specific objects.</div><div class="line"></div><div class="line">3. &#x7D27;&#x8026;&#x5408;&#x4E0D;&#x9002;&#x7528; &#xFF0C;&#x5BB9;&#x6613;&#x9020;&#x6210;&#x5FAA;&#x73AF;&#x5F15;&#x7528;&#xFF1F;</div><div class="line"></div><div class="line">Blocks</div><div class="line">----</div><div class="line">1. &#x6F5C;&#x5728;&#x9690;&#x60A3;&#xFF1A;</div><div class="line">&gt; if the sender needs to retain the block and cannot guarantee that this reference will be a nilled out, the every reference to self from within the block becomes a potential retain cycle.</div><div class="line">&#x5982;</div><div class="line">```OBJC</div><div class="line">self.myTableView.selectionHandler = ^void(NSIndexPath *selectedIndexPath) {</div><div class="line">    // handle selection ...</div><div class="line">};</div></pre></td></tr></table></figure></li>
-</ol>
-<blockquote>
-<p>&#x800C; &#x5982;&#x4E0B;&#x5C31;&#x4E0D;&#x4F1A;&#xFF0C;&#x539F;&#x56E0;&#x662F;operation &#x6267;&#x884C;&#x5B8C;&#x540E;&#x4F1A;&#x7ACB;&#x5373;&#x91CA;&#x653E;</p>
-</blockquote>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.queue = [[<span class="built_in">NSOperationQueue</span> alloc] init];</div><div class="line">MyOperation *operation = [[MyOperation alloc] init];</div><div class="line">operation.completionBlock = ^{</div><div class="line">    [<span class="keyword">self</span> finishedOperation];</div><div class="line">};</div><div class="line">[<span class="keyword">self</span>.queue addOperation:operation];</div></pre></td></tr></table></figure>
-<h2 id="Target-Action">Target-Action</h2><ol>
-<li>Target-Action is the typical pattern used to send messages in response to user-interface events.</li>
-<li>A limitation of target-action-based communication is that the messages sent cannot carry any custom payloads.</li>
-<li>&#x975E;&#x5E38;&#x677E;&#x8026;&#x5408;&#xFF0C;target &#x548C; action &#x4E0D;&#x7528;&#x77E5;&#x9053;&#x5BF9;&#x65B9;&#x7684;&#x5B58;&#x5728;&#xFF0C;&#x751A;&#x81F3;target=nil ,Action &#x4F1A;&#x6CBF;&#x7740;&#x54CD;&#x5E94;&#x94FE;&#x4E00;&#x76F4;&#x4F20;&#x9012;&#x76F4;&#x5230;&#x627E;&#x5230;&#x54CD;&#x5E94;&#x8005;&#x3002;On iOS, each control can even be associated with multiple target-action pairs.</li>
-</ol>
-<h2 id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</h2><p><a href="http://www.objc.io/issue-7/communication-patterns.html" target="_blank" rel="external">&#x539F;&#x6587;&#x94FE;&#x63A5;</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="&#x5F15;&#x5B50;">&#x5F15;&#x5B50;</h2><p>&#x672C;&#x6587;&#x662F;&#x5B66;&#x4E60;ObjC&#x4E2D;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x673A;&#x5236;&#x7684;&#x4E00;&#x7BC7;&#x5C0F;&#x7ED3;&#x5C0F;&#x7ED3;</p>]]>
-    
-    </summary>
-    
-      <category term="ObjC" scheme="https://github.com/watermeion/tags/ObjC/"/>
-    
-      <category term="消息机制" scheme="https://github.com/watermeion/tags/%E6%B6%88%E6%81%AF%E6%9C%BA%E5%88%B6/"/>
     
       <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
     

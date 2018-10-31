@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://github.com/watermeion/about/index.html</loc>
+    <lastmod>2018-10-31T02:35:55.384Z</lastmod>
+  </url>
+  
+  <url>
     <loc>https://github.com/watermeion/2018/10/19/%E4%B8%80%E6%AC%A1Http%E8%AF%B7%E6%B1%82%E7%9A%84Debug%E8%AE%B0/</loc>
     <lastmod>2018-10-19T02:16:00.287Z</lastmod>
   </url>
@@ -119,11 +124,6 @@
   <url>
     <loc>https://github.com/watermeion/categories/index.html</loc>
     <lastmod>2017-09-09T07:17:14.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://github.com/watermeion/about/index.html</loc>
-    <lastmod>2017-09-09T07:12:41.000Z</lastmod>
   </url>
   
   <url>

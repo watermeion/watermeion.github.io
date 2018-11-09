@@ -18,6 +18,9 @@
       <categories>
         <category>运维 | 实践 | 容器云</category>
       </categories>
+      <tags>
+        <tag>Mesos</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[一次Http请求的Debug记]]></title>

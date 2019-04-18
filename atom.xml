@@ -4,7 +4,7 @@
   <subtitle><![CDATA[-—Philip W. Anderson]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="https://github.com/watermeion/"/>
-  <updated>2019-04-18T05:02:54.863Z</updated>
+  <updated>2019-04-18T05:07:10.252Z</updated>
   <id>https://github.com/watermeion/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="https://github.com/watermeion/2019/04/18/kvm/"/>
     <id>https://github.com/watermeion/2019/04/18/kvm/</id>
     <published>2019-04-18T04:51:28.000Z</published>
-    <updated>2019-04-18T05:02:54.863Z</updated>
+    <updated>2019-04-18T05:07:10.252Z</updated>
     <content type="html"><![CDATA[<h2 id="&#x5F15;&#x8A00;">&#x5F15;&#x8A00;</h2><p>&#x5BF9;&#x4E8E;&#x865A;&#x62DF;&#x5316;&#x4E00;&#x76F4;&#x4EE5;&#x6765;&#x90FD;&#x8BA4;&#x4E3A;&#x662F;&#x9AD8;&#x6500;&#x4E0D;&#x8D77;&#x7684;&#x9886;&#x57DF;&#xFF0C;&#x4E0D;&#x8FC7;&#x6700;&#x8FD1;&#x9879;&#x76EE;&#x4E0A;&#x8981;&#x7528;&#x5230; openstack &#x505A;&#x865A;&#x62DF;&#x5316;&#x96C6;&#x7FA4;&#xFF0C;&#x201D;&#x65E0;&#x5948;&#x201D;&#x4ECE;0&#x5B66;&#x8D77;&#xFF0C;&#x672C;&#x6587;&#x662F;&#x6700;&#x8FD1;&#x5165;&#x95E8;&#x865A;&#x62DF;&#x5316;&#x7684;&#x4E2A;&#x4EBA;&#x7B14;&#x8BB0;&#xFF0C;&#x624D;&#x758F;&#x5B66;&#x6D45;&#xFF0C;&#x5FC5;&#x6709;&#x7EB0;&#x6F0F;&#xFF0C;&#x540E;&#x7EED;&#x4E0D;&#x65AD;&#x8865;&#x5145;&#x6539;&#x6B63;&#xFF0C;&#x6B22;&#x8FCE;&#x6279;&#x8BC4;&#x6307;&#x6B63;.</p>
 <a id="more"></a>
 <p>&#x865A;&#x62DF;&#x5316;&#xFF0C;&#x603B;&#x4F53;&#x4E0A;&#x5305;&#x62EC;&#x5168;&#x865A;&#x62DF;&#x5316;&#xFF0C;&#x534A;&#x865A;&#x62DF;&#x5316;&#xFF0C;&#x548C;&#x786C;&#x4EF6;&#x8F85;&#x52A9;&#x865A;&#x62DF;&#x5316;.</p>
@@ -57,7 +57,7 @@
     
       <category term="虚拟化" scheme="https://github.com/watermeion/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/"/>
     
-      <category term="后台 |Tech Memo" scheme="https://github.com/watermeion/categories/%E5%90%8E%E5%8F%B0-Tech-Memo/"/>
+      <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
     
   </entry>
   
@@ -66,7 +66,7 @@
     <link href="https://github.com/watermeion/2019/04/16/celery/"/>
     <id>https://github.com/watermeion/2019/04/16/celery/</id>
     <published>2019-04-16T03:39:34.000Z</published>
-    <updated>2019-04-16T03:46:25.481Z</updated>
+    <updated>2019-04-18T05:07:04.127Z</updated>
     <content type="html"><![CDATA[<h2 id="&#x5F15;&#x8A00;">&#x5F15;&#x8A00;</h2><p>celery &#x662F; Python &#x4E0B;&#x6700;&#x6D41;&#x884C;&#x7684;&#x57FA;&#x4E8E;&#x5206;&#x5E03;&#x5F0F;&#x6D88;&#x606F;&#x7684;&#x5F02;&#x6B65;&#x4EFB;&#x52A1;&#x5E93;&#x3002;&#x4E5F;&#x652F;&#x6301;&#x5B9A;&#x65F6;&#x4EFB;&#x52A1;&#x3002;&#x4F18;&#x70B9;&#xFF1A;&#x914D;&#x7F6E;&#x65B9;&#x4FBF;&#xFF0C;&#x96C6;&#x6210;&#x5FEB;&#x901F;&#xFF0C;&#x6587;&#x6863;&#x9F50;&#x5168;&#x3002;&#x6BD4;&#x8F83;&#x9002;&#x5408; python web &#x9879;&#x76EE;&#x4E2D;&#x7684;&#x5F02;&#x6B65;&#x4EFB;&#x52A1;&#x5F00;&#x53D1;&#x9700;&#x6C42;</p>
 <a id="more"></a>
 <h2 id="&#x4E3B;&#x8981;&#x6982;&#x5FF5;">&#x4E3B;&#x8981;&#x6982;&#x5FF5;</h2><p>celery &#x4E2D;&#x6D89;&#x53CA;&#x7684;&#x6982;&#x5FF5;&#x4E3B;&#x8981;&#x6709;&#x8FD9;&#x51E0;&#x4E2A;:</p>
@@ -116,7 +116,7 @@
     
       <category term="后端" scheme="https://github.com/watermeion/tags/%E5%90%8E%E7%AB%AF/"/>
     
-      <category term="后端 | Tech Memo" scheme="https://github.com/watermeion/categories/%E5%90%8E%E7%AB%AF-Tech-Memo/"/>
+      <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
     
   </entry>
   
@@ -194,7 +194,7 @@
     <link href="https://github.com/watermeion/2018/11/06/Mesos-Hook%E5%AE%9E%E8%B7%B5/"/>
     <id>https://github.com/watermeion/2018/11/06/Mesos-Hook实践/</id>
     <published>2018-11-06T08:34:24.000Z</published>
-    <updated>2018-11-09T03:32:45.064Z</updated>
+    <updated>2019-04-18T05:08:21.024Z</updated>
     <content type="html"><![CDATA[<p>&#x5728;&#x5BB9;&#x5668;&#x5316;&#x89E3;&#x51B3;&#x65B9;&#x6848;&#x4E2D;&#xFF0C;&#x9664;&#x4E86;&#x5982;&#x65E5;&#x4E2D;&#x5929;&#x7684;k8s&#xFF0C;mesos+marathon+docker &#x4E5F;&#x7B97;&#x662F;&#x53E6;&#x4E00;&#x79CD;&#x4E3B;&#x6D41;&#x3002;&#x7EF4;&#x62A4;mesos&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x96BE;&#x514D;&#x4F1A;&#x4EA7;&#x751F;&#x4E00;&#x4E9B;&#x65B0;&#x7684;&#x9700;&#x6C42;&#xFF0C;&#x672C;&#x6587;&#x7B14;&#x8005;&#x4ECB;&#x7ECD;&#x4E00;&#x4E2A;mesos module hook&#x7684;&#x5F00;&#x53D1;&#x5B9E;&#x8DF5;&#x3002;</p>
 <a id="more"></a>
 <h3 id="&#x7B80;&#x4ECB;">&#x7B80;&#x4ECB;</h3><p>mesos module &#x53EF;&#x4EE5;&#x5B9E;&#x73B0; mesos &#x7684; plugin &#x6269;&#x5C55;&#xFF0C;&#x4E30;&#x5BCC; mesos &#x7684;&#x529F;&#x80FD;. mesos &#x9ED8;&#x8BA4;&#x63D0;&#x4F9B;&#x4E86;&#x51E0;&#x79CD;module&#x529F;&#x80FD;&#x7684;&#x652F;&#x6301;. &#x8BE6;&#x89C1;&#x53C2;&#x8003;.</p>
@@ -321,9 +321,9 @@
     
     </summary>
     
-      <category term="Mesos" scheme="https://github.com/watermeion/tags/Mesos/"/>
+      <category term="Mesos | 容器云" scheme="https://github.com/watermeion/tags/Mesos-%E5%AE%B9%E5%99%A8%E4%BA%91/"/>
     
-      <category term="运维 | 实践 | 容器云" scheme="https://github.com/watermeion/categories/%E8%BF%90%E7%BB%B4-%E5%AE%9E%E8%B7%B5-%E5%AE%B9%E5%99%A8%E4%BA%91/"/>
+      <category term="运维" scheme="https://github.com/watermeion/categories/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
@@ -450,7 +450,7 @@ report: &#x67E5;&#x770B;&#x9650;&#x989D;&#x62A5;&#x544A;&#x3002;&#x5177;&#x4F53;
     <link href="https://github.com/watermeion/2017/12/25/Java%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB%E5%A4%A7%E5%85%A8-md/"/>
     <id>https://github.com/watermeion/2017/12/25/Java面试题汇总大全-md/</id>
     <published>2017-12-25T06:36:51.000Z</published>
-    <updated>2017-12-25T06:51:16.876Z</updated>
+    <updated>2019-04-18T05:07:46.072Z</updated>
     <content type="html"><![CDATA[<h3 id="&#x5F15;&#x8A00;">&#x5F15;&#x8A00;</h3><p>&#x8F6C;&#x8F7D;&#x6574;&#x7406;&#x7684;Java&#x9762;&#x8BD5;&#x5927;&#x5168;&#xFF0C;&#x6BCF;&#x4E2A;&#x95EE;&#x9898;&#x7684;&#x7B54;&#x6848;&#x6301;&#x7EED;&#x66F4;&#x65B0;&#x4E2D;&#x2026;&#x2026;&#x767E;&#x5EA6;&#x524D; 200 &#x9875;&#x90FD;&#x5728;&#x8FD9;&#x91CC;&#x4E86;&#x3002;</p>
 <blockquote>
 <p>2017-11-16 ImportNew,&#x6765;&#x6E90;&#xFF1A;&#x5510;&#x5C24;&#x534E;&#xFF0C;github.com/tangyouhua/program-resource/blob/master/program-interview/java-baidu-200.md<br><a id="more"></a></p>
@@ -1222,9 +1222,9 @@ report: &#x67E5;&#x770B;&#x9650;&#x989D;&#x62A5;&#x544A;&#x3002;&#x5177;&#x4F53;
     
     </summary>
     
-      <category term="Java|面试" scheme="https://github.com/watermeion/tags/Java-%E9%9D%A2%E8%AF%95/"/>
+      <category term="Java" scheme="https://github.com/watermeion/tags/Java/"/>
     
-      <category term="随笔|Tech Memo" scheme="https://github.com/watermeion/categories/%E9%9A%8F%E7%AC%94-Tech-Memo/"/>
+      <category term="Tech Memo" scheme="https://github.com/watermeion/categories/Tech-Memo/"/>
     
   </entry>
   

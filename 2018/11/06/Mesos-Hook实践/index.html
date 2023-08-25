@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在容器化解决方案中，除了如日中天的k8s，mesos+marathon+docker 也算是另一种主流。维护mesos过程中，难免会产生一些新的需求，本文笔者介绍一个mesos module hook的开发实践。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mesos Module —— Hook 实践">
+<meta property="og:url" content="https://github.com/watermeion/2018/11/06/Mesos-Hook%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="在容器化解决方案中，除了如日中天的k8s，mesos+marathon+docker 也算是另一种主流。维护mesos过程中，难免会产生一些新的需求，本文笔者介绍一个mesos module hook的开发实践。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-06T08:34:24.000Z">
+<meta property="article:modified_time" content="2023-08-25T08:12:17.498Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="Mesos | 容器云">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2018/11/06/Mesos-Hook%E5%AE%9E%E8%B7%B5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://github.com/watermeion/2018/11/06/Mesos-Hook%E5%AE%9E%E8%B7%B5/","path":"2018/11/06/Mesos-Hook实践/","title":"Mesos Module —— Hook 实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mesos Module —— Hook 实践 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">构建和测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo"><span class="nav-number">4.</span> <span class="nav-text">Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2018/11/06/Mesos-Hook%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Mesos Module —— Hook 实践 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mesos Module —— Hook 实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-11-06 16:34:24" itemprop="dateCreated datePublished" datetime="2018-11-06T16:34:24+08:00">2018-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-25 16:12:17" itemprop="dateModified" datetime="2023-08-25T16:12:17+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">运维</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在容器化解决方案中，除了如日中天的k8s，mesos+marathon+docker 也算是另一种主流。维护mesos过程中，难免会产生一些新的需求，本文笔者介绍一个mesos module hook的开发实践。</p>
+<span id="more"></span>
+
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>mesos module 可以实现 mesos 的 plugin 扩展，丰富 mesos 的功能. mesos 默认提供了几种module功能的支持. 详见参考.</p>
+<p>mesos module 分类：</p>
+<table>
+<thead>
+<tr>
+<th>kind</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Allocator</strong></td>
+<td>Provides available resources to schedulers.</td>
+</tr>
+<tr>
+<td><strong>Anonymous</strong></td>
+<td>Coexists with parent process without providing any callbacks.</td>
+</tr>
+<tr>
+<td><strong>Authenticatee</strong></td>
+<td>Provides the client side of an RPC authentication.</td>
+</tr>
+<tr>
+<td><strong>Authenticator</strong></td>
+<td>Provides the server side of an RPC authentication.</td>
+</tr>
+<tr>
+<td><strong>Authorizer</strong></td>
+<td>Allows certain principals to perform specific actions.</td>
+</tr>
+<tr>
+<td><strong>ContainerLogger</strong></td>
+<td>Container logger modules implement container log management.</td>
+</tr>
+<tr>
+<td><strong>Hook</strong></td>
+<td>Provides means of tying into specific callbacks.</td>
+</tr>
+<tr>
+<td><strong>HttpAuthenticatee</strong></td>
+<td>Provides the client side of an HTTP authentication.</td>
+</tr>
+<tr>
+<td><strong>HttpAuthenticator</strong></td>
+<td>Provides the server side of an HTTP authentication.</td>
+</tr>
+<tr>
+<td><strong>Isolator</strong></td>
+<td>Enables experimenting with specialized isolation and monitoring.</td>
+</tr>
+<tr>
+<td><strong>MasterContender</strong></td>
+<td>Contender modules allow implementing custom leader election mechanisms.</td>
+</tr>
+<tr>
+<td><strong>MasterDetector</strong></td>
+<td>Detector modules allow implementing custom master detection mechanisms.</td>
+</tr>
+<tr>
+<td><strong>QoSController</strong></td>
+<td>QoS modules allow providing task performance guarantees.</td>
+</tr>
+<tr>
+<td><strong>ResourceEstimator</strong></td>
+<td>Estimator modules allow predicting the resources total used.</td>
+</tr>
+<tr>
+<td><strong>SecretResolver</strong></td>
+<td>Secret resolver modules allow interfacing with secure data providers.</td>
+</tr>
+<tr>
+<td><strong>TestModule</strong></td>
+<td>Used internally for testing purposes only.</td>
+</tr>
+</tbody></table>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>module 以 .so 库的形式，在 mesos 启动时候加载进去。因此比较方便. 可以与 mesos 源码一起编译构建，也可独立构建.</p>
+<p>独立编译时需要加入相应的mesos依赖库就好，主要有以下几个，hook.cpp , libprocess, google-protobuf, glog,libblkid等.</p>
+<p>本例中还依赖了其他 linux 系统头文件，kenerl-headers, xfsprods-devel 等，在此不赘述.</p>
+<p>启动 mesos master 或 slave 时,需指定 <strong>–modules</strong>与**–hooks**(或**–isolators**)，例如：**–modules&#x3D;&#x2F;path&#x2F;to&#x2F;your&#x2F;modules.json<strong>和</strong>–hooks&#x3D;demo_mesos_xfsquotahook**.</p>
+<p>modules.json 文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> &#123;</span><br><span class="line">   <span class="string">&quot;libraries&quot;</span>: [</span><br><span class="line">     &#123;</span><br><span class="line">       <span class="string">&quot;name&quot;</span>: <span class="string">&quot;foo&quot;</span>,</span><br><span class="line">       <span class="string">&quot;modules&quot;</span>: [</span><br><span class="line">         &#123;</span><br><span class="line">           <span class="string">&quot;name&quot;</span>: <span class="string">&quot;org_apache_mesos_bar&quot;</span>,</span><br><span class="line">           <span class="string">&quot;parameters&quot;</span>: [</span><br><span class="line">             &#123;</span><br><span class="line">               <span class="string">&quot;key&quot;</span>: <span class="string">&quot;X&quot;</span>,</span><br><span class="line">               <span class="string">&quot;value&quot;</span>: <span class="string">&quot;Y&quot;</span></span><br><span class="line">             &#125;</span><br><span class="line">           ]</span><br><span class="line">         &#125;,</span><br><span class="line">         &#123;</span><br><span class="line">           <span class="string">&quot;name&quot;</span>: <span class="string">&quot;org_apache_mesos_baz&quot;</span></span><br><span class="line">         &#125;</span><br><span class="line">       ]</span><br><span class="line">     &#125;</span><br><span class="line">   ]</span><br><span class="line"> &#125;<span class="string">``</span><span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### hook开发</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">可供 hook 的接口定义在 `</span>mesos/scr/hook.<span class="property">hpp</span><span class="string">` 文件。hook 开发就是实现对应接口。不同的时机调用的上下文也不同，因此开发时需要注意下接口调用的时机和并发相关的问题。一般来讲，mesos 是基于 libprocess 实现d  Actor 并发模型，不需要特别关注这一块。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### hook运行原理</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">hook 的运行由 HookManager 管理，源码在 `</span>src/hook/manager.<span class="property">cpp</span><span class="string">` 中。HookManager 维护了一个 HashMap.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>C++</span><br><span class="line"><span class="keyword">static</span> <span class="title class_">LinkedHashMap</span>&lt;string, <span class="title class_">Hook</span>*&gt; availableHooks;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>load<br>在 slave 启动的时候，会解析**–modules**参数,调用<code>ModuleManager::load()</code>对应的.so库. ModuleManager 负责 module 的 load , unload 等生命周期.</p>
+</li>
+<li><p>initialize<br>slave launch 的时候，会调用<code>hookManager::initialize()</code>,委托 hookManager 进行初始化，所有hook的 event 也是由 hookManager 转发处理，对 slave 基本是透明的.<br>hookManager 根据**–hooks**参数指定的module名，调用<code>ModuleManager::creat()</code>初始化，按顺序被添加进 availableHooks 中.</p>
+</li>
+<li><p>Run<br>不同 hook 时机，由不同的调用者，如 slaveProcess 或 containerizerProcess 或 executor，会调用 hookManager 对应的方法，执行Hook操作.<br>前置检验由<code>hookManager::available()</code> 完成.</p>
+</li>
+</ul>
+<p>本例中hook<code>slavePreLaunchDockerTaskExecutorDecorator</code>是在<code>dockercontainerizerProcess::launchTask()</code> 中被调用.注:hookmanager 维护同一个 event 多个hook module 的调用顺序，一般而言，先load，先调用，也就是以启动参数<code>--hooks=&#123;1&#125;，&#123;2&#125;...</code> 顺序调用.</p>
+<h3 id="构建和测试"><a href="#构建和测试" class="headerlink" title="构建和测试"></a>构建和测试</h3><p>注： build module 时会使用当前的 mesos 中的库，比如libmesos.so，libprocess.so等，因此module 与 mesos 最好配对使用，保持版本一致性.</p>
+<h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><p>本例为实现 XFS Quota操作, Hook 如下接口.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This task and executor decorator is called from within the slave after</span></span><br><span class="line"><span class="comment">// receiving a run task request from the master but before the docker</span></span><br><span class="line"><span class="comment">// containerizer launches the task. A module implementing the hook can</span></span><br><span class="line"><span class="comment">// inspect the arguments and return a `Failure` if the task should be</span></span><br><span class="line"><span class="comment">// rejected with a `TASK_FAILED`.</span></span><br><span class="line"><span class="comment">// The hook can return a set of environment variables individually for</span></span><br><span class="line"><span class="comment">// both, the executor and the task. Note that for custom executors,</span></span><br><span class="line"><span class="comment">// the task environment variables, in case of conflicts, *will*</span></span><br><span class="line"><span class="comment">// overwrite the executor variables.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> The order of hooks matters for environment variables.</span></span><br><span class="line"><span class="comment">// If there is a conflict, the hook loaded last will take priority.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> Unlike `slaveExecutorEnvironmentDecorator`, environment variables</span></span><br><span class="line"><span class="comment">// returned from this hook, in case of conflicts, *will* overwrite</span></span><br><span class="line"><span class="comment">// environment variables inside the `ExecutorInfo`.</span></span><br><span class="line"><span class="keyword">virtual</span> process::Future&lt;Option&lt;DockerTaskExecutorPrepareInfo&gt;&gt;</span><br><span class="line">  <span class="built_in">slavePreLaunchDockerTaskExecutorDecorator</span>(</span><br><span class="line">      <span class="type">const</span> Option&lt;TaskInfo&gt;&amp; taskInfo,</span><br><span class="line">      <span class="type">const</span> ExecutorInfo&amp; executorInfo,</span><br><span class="line">      <span class="type">const</span> std::string&amp; containerName,</span><br><span class="line">      <span class="type">const</span> std::string&amp; containerWorkDirectory,</span><br><span class="line">      <span class="type">const</span> std::string&amp; mappedSandboxDirectory,</span><br><span class="line">      <span class="type">const</span> Option&lt;std::map&lt;std::string, std::string&gt;&gt;&amp; env)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">None</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关键代码,由三部分组成.</p>
+<ul>
+<li>Hook实体类.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuotaHook</span> : <span class="keyword">public</span> ::mesos::Hook &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> Future &lt;Option&lt;DockerTaskExecutorPrepareInfo&gt;&gt; <span class="built_in">slavePreLaunchDockerTaskExecutorDecorator</span>(</span><br><span class="line">            <span class="type">const</span> Option &lt;TaskInfo&gt; &amp;taskInfo,</span><br><span class="line">            <span class="type">const</span> ExecutorInfo &amp;executorInfo,</span><br><span class="line">            <span class="type">const</span> string &amp;containerName,</span><br><span class="line">            <span class="type">const</span> string &amp;containerWorkDirectory,</span><br><span class="line">            <span class="type">const</span> string &amp;mappedSandboxDirectory,</span><br><span class="line">            <span class="type">const</span> Option &lt;map&lt;string, string&gt;&gt; &amp;env) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">LOG</span>(INFO) &lt;&lt; <span class="string">&quot;Executing &#x27;slavePreLaunchDockerTaskExecutorDecorator&#x27; hook name &quot;</span> &lt;&lt; containerName &lt;&lt; <span class="string">&quot; workdir &quot;</span></span><br><span class="line">                  &lt;&lt; containerWorkDirectory &lt;&lt; <span class="string">&quot; mappedSandboxDirectory &quot;</span> &lt;&lt; mappedSandboxDirectory;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//parse params</span></span><br><span class="line">        Try &lt;QuotaFlags&gt; flags = <span class="built_in">parse</span>(env);</span><br><span class="line">        <span class="keyword">if</span> (!flags.<span class="built_in">isError</span>() &amp;&amp; flags.<span class="built_in">get</span>().enable) &#123;</span><br><span class="line">           Try&lt;Nothing&gt; status =  <span class="built_in">quotaProcess</span>(flags.<span class="built_in">get</span>().path, containerName, flags.<span class="built_in">get</span>().hardLimit);</span><br><span class="line">           <span class="keyword">if</span> (status.<span class="built_in">isError</span>())&#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="built_in">Failure</span>(<span class="string">&quot;[Error] Fail to set xfs quota because &quot;</span> + status.<span class="built_in">error</span>());</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//TODO add labels in prepareInfo byproduct is OK?</span></span><br><span class="line">        DockerTaskExecutorPrepareInfo prepareInfo;</span><br><span class="line">        Environment *taskEnvironment = prepareInfo.<span class="built_in">mutable_taskenvironment</span>();</span><br><span class="line">        Environment::Variable *variable = taskEnvironment-&gt;<span class="built_in">add_variables</span>();</span><br><span class="line">        variable-&gt;<span class="built_in">set_name</span>(<span class="string">&quot;QOUTAHOOK_TASK&quot;</span>);</span><br><span class="line">        variable-&gt;<span class="built_in">set_value</span>(<span class="string">&quot;run&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Environment *executorEnvironment = prepareInfo.<span class="built_in">mutable_executorenvironment</span>();</span><br><span class="line">        variable = executorEnvironment-&gt;<span class="built_in">add_variables</span>();</span><br><span class="line">        variable-&gt;<span class="built_in">set_name</span>(<span class="string">&quot;QOUTAHOOK_EXECUTOR&quot;</span>);</span><br><span class="line">        variable-&gt;<span class="built_in">set_value</span>(<span class="string">&quot;run&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> prepareInfo;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"><span class="comment">//...此处省略具体实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>静态实例化入口.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> Hook *<span class="title">createHook</span><span class="params">(<span class="type">const</span> Parameters &amp;parameters)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">QuotaHook</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>module 声明.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Declares a Hook module named &#x27;&#x27;.</span></span><br><span class="line">mesos::<span class="function">modules::Module&lt;Hook&gt; <span class="title">demo_mesos_xfsquotahook</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">        MESOS_MODULE_API_VERSION,</span></span></span><br><span class="line"><span class="params"><span class="function">        MESOS_VERSION,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="string">&quot;Company&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="string">&quot;xxxxx@yyyy.zzz&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="string">&quot;XFS Quota Hook&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="literal">nullptr</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        createHook)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://mesos.apache.org/documentation/latest/modules/">mesos module</a></li>
+<li><a href="https://github.com/criteo/mesos-command-modules">mesos-command-module repo</a></li>
+<li><a href="https://github.com/mesos/modules/">mesos module repo</a></li>
+<li><a target="_blank" rel="noopener" href="https://yinhongwu.gitbooks.io/mesos-source-analyse/content/isolator.html">mesos-source-analyse</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mesos-%E5%AE%B9%E5%99%A8%E4%BA%91/" rel="tag"># Mesos | 容器云</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/19/%E4%B8%80%E6%AC%A1Http%E8%AF%B7%E6%B1%82%E7%9A%84Debug%E8%AE%B0/" rel="prev" title="一次Http请求的Debug记">
+                  <i class="fa fa-angle-left"></i> 一次Http请求的Debug记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/11/09/libprocess-introduction-1/" rel="next" title="Mesos libprocess —— 初探（1）">
+                  Mesos libprocess —— 初探（1） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

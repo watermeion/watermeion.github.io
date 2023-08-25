@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="性能调优，是一个永恒的话题。本文简单记录了IOS常见的性能考虑的方面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IOS 性能优化的几方面">
+<meta property="og:url" content="https://github.com/watermeion/2015/11/27/IOS-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%A0%E6%96%B9%E9%9D%A2/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="性能调优，是一个永恒的话题。本文简单记录了IOS常见的性能考虑的方面。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-11-27T11:41:30.000Z">
+<meta property="article:modified_time" content="2023-08-25T08:12:17.508Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="IOS">
+<meta property="article:tag" content="优化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2015/11/27/IOS-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%A0%E6%96%B9%E9%9D%A2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://github.com/watermeion/2015/11/27/IOS-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%A0%E6%96%B9%E9%9D%A2/","path":"2015/11/27/IOS-性能优化的几方面/","title":"IOS 性能优化的几方面"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IOS 性能优化的几方面 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">计算代码运行时间。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%84%E7%94%A8xcode%E7%9A%84%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">善用xcode的性能分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E7%AD%89%E5%A4%9A%E5%AA%92%E4%BD%93%E8%B5%84%E6%BA%90"><span class="nav-number">3.</span> <span class="nav-text">图片等多媒体资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E7%9A%84UIView"><span class="nav-number">4.</span> <span class="nav-text">复杂的UIView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E6%97%B6%E6%9C%BA"><span class="nav-number">6.</span> <span class="nav-text">注意时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1"><span class="nav-number">7.</span> <span class="nav-text">关于后台任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%86%85%E5%AD%98%E9%87%8A%E6%94%BE"><span class="nav-number">9.</span> <span class="nav-text">关于内存释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E9%AB%98APP%E5%90%AF%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%80%9F%E5%BA%A6"><span class="nav-number">10.</span> <span class="nav-text">提高APP启动加载速度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%84%E7%94%A8cache%EF%BC%8C%E7%A9%BA%E9%97%B4%E6%8D%A2%E6%97%B6%E9%97%B4%E3%80%82"><span class="nav-number">11.</span> <span class="nav-text">善用cache，空间换时间。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">12.</span> <span class="nav-text">数据库</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2015/11/27/IOS-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E5%87%A0%E6%96%B9%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IOS 性能优化的几方面 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IOS 性能优化的几方面
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-11-27 19:41:30" itemprop="dateCreated datePublished" datetime="2015-11-27T19:41:30+08:00">2015-11-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-25 16:12:17" itemprop="dateModified" datetime="2023-08-25T16:12:17+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech-Memo/" itemprop="url" rel="index"><span itemprop="name">Tech Memo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>性能调优，是一个永恒的话题。本文简单记录了IOS常见的性能考虑的方面。</p>
+<span id="more"></span>
+
+<h2 id="计算代码运行时间。"><a href="#计算代码运行时间。" class="headerlink" title="计算代码运行时间。"></a>计算代码运行时间。</h2><pre><code>1.利用`BNRtimeBlock` `NSDate`类计算代码运算时间。
+</code></pre>
+<h2 id="善用xcode的性能分析工具"><a href="#善用xcode的性能分析工具" class="headerlink" title="善用xcode的性能分析工具"></a>善用xcode的性能分析工具</h2><h2 id="图片等多媒体资源"><a href="#图片等多媒体资源" class="headerlink" title="图片等多媒体资源"></a>图片等多媒体资源</h2><pre><code>1. 优先使用`[UIImage imageNamed@&quot;&quot;]`  `ImageCache`类
+</code></pre>
+<ol start="2">
+<li>使用gradient图片代替硬编码实现的gradient;</li>
+<li>使用多线程来延迟加载资源、如图片.</li>
+</ol>
+<h2 id="复杂的UIView"><a href="#复杂的UIView" class="headerlink" title="复杂的UIView"></a>复杂的UIView</h2><pre><code>1.对于复杂的View：
+
+    使用drawRect 自绘而不是从nib中载入。
+
+2.对于TableView：
+
+    重用Cell;
+
+    减少cell初始化的工作量，延迟装载;
+
+    定制复杂cell时，使用drawRect自绘；
+
+    Cache 尽可能多的东西，包括cell高度。
+</code></pre>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><pre><code>1. 在线程中使用`autoreleasepool`管理内存
+2. 将一些不太重要的任务放在idle时运行
+
+&gt;问：idle是什么时候？
+&gt;idle 根据自己应用的业务需求不同，一般来讲是任务不多的时候
+</code></pre>
+<h2 id="注意时机"><a href="#注意时机" class="headerlink" title="注意时机"></a>注意时机</h2><pre><code>不要再`viewWillAppear`中做费时的操作，只进行背景色、字体等设置
+</code></pre>
+<h2 id="关于后台任务"><a href="#关于后台任务" class="headerlink" title="关于后台任务"></a>关于后台任务</h2><pre><code>系统进入background后，有10分钟的运行时间，因此有很多值得注意的事项：
+
+a)尽量减少内存的使用，当内存不足时，IOS将kill那些内存消耗多的app
+
+b)释放所有的共享资源，比如Calendar 与 Address bool 当app进入后台时，若果还在使用共享资源，IOS会立即kill掉该应用程序
+
+c)正确处理apps生命周期，当进入后台时，赢保持用户数据，以便回到前台时能够恢复，当进入后台时，IOS会保存当前App的一个快照，以便之后在合适的时候呈现给用户以提高用户体检，因此应该避免在屏幕上呈现用户信息，以免西楼用户个人资料。
+</code></pre>
+<h2 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h2><pre><code>1. 混合编码。关键代码使用 C/C++/asm 效率更高就使用 C/C++/asm。
+</code></pre>
+<ol start="2">
+<li>如果一个方法在一个循环次数非常多的循环中使用，在进入循环前使用 methodForSelector 获取该方法 IMP，然后在循环体中直接使用该 IMP。</li>
+</ol>
+<h2 id="关于内存释放"><a href="#关于内存释放" class="headerlink" title="关于内存释放"></a>关于内存释放</h2><pre><code>在 didReceiveMemoryWarning 中释放内存，比如cache 的图像，view 等，并记得调用 [supper didReceiveMemoryWarning]。清理函数 didReceiveMemoryWarning, viewDidUnload 和 dealloc 都是在方法结尾处调用 supper 的方法。
+</code></pre>
+<h2 id="提高APP启动加载速度"><a href="#提高APP启动加载速度" class="headerlink" title="提高APP启动加载速度"></a>提高APP启动加载速度</h2><pre><code>1.避免使用静态初始化，包括静态c++对象，加载时会运行的代码，如+(void) load&#123;&#125; ，会造成在Main函数之前运行额外的代码。
+2.减少ddl等动态链接库的数量。
+</code></pre>
+<h2 id="善用cache，空间换时间。"><a href="#善用cache，空间换时间。" class="headerlink" title="善用cache，空间换时间。"></a>善用cache，空间换时间。</h2><pre><code>1.cache 是一种常见的空间换时间的提供性能的收到，可以用在相当多的场合。
+2.尽量cache 那些可重复利用的对象，比如 table cell，date/number formatters，正则表达式，sqlite语句等。
+</code></pre>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><pre><code>1.缓存经常用到的 sqlite语句；
+2.优化数据库查询语句，用sqlite3_trace和sqlite3_profile来查找性能差的语句；
+3.如果可能的话，缓存查询结果;
+3.在使用 sqlite_prepare会将SQL查询编译成字节码，要使用bind，重用那些已经prepared的语句。
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IOS/" rel="tag"># IOS</a>
+              <a href="/tags/%E4%BC%98%E5%8C%96/" rel="tag"># 优化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015/11/27/Unicode-and-NSString/" rel="prev" title="NSString 与 Unicode">
+                  <i class="fa fa-angle-left"></i> NSString 与 Unicode
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016/08/13/IOS-App-Thining-%E7%AE%80%E4%BB%8B/" rel="next" title="IOS App Thining 简介">
+                  IOS App Thining 简介 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

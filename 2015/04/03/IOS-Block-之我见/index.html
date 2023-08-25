@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引子昨日午后至今日，一直在研究IOS 中 Block原理和机制，妄图一下午就看清，实则有“急功近利”之嫌。不过后来也想明白了，技术原理需要细细揣摩和反复钻研，才有味道。先就这两日的研究做一小结。 本文内容：  Block类型 Capture机制 ARC和MRC下Block的不同 Block 实践中的循环引用问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IOS Block 之我见">
+<meta property="og:url" content="https://github.com/watermeion/2015/04/03/IOS-Block-%E4%B9%8B%E6%88%91%E8%A7%81/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="引子昨日午后至今日，一直在研究IOS 中 Block原理和机制，妄图一下午就看清，实则有“急功近利”之嫌。不过后来也想明白了，技术原理需要细细揣摩和反复钻研，才有味道。先就这两日的研究做一小结。 本文内容：  Block类型 Capture机制 ARC和MRC下Block的不同 Block 实践中的循环引用问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://img.blog.csdn.net/20140818115256984">
+<meta property="og:image" content="http://blog.devtang.com/images/block-struct.jpg">
+<meta property="article:published_time" content="2015-04-03T01:44:42.000Z">
+<meta property="article:modified_time" content="2023-08-25T08:12:17.510Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="IOS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20140818115256984">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2015/04/03/IOS-Block-%E4%B9%8B%E6%88%91%E8%A7%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://github.com/watermeion/2015/04/03/IOS-Block-%E4%B9%8B%E6%88%91%E8%A7%81/","path":"2015/04/03/IOS-Block-之我见/","title":"IOS Block 之我见"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IOS Block 之我见 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">block简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block-%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">block 类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block-%E6%8D%95%E8%8E%B7%E5%8E%9F%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">block 捕获原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E7%90%86%E8%A7%A3"><span class="nav-number">5.</span> <span class="nav-text">个人理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2015/04/03/IOS-Block-%E4%B9%8B%E6%88%91%E8%A7%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IOS Block 之我见 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IOS Block 之我见
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-04-03 09:44:42" itemprop="dateCreated datePublished" datetime="2015-04-03T09:44:42+08:00">2015-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-25 16:12:17" itemprop="dateModified" datetime="2023-08-25T16:12:17+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech-Memo/" itemprop="url" rel="index"><span itemprop="name">Tech Memo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>昨日午后至今日，一直在研究IOS 中 Block原理和机制，妄图一下午就看清，实则有“急功近利”之嫌。不过后来也想明白了，技术原理需要细细揣摩和反复钻研，才有味道。先就这两日的研究做一小结。</p>
+<p>本文内容：</p>
+<ul>
+<li>Block类型</li>
+<li>Capture机制</li>
+<li>ARC和MRC下Block的不同</li>
+<li>Block 实践中的循环引用问题</li>
+</ul>
+<span id="more"></span>
+
+
+
+<h2 id="block简介"><a href="#block简介" class="headerlink" title="block简介"></a>block简介</h2><p>都说<code>block</code>是闭包的实现，那么什么是闭包？闭包是函数块，以及其运行的上下文环境，脱离创造他的环境也可以运行。</p>
+<blockquote>
+<p>在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。 from wiki</p>
+</blockquote>
+<blockquote>
+<p>闭包是可以包含自由（未绑定到特定对象）变量的代码块. from baidu</p>
+</blockquote>
+<h2 id="block-类型"><a href="#block-类型" class="headerlink" title="block 类型"></a>block 类型</h2><p>包括三种:</p>
+<ol>
+<li>NSConcreteGlobalBlock   全局静态block，不访问（捕获）任何外部变量的block 位于静态区。不用担心内存管理问题</li>
+<li>NSConcreteStackBlock   保存在栈中的Block, 对外部变量有访问，当函数返回时被销毁</li>
+<li>NSConcreteMallocBlock   保存在堆中的Block，和一般的NSObject管理方式一样，当引用计数为0时销毁</li>
+</ol>
+<p>需要注意：ARC、MRC 下三种block 均存在：</p>
+<p>1、StackBlock 在执行copy之后，会变为MallocBlock 保存在堆中。</p>
+<p>2、但是在ARC 下  将一个捕获了外部变量的Block绑定到一个strong变量时，编译器自动将其copy，因此常见MallocBlock和GlobeBlock,</p>
+<p>3、有图为证<br><img src="http://img.blog.csdn.net/20140818115256984"></p>
+<h2 id="block-捕获原理"><a href="#block-捕获原理" class="headerlink" title="block 捕获原理"></a>block 捕获原理</h2><p>简单的说，<code>block</code> 捕获的外部变量 ，将其转化为Block 自身Struct 的成员变量, 这就解释了为何block中不能修改外部变量的原因。但加上<code>_block</code>修饰符，即捕获外部变量的指针，因此可以修改其内容。</p>
+<p>最后附张图显示block数据结构<br><img src="http://blog.devtang.com/images/block-struct.jpg"></p>
+<p>捕获的原理代码:学会使用<code>clang -rewrite-objc main.m</code>命令，查看编译后的c++源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    int a = 100;</span><br><span class="line">    void (^block2)(void) = ^&#123;</span><br><span class="line">        printf(&quot;%d\n&quot;, a);</span><br><span class="line">    &#125;;</span><br><span class="line">    block2();</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">struct __main_block_impl_0 &#123;</span><br><span class="line">    struct __block_impl impl;</span><br><span class="line">    struct __main_block_desc_0* Desc;</span><br><span class="line">    int a; //此处捕获变量</span><br><span class="line">    __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int _a, int flags=0) : a(_a) &#123;</span><br><span class="line">        impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">        impl.Flags = flags;</span><br><span class="line">        impl.FuncPtr = fp;</span><br><span class="line">        Desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">static void __main_block_func_0(struct __main_block_impl_0 *__cself) &#123;</span><br><span class="line">    int a = __cself-&gt;a; // bound by copy</span><br><span class="line">    printf(&quot;%d\n&quot;, a);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static struct __main_block_desc_0 &#123;</span><br><span class="line">    size_t reserved;</span><br><span class="line">    size_t Block_size;</span><br><span class="line">&#125; __main_block_desc_0_DATA = &#123; 0, sizeof(struct __main_block_impl_0)&#125;;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 100;</span><br><span class="line">    void (*block2)(void) = (void (*)())&amp;__main_block_impl_0((void *)__main_block_func_0, &amp;__main_block_desc_0_DATA, a);</span><br><span class="line">    ((void (*)(__block_impl *))((__block_impl *)block2)-&gt;FuncPtr)((__block_impl *)block2);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="个人理解"><a href="#个人理解" class="headerlink" title="个人理解"></a>个人理解</h2><p>最后说一下自己对block 循环应用的理解</p>
+<p>1、当block作为对象的成员属性存在时，block 中又引用了（实际上是捕获）该对象，就会造成循环引用。因为block 捕获时自动将其retain<br>此时需要使用<code>__weak</code>修饰符 ，在block 捕获前进行weak。同时，严谨期间，为了避免过早释放，可以在block中定义新的strong变量引用该对象，这样也起到retain该对象的左右，但是block中执行完毕后回释放调该新的strong引用,达到有效避免循环引用的情况。</p>
+<p>2、其他情况下大可放心，block的生命周期将由ARC管理，会及时释放。</p>
+<p>其他情况参见<a target="_blank" rel="noopener" href="http://tanqisen.github.io/blog/2013/04/19/gcd-block-cycle-retain/">此处</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1、<a target="_blank" rel="noopener" href="http://blog.devtang.com/blog/2013/07/28/a-look-inside-blocks/">唐巧的博客</a></p>
+<p>2、<a target="_blank" rel="noopener" href="http://blog.csdn.net/hherima/article/details/38620175">hherima</a></p>
+<p>3、<a target="_blank" rel="noopener" href="http://www.galloway.me.uk/2013/05/a-look-inside-blocks-episode-3-block-copy/">Matt Galloway</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IOS/" rel="tag"># IOS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015/04/02/IOS%E5%BC%80%E5%8F%91ARC%E6%8A%80%E6%9C%AF%E8%A6%81%E7%82%B9%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/" rel="prev" title="IOS开发ARC技术要点（转载）">
+                  <i class="fa fa-angle-left"></i> IOS开发ARC技术要点（转载）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2015/04/12/Loved-Ted-Vedio-4-a-m/" rel="next" title="Loved Ted Vedio 4 a.m.">
+                  Loved Ted Vedio 4 a.m. <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引言对于虚拟化一直以来都认为是高攀不起的领域，不过最近项目上要用到 openstack 做虚拟化集群，”无奈”从0学起，本文是最近入门虚拟化的个人笔记，才疏学浅，必有纰漏，后续不断补充改正，欢迎批评指正.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kvm Xen 笔记">
+<meta property="og:url" content="https://github.com/watermeion/2019/04/18/kvm/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="引言对于虚拟化一直以来都认为是高攀不起的领域，不过最近项目上要用到 openstack 做虚拟化集群，”无奈”从0学起，本文是最近入门虚拟化的个人笔记，才疏学浅，必有纰漏，后续不断补充改正，欢迎批评指正.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-18T04:51:28.000Z">
+<meta property="article:modified_time" content="2023-08-25T08:04:13.762Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="虚拟化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2019/04/18/kvm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":"","permalink":"https://github.com/watermeion/2019/04/18/kvm/","path":"2019/04/18/kvm/","title":"kvm Xen 笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kvm Xen 笔记 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.0.1.</span> <span class="nav-text">全虚拟化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8A%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.0.2.</span> <span class="nav-text">半虚拟化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E8%BE%85%E5%8A%A9%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">硬件辅助虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#KVM-vs-Xen"><span class="nav-number">1.1.1.</span> <span class="nav-text">KVM vs Xen</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2019/04/18/kvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kvm Xen 笔记 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kvm Xen 笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-18 12:51:28" itemprop="dateCreated datePublished" datetime="2019-04-18T12:51:28+08:00">2019-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-25 16:04:13" itemprop="dateModified" datetime="2023-08-25T16:04:13+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech-Memo/" itemprop="url" rel="index"><span itemprop="name">Tech Memo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>对于虚拟化一直以来都认为是高攀不起的领域，不过最近项目上要用到 openstack 做虚拟化集群，”无奈”从0学起，本文是最近入门虚拟化的个人笔记，才疏学浅，必有纰漏，后续不断补充改正，欢迎批评指正.</p>
+<span id="more"></span>
+
+<p>虚拟化，总体上包括全虚拟化，半虚拟化，和硬件辅助虚拟化.</p>
+<h4 id="全虚拟化"><a href="#全虚拟化" class="headerlink" title="全虚拟化"></a>全虚拟化</h4><p>指Hypervisor程序，完全模拟硬件和OS执行过程.Guest OS 完全透明.例如 X86架构上的Ring 3 指令直接在host物理内存上执行， Ring0 执行异常由 Hypervisor 捕获，翻译，模拟执行之后，返回给Guest OS. Guest OS 无感知.这种方案通常性能较低，涉及到特权指令等一系列复杂的处理流程.好处是Guest OS 不需要有改动.常见的 QEMU, KVM, QEMU-KVM技术均属于全虚拟化, 还有VMWare Virtual PC等</p>
+<h4 id="半虚拟化"><a href="#半虚拟化" class="headerlink" title="半虚拟化"></a>半虚拟化</h4><p>有时候也叫准虚拟化或超虚拟化，指改造Guest OS的方法，实现虚拟化的方案.比如，替换Guest OS 高特权级指令，改造 hypercall(hypervisor 提供的调用服务). Guest OS 需要执行类似指令，就 产生 hypercall 给hypervisor 程序， 由  hypervisor 调用 host OS或者裸金属硬件，完成执行.<br>这省去了之前的异常捕获和翻译过程，大大提高了性能，代表就是Xen 的半虚拟化模式.</p>
+<blockquote>
+<p>hypervisor 同时也提供了超级调用接口来满足其他关键内核操作，比如内存管理、中断和时间保持.<br>  这种做法省去了全虚拟化中的捕获和模拟，大大提高了效率.所以像XEN这种半虚拟化技术，客户机操作系统都是有一个专门的定制内核版本，和x86、mips、arm这些内核版本等价.这样以来，就不会有捕获异常、翻译、模拟的过程了，性能损耗非常低.这就是XEN这种半虚拟化架构的优势.这也是为什么XEN只支持虚拟化Linux，无法虚拟化windows原因，微软不改代码啊.</p>
+</blockquote>
+<h3 id="硬件辅助虚拟化"><a href="#硬件辅助虚拟化" class="headerlink" title="硬件辅助虚拟化"></a>硬件辅助虚拟化</h3><p>随着硬件技术的提高，单个运行的OS很难吃到硬件资源的上限，这样就导致硬件性能过剩，反过来说造成了资源浪费.另外有些应用出于安全性和隔离性的考虑，需要单独的OS环境，因此对于虚拟化有需求变的更加迫切.硬件厂商也看到了这个趋势.</p>
+<p>在2005年左右，Intel 和 AMD 也分别推出了各自的硬件虚拟化技术 Inter-VT 和 AMD VX.<br>Intel-VT 技术在CPU上引入了根模式（VMX root operation）和非根模式（VMX non root operation）,两种模式都支持Ring0 ~ Ring3的架构，虚拟机监控程序（VMM）运行在跟模式下，通过 VMLAUNCH 和 VMRESUME 切换到 非根模式下，直接运行 Guest OS. CPU 直接在 Guest 的上下文下进行执行.产生中断或者切换，由 VMM 返回跟模式下执行之后.</p>
+<p>这种方式全虚拟化的“异常捕获-翻译-模拟执行”不需要了，由于硬件的支持 CPU 和 内存虚拟化的速度大大逼近半虚拟化的，逐渐成为主流.代表实现 VMware ESXi , Xen 3.0, KVM, Hyper-v</p>
+<blockquote>
+<p>运行在 VMX root operation 模式下的 VMM 通过显式调用 VMLAUNCH 或 VMRESUME 指令切换到 VMX non-root operation 模式，硬件自动加载 Guest OS 的上下文，于是 Guest OS 获得运行，这种转换称为 VM entry.Guest OS 运行过程中遇到需要 VMM 处理的事件，例如外部中断或缺页异常，或者主动调用 VMCALL 指令调用 VMM 的服务的时候（与系统调用类似），硬件自动挂起 Guest OS，切换到 VMX root operation 模式，恢复 VMM 的运行，这种转换称为 VM exit.VMX root operation 模式下软件的行为与在没有 VT-x 技术的处理器上的行为基本一致；而VMX non-root operation 模式则有很大不同，最主要的区别是此时运行某些指令或遇到某些事件时，发生 VM exit.</p>
+</blockquote>
+<h4 id="KVM-vs-Xen"><a href="#KVM-vs-Xen" class="headerlink" title="KVM vs Xen"></a>KVM vs Xen</h4><ol>
+<li>背景</li>
+</ol>
+<p>作为新老两代主流虚拟化技术的实现，XEN 最早有Citrix 公司 2003年推出，统治了虚拟化领域 十年有余，KVM 由以色列 XXX 公司 2005推出，由于其简单稳定的设计理念和实现，发展非常迅速，目前已经被合并入Linux 2.6 内核，被各大厂商和云服务商主推.截止日前（2019-4-18），亚马逊宣布2020年在VPS 业务上逐步用KVM 替换 Xen.</p>
+<ol start="2">
+<li>对比</li>
+</ol>
+<p>Xen 是可以直接运行在裸金属硬件上hypervisor 程序，有全虚拟化，和半虚拟化的两种模式.但半虚拟化性能接近主机性能，被广泛采用.不过半虚拟化模式需要修改Guest OS, 因此兼容性和广泛性一直是其掣肘.</p>
+<p>KVM 严格的说，可以看做是Linux 内核扩展的一个模块.主要负责CPU和内存虚拟化的任务，其他设备的虚拟化需要借助 QEMU 等实现.从设计角度看，KVM 把 Linux 本身变成了 Hypervisor，运行在裸金属上.内存管理，任务调度，中断异常处理等很多核心功能依赖 Linux 内核模块来实现.所以 KVM 非常轻量级，代码规模较小，这也意味着稳定性出错率较小.因此从诞生之初就发展非常快.</p>
+<p>(to be continue)</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://hurray0.com/menu/50/">https://hurray0.com/menu/50/</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/community/blogs/5144904d-5d75-45ed-9d2b-cf1754ee936a/entry/%25e8%2599%259a%25e6%258b%259f%25e5%258c%2596%25e6%258a%2580%25e6%259c%25af%25e6%25a6%2582%25e8%25bf%25b0?lang=en">虚拟化技术概述 - IBM</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19844004">KVM Xen 对比</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" rel="tag"># 虚拟化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/04/16/celery/" rel="prev" title="celery 简要说明">
+                  <i class="fa fa-angle-left"></i> celery 简要说明
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

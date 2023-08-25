@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引言celery 是 Python 下最流行的基于分布式消息的异步任务库。也支持定时任务。优点：配置方便，集成快速，文档齐全。比较适合 python web 项目中的异步任务开发需求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="celery 简要说明">
+<meta property="og:url" content="https://github.com/watermeion/2019/04/16/celery/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="引言celery 是 Python 下最流行的基于分布式消息的异步任务库。也支持定时任务。优点：配置方便，集成快速，文档齐全。比较适合 python web 项目中的异步任务开发需求">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-16T03:39:34.000Z">
+<meta property="article:modified_time" content="2023-08-25T08:12:46.641Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="后端">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2019/04/16/celery/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":"","permalink":"https://github.com/watermeion/2019/04/16/celery/","path":"2019/04/16/celery/","title":"celery 简要说明"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>celery 简要说明 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">主要概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#celery-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">celery 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Django-%E9%9B%86%E6%88%90-celery-%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">Django 集成 celery 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">5.</span> <span class="nav-text">一些注意的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">6.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">7.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2019/04/16/celery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="celery 简要说明 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          celery 简要说明
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-16 11:39:34" itemprop="dateCreated datePublished" datetime="2019-04-16T11:39:34+08:00">2019-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-25 16:12:46" itemprop="dateModified" datetime="2023-08-25T16:12:46+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech-Memo/" itemprop="url" rel="index"><span itemprop="name">Tech Memo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>celery 是 Python 下最流行的基于分布式消息的异步任务库。也支持定时任务。优点：配置方便，集成快速，文档齐全。比较适合 python web 项目中的异步任务开发需求</p>
+<span id="more"></span>
+
+<h2 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h2><p>celery 中涉及的概念主要有这几个:</p>
+<p>broker: 消息代理。常用存储或消息中间件充当。比如 RabbitMQ (官方推荐), 或 Redis 等，提供高可用的消息队列服务，连接，协调和解耦生成者和消费者.</p>
+<p>worker: 工作进程或者线程，从 broker 获取要执行的任务，执行。 一个 worker 包含多个 child 进程，由 pool 参数指定。最为多个执行单元.</p>
+<p>task: 用户定义的任务，注册后，供worker 执行.</p>
+<p>app: celery 隔离一个管理单元，配置 worker task broker 等信息.</p>
+<h2 id="celery-配置"><a href="#celery-配置" class="headerlink" title="celery 配置"></a>celery 配置</h2><p>celery 核心几个配置:<br>BROKER_URL: 代理url, Redis, RabbitMQ<br>RESULT_BACKEND: 结果返回地址<br>TASK_SERIALIZER: 序列化类型，可为 json, packle, xml 等。</p>
+<p>worker 配置:<br>concurrency: 并发数，默认与机器CPU核心相当。<br>max_tasks_per_child: 最大执行任务数。worker 的 child 进程，每执行一定数量的task 就会被啥掉重启，以回收内存，防止内存泄露。</p>
+<h2 id="Django-集成-celery-流程"><a href="#Django-集成-celery-流程" class="headerlink" title="Django 集成 celery 流程"></a>Django 集成 celery 流程</h2><ol>
+<li><p>新建一个 celery.py 文件，用于设置和实例化APP，在 module , <strong>init</strong> 中配置</p>
+</li>
+<li><p>在 django settings 中，配置 基本的配置项，BROKER_URL , RESULT_BACKEND TASK_SERIALIZER, 序列化</p>
+</li>
+<li><p>定义自定义的tasks, 通过官方提供的装饰器，注册任务到 celery 中</p>
+</li>
+<li><p>本地调试，可以直接用 celery cmd 命令行，启动worker。</p>
+<p> <code>celery -A path/to/your/celery_app worker -l info</code></p>
+</li>
+<li><p>生产环境，以守护进程方式运行 worker。支持 init.d, supervisord, serviced, 方式比较多。配置参考<a target="_blank" rel="noopener" href="http://docs.celeryproject.org/en/latest/userguide/daemonizing.html">官方文档</a>。</p>
+</li>
+</ol>
+<h2 id="一些注意的地方"><a href="#一些注意的地方" class="headerlink" title="一些注意的地方"></a>一些注意的地方</h2><ol>
+<li>配置参数的前缀，celery 4.0+ 已经改变了参数前缀的命名的方法，并且建议小写命名法。</li>
+<li>flower 可以用于监控 worker 状态和 task 执行情况。</li>
+<li>Django-celery 可以使用 Django框架的cache 或  DB 做消息代理，但是不建议这么用</li>
+</ol>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ol>
+<li><p>不要使用 DB 作为  broker.<br>DB 不是设计用来做消息处理的。几个 worker 并发轮询消费任务有可能存在拖垮 DB</p>
+</li>
+<li><p>使用多个队列 （不要仅用一个）。<br>建议根据任务优先级，设置多个优先级队列。这样对于高优先级的task 可以不受低优先任务的影响。调整worker 参数可以提高对应的消费速度。</p>
+</li>
+<li><p>配置优先级worker。配合优先级队列，这样能够保证高优先级的任务不会被低优先级的任务阻塞</p>
+</li>
+<li><p>使用 celery error 机制，task 执行过程中很可能遇到第三方服务或者api 宕机的，或者网络问题，最好的办法就是重试。</p>
+</li>
+<li><p>使用 Flower 监控</p>
+</li>
+<li><p>只在真正有需要时，才跟踪任务结果<br>大部分应用不会关心任务的结果，或者任务的结果可以通过其他方式获得，那么就不要在task中显式返回结果，这样会带来一些无用的存储消耗和副产品。特别对于使用DB 作为 result_backend,增加DB 负担。可以使用CELERY_IGNORE_RESULT &#x3D; True 来忽略掉结果。因为大部分关系的只是任务的执行状态而已。</p>
+</li>
+<li><p>不要传入 DB &#x2F; ORM 对象给tasks，如 User Model<br>建议做法，是传入数据的关键字或者索引，在任务中重新建立DB连接获取最新数据，来做处理。因为传入这么大的对象，会给序列化工作带来很大开销，包含很多不必要的信息。</p>
+</li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://denibertovic.com/posts/celery-best-practices/">https://denibertovic.com/posts/celery-best-practices/</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.celeryproject.org/">http://www.celeryproject.org/</a></li>
+<li><a target="_blank" rel="noopener" href="http://docs.celeryproject.org/en/latest/index.html">http://docs.celeryproject.org/en/latest/index.html</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag"># 后端</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/11/09/libprocess-introduction-1/" rel="prev" title="Mesos libprocess —— 初探（1）">
+                  <i class="fa fa-angle-left"></i> Mesos libprocess —— 初探（1）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/04/18/kvm/" rel="next" title="kvm Xen 笔记">
+                  kvm Xen 笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

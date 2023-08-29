@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="译者序最近，我们为了增加一个功能，在运维 K8s 集群资源更新时，触发了 cilium 大量并发更新 endpoint 的 identity 资源，导致 API-Server 内存暴涨，请求无法响应。 事后，我们在思考如何落地对 API-Server 限流，偶然中检索到了一篇外文博客，里面介绍了和我非常类似的故障情景，因此翻译整理出来留作参考。 本文来自 2023 年 palark 的博客Kube">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 K8s API 流量控制能力管理请求数量和优先级的实践">
+<meta property="og:url" content="https://github.com/watermeion/2023/08/29/k8s-apf-introduct/index.html">
+<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:description" content="译者序最近，我们为了增加一个功能，在运维 K8s 集群资源更新时，触发了 cilium 大量并发更新 endpoint 的 identity 资源，导致 API-Server 内存暴涨，请求无法响应。 事后，我们在思考如何落地对 API-Server 限流，偶然中检索到了一篇外文博客，里面介绍了和我非常类似的故障情景，因此翻译整理出来留作参考。 本文来自 2023 年 palark 的博客Kube">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-29T06:40:32.000Z">
+<meta property="article:modified_time" content="2023-08-29T06:56:04.297Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="Cloud Native">
+<meta property="article:tag" content="K8s">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2023/08/29/k8s-apf-introduct/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":"","permalink":"https://github.com/watermeion/2023/08/29/k8s-apf-introduct/","path":"2023/08/29/k8s-apf-introduct/","title":"使用 K8s API 流量控制能力管理请求数量和优先级的实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 K8s API 流量控制能力管理请求数量和优先级的实践 | “More is Different.”</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">“More is Different.”</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%91%E8%80%85%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">译者序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E9%81%87%E5%88%B0%E7%9A%84%E6%95%85%E9%9A%9C"><span class="nav-number">1.0.1.</span> <span class="nav-text">我们遇到的故障</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-flowcontrol-%E7%AE%A1%E6%8E%A7-K8s-API-%E6%B5%81%E9%87%8F"><span class="nav-number">1.0.2.</span> <span class="nav-text">使用 flowcontrol 管控 K8s API 流量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flowcontrol-API-%E6%9C%89%E4%B8%A4%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.0.3.</span> <span class="nav-text">flowcontrol API 有两个核心对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PriorityLevelConfiguration"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">PriorityLevelConfiguration</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FlowSchema"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">FlowSchema</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87"><span class="nav-number">1.0.4.</span> <span class="nav-text">监控指标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.0.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我和世界的交互！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:watermeion@hotmail.com" title="E-Mail → mailto:watermeion@hotmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2023/08/29/k8s-apf-introduct/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="“More is Different.”">
+      <meta itemprop="description" content="记录与分享我和世界的交互！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 K8s API 流量控制能力管理请求数量和优先级的实践 | “More is Different.”">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 K8s API 流量控制能力管理请求数量和优先级的实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-08-29 14:40:32 / 修改时间：14:56:04" itemprop="dateCreated datePublished" datetime="2023-08-29T14:40:32+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cloud-Native/" itemprop="url" rel="index"><span itemprop="name">Cloud Native</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="译者序"><a href="#译者序" class="headerlink" title="译者序"></a>译者序</h2><p>最近，我们为了增加一个功能，在运维 K8s 集群资源更新时，触发了 cilium 大量并发更新 endpoint 的 identity 资源，导致 API-Server 内存暴涨，请求无法响应。</p>
+<p>事后，我们在思考如何落地对 API-Server 限流，偶然中检索到了一篇外文博客，里面介绍了和我非常类似的故障情景，因此翻译整理出来留作参考。</p>
+<p>本文来自 2023 年 palark 的博客<a target="_blank" rel="noopener" href="https://blog.palark.com/kubernetes-api-flow-control-management/">Kubernetes API and flow control: Managing request quantity and queuing procedure</a>。 翻译了其中感兴趣的部分。</p>
+<p>译者水平有限，不免存在遗漏或错误之处。如有疑问，敬请查阅原文。</p>
+<p>以下是译文：</p>
+<span id="more"></span>
+
+<h4 id="我们遇到的故障"><a href="#我们遇到的故障" class="headerlink" title="我们遇到的故障"></a>我们遇到的故障</h4><p>在一个非常普通的早晨，我们开始了一项漫长的研究—— Kubernetes API以及对其请求的优先级。</p>
+<p>我们接到了一位技术支持工程师的电话，他报告说客户的一个集群无法正常运行。我们连接到出现故障的集群，发现 Kube-API-Server 占用了所有内存。并且不断在崩溃、重启，然后再次崩溃、再次重启，如此反复。</p>
+<p>这样的直接后果是 Kubernetes API无法访问，完全失去了功能。</p>
+<p>原本的控制平面节点有 8个CPU和16GB的RAM。我们将规格增加到了16 CPU 、64GB的RAM，最终才稳定住了集群。</p>
+<p>扩容后，我们通过监控发现点节点 api-server 内存消耗高达50GB。<br>进一步分析，我们发现集群中 Cilium Agent pod 不明原因的大量向API发送 LIST 请求。由于集群较大且节点数量较多，同时发出的请求大大增加了使用的内存量。</p>
+<p>我们准备对 cilium-agent 的API 请求并发数做个限制。这就用到了 </p>
+<p>flowcontrol.apiserver.k8s.io&#x2F;v1beta1。</p>
+<p>以下是我们配置的 flowcontrol 资源对象。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">flowcontrol.apiserver.k8s.io/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">FlowSchema</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">cilium-pods</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">distinguisherMethod:</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">ByUser</span></span><br><span class="line"> <span class="attr">matchingPrecedence:</span> <span class="number">1000</span></span><br><span class="line"> <span class="attr">priorityLevelConfiguration:</span></span><br><span class="line">   <span class="attr">name:</span> <span class="string">cilium-pods</span></span><br><span class="line"> <span class="attr">rules:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="attr">resourceRules:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="attr">apiGroups:</span></span><br><span class="line">           <span class="bullet">-</span> <span class="string">&#x27;cilium.io&#x27;</span></span><br><span class="line">         <span class="attr">clusterScope:</span> <span class="literal">true</span></span><br><span class="line">         <span class="attr">namespaces:</span></span><br><span class="line">           <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">         <span class="attr">resources:</span></span><br><span class="line">           <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">         <span class="attr">verbs:</span></span><br><span class="line">           <span class="bullet">-</span> <span class="string">&#x27;list&#x27;</span></span><br><span class="line">     <span class="attr">subjects:</span></span><br><span class="line">       <span class="bullet">-</span> <span class="attr">group:</span></span><br><span class="line">           <span class="attr">name:</span> <span class="string">system:serviceaccounts:d8-cni-cilium</span></span><br><span class="line">         <span class="attr">kind:</span> <span class="string">Group</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">flowcontrol.apiserver.k8s.io/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PriorityLevelConfiguration</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">cilium-pods</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">type:</span> <span class="string">Limited</span></span><br><span class="line"> <span class="attr">limited:</span></span><br><span class="line">   <span class="attr">assuredConcurrencyShares:</span> <span class="number">5</span></span><br><span class="line">   <span class="attr">limitResponse:</span></span><br><span class="line">     <span class="attr">queuing:</span></span><br><span class="line">       <span class="attr">handSize:</span> <span class="number">4</span></span><br><span class="line">       <span class="attr">queueLengthLimit:</span> <span class="number">50</span></span><br><span class="line">       <span class="attr">queues:</span> <span class="number">16</span></span><br><span class="line">     <span class="attr">type:</span> <span class="string">Queue</span></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="使用-flowcontrol-管控-K8s-API-流量"><a href="#使用-flowcontrol-管控-K8s-API-流量" class="headerlink" title="使用 flowcontrol 管控 K8s API 流量"></a>使用 flowcontrol 管控 K8s API 流量</h4><p>K8s 中有默认开启管控 API 流量的机制 —— APF, 全称为 <a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/cluster-administration/flow-control/">API Priority and Fairness</a></p>
+<p>在 k8s 1.20 之前，API Server 提供了两个参数：</p>
+<ul>
+<li>–max-requests-inflight： default is 400</li>
+<li>–max-mutating-requests-inflight：default is 200</li>
+</ul>
+<p>这两个参数共同限制 API 的请求总数。</p>
+<p>不过也有些情况，不受 APF 限制：</p>
+<ol>
+<li>长连接， logs, exec 或者 watch 请求。不受限流的影响。</li>
+<li>属于预定义 exempt Level 的请求，直接执行不受限流影响。</li>
+</ol>
+<h4 id="flowcontrol-API-有两个核心对象"><a href="#flowcontrol-API-有两个核心对象" class="headerlink" title="flowcontrol API 有两个核心对象"></a>flowcontrol API 有两个核心对象</h4><h5 id="PriorityLevelConfiguration"><a href="#PriorityLevelConfiguration" class="headerlink" title="PriorityLevelConfiguration"></a>PriorityLevelConfiguration</h5><p>用来声明优先级和对应的限流值。</p>
+<p>我们看个例子，来说明下具体这些字段的含义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">~# kubectl get prioritylevelconfigurations.flowcontrol.apiserver.k8s.io</span><br><span class="line">NAME                 TYPE      ASSUREDCONCURRENCYSHARES   QUEUES   HANDSIZE   QUEUELENGTHLIMIT   AGE</span><br><span class="line">catch-all            Limited   5                          &lt;none&gt;   &lt;none&gt;     &lt;none&gt;             193d</span><br><span class="line">d8-serviceaccounts   Limited   5                          32       8          50                 53d</span><br><span class="line">deckhouse-pod        Limited   10                         128      6          50                 90d</span><br><span class="line">exempt               Exempt    &lt;none&gt;                     &lt;none&gt;   &lt;none&gt;     &lt;none&gt;             193d</span><br><span class="line">global-default       Limited   20                         128      6          50                 193d</span><br><span class="line">leader-election      Limited   10                         16       4          50                 193d</span><br><span class="line">node-high            Limited   40                         64       6          50                 183d</span><br><span class="line">system               Limited   30                         64       6          50                 193d</span><br><span class="line">workload-high        Limited   40                         128      6          50                 193d</span><br><span class="line">workload-low         Limited   100                        128      6          50                 193d</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>总的份额是 Sum(AssuredConcurrencyShares) &#x3D; 260</li>
+<li>具体Level 的限额，比如 workload-low 这个优先级，它允许的最大 QPS &#x3D; (400+200)&#x2F;260 * 100 &#x3D; 230. 400， 200 是前面 <code>--max-requests-inflight</code>、<code>--max-mutating-requests-inflight</code>统一指定的集群最大并发数。260 是全部 level 的份额总和。</li>
+</ol>
+<p>如果当某个有限级的并发数大于允许值时，请求就会被入队。此时另外三个控制队列的参数就会发生作用。当然也可以配置直接丢弃请求，不进行入队。</p>
+<p>队列的控制参数有：</p>
+<ul>
+<li>handSize：调整不同请求流的碰撞概率。</li>
+<li>queueLengthLimit：每个队列最大长度</li>
+<li>queues：队列个数, 提高 queues 可以减少不同请求流的碰撞概率。</li>
+</ul>
+<p>需要说明的是：</p>
+<ul>
+<li>queues 越大，流之间的碰撞次数越小，但会增加内存开销</li>
+<li>queueLengthLimit越大，在高流量爆发时，能够缓存的请求量越多，减少请求被丢弃的风险。但会增加延迟和增加内存开销。</li>
+<li>通过改变handSize，可以调整流之间碰撞的可能性以及在高负载情况下单个流可用的整体并发量。</li>
+<li>单流的最大请求缓存量为 handsize * queueLengthLimit</li>
+</ul>
+<p>这里 handsize 和 queues 是两个比较难直观理解的参数。但他们的作用都是为了实现流间公平性的，在大象流和老鼠流之间做到公平限流。具体算法可以参考这里<br><a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/1040-priority-and-fairness">KEP-1040</a></p>
+<p>有趣的是K8s 文档中给了个算法效果的表格, 具体请运行下这个示例程序<a target="_blank" rel="noopener" href="https://go.dev/play/p/Gi0PLgVHiUg">Go Playgroud</a>。</p>
+<ol>
+<li><p>当 handsize&#x3D;12, queues&#x3D;32 时，当分别有1,4,16 个大象流并发时，单个老鼠流被抑制的概率为：0.00000000442,0.113,0.993</p>
+</li>
+<li><p>当 handsize&#x3D;10, queues&#x3D;32 时，老鼠流被抑制的概率为：0.0000000155,0.06,0.97</p>
+</li>
+<li><p>当 handsize&#x3D;10, queues&#x3D;64 是，被抑制的概率变为：0.0000000000066,0.000455,0.49</p>
+</li>
+</ol>
+<p>笔者简单总结下：</p>
+<ol>
+<li>queues 增加可以显著降低多个大象流对老鼠流的影响</li>
+<li>handsize 减少可以减少多流碰撞的概率，但对于单个流会更有可能占据全部限流带宽。</li>
+</ol>
+<p>在生产上，既要保护 API-Server 不因突然的流量激增而过载，又要确保各优先级请求延迟不会太大。 因此需要多次调参，才能达到好的效果：</p>
+<h5 id="FlowSchema"><a href="#FlowSchema" class="headerlink" title="FlowSchema"></a>FlowSchema</h5><p>用来声明哪些请求归属于该优先级。</p>
+<p>主要参数有三个：</p>
+<ul>
+<li><p>matchingPrecedence：定义 FlowSchema 应用的顺序。数字越低，优先级越高。这样你可以按照从更具体的情况到更一般的情况，编写重叠的 FlowSchemas。</p>
+</li>
+<li><p>rules：定义请求过滤规则；格式与 Kubernetes RBAC中的相同。</p>
+</li>
+<li><p>distinguisherMethod：在将请求转发到优先级时，指定一个参数（用户或命名空间）以将请求分离成流。如果省略该参数，所有请求将被分配到同一个流。</p>
+</li>
+</ul>
+<p>写到这里，不知道你是否有这样的疑问：如何知道请求匹配到了哪个优先级？</p>
+<p>答案是：API-Server 会在请求的返回头中，加入<code>X-Kubernetes-PF-FlowSchema-UID</code><br>、<code>X-Kubernetes-PF-PriorityLevel-UID</code>两个 header来表明匹配到的流控优先级 uId 。</p>
+<p>eg:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">curl https://127.0.0.1:6445/apis/cilium.io/v2/ciliumclusterwidenetworkpolicies?limit=500  -X GET --header &quot;Authorization: Bearer $TOKEN&quot; -k -I</span><br><span class="line">HTTP/2 200</span><br><span class="line">audit-id: 4f647505-8581-4a99-8e4c-f3f4322f79fe</span><br><span class="line">cache-control: no-cache, private</span><br><span class="line">content-type: application/json</span><br><span class="line">x-kubernetes-pf-flowschema-uid: 7f0afa35-07c3-4601-b92c-dfe7e74780f8</span><br><span class="line">x-kubernetes-pf-prioritylevel-uid: df8f409a-ebe7-4d54-9f21-1f2a6bee2e81</span><br><span class="line">content-length: 173</span><br><span class="line">date: Sun, 26 Mar 2023 17:45:02 GMT</span><br><span class="line"></span><br><span class="line">kubectl get flowschemas -o custom-columns=&quot;uid:&#123;metadata.uid&#125;,name:&#123;metadata.name&#125;&quot; | grep 7f0afa35-07c3-4601-b92c-dfe7e74780f8</span><br><span class="line">7f0afa35-07c3-4601-b92c-dfe7e74780f8   d8-serviceaccounts</span><br><span class="line"></span><br><span class="line">kubectl get prioritylevelconfiguration -o custom-columns=&quot;uid:&#123;metadata.uid&#125;,name:&#123;metadata.name&#125;&quot; | grep df8f409a-ebe7-4d54-9f21-1f2a6bee2e81</span><br><span class="line">df8f409a-ebe7-4d54-9f21-1f2a6bee2e81   d8-serviceaccounts</span><br></pre></td></tr></table></figure>
+
+<h4 id="监控指标"><a href="#监控指标" class="headerlink" title="监控指标"></a>监控指标</h4><p>上了 FlowControl 的功能，自然会想要从指标测能够监测到流控的效果。为此 K8s FlowControl 提供了三个有用监控指标：</p>
+<ul>
+<li>Apiserver_flowcontrol_rejected_requests_total：被拒绝的请求总数</li>
+<li>Apiserver_current_inqueue_requests：当前缓冲在队列中未被处理的请求数</li>
+<li>Apiserver_flowcontrol_request_execution_seconds：请求执行时长</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>本文介绍了社区原生提供的流控管理能力。随着集群规模越来越大，对 API-Server 的访问压力也会陡增。而且在开放的多租户环境中，不同来源的 CRD controllers， webhooks 等组件与API-Server 通信的模式无法预估，更应该加强对 API-Server 的流控管理。</p>
+<p>此外,也有另一种思路是通过引入 proxy 的方式，将 API-Server 隐藏在 Proxy 后面，对其的请求先打到 Proxy 上，流控功能在 Proxy 上实现。字节跳动开源的 kubeGateway 项目就是这种思路落地的，据说也取得了不错的效果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cloud-Native/" rel="tag"># Cloud Native</a>
+              <a href="/tags/K8s/" rel="tag"># K8s</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/28/k8s-client-request-optimized-tips/" rel="prev" title="K8s API-Server Query 接口使用最佳实践">
+                  <i class="fa fa-angle-left"></i> K8s API-Server Query 接口使用最佳实践
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">35k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:09</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

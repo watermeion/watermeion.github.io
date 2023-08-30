@@ -225,9 +225,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-08-29 14:40:32 / 修改时间：14:56:04" itemprop="dateCreated datePublished" datetime="2023-08-29T14:40:32+08:00">2023-08-29</time>
+      <time title="创建时间：2023-08-29 14:40:32" itemprop="dateCreated datePublished" datetime="2023-08-29T14:40:32+08:00">2023-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-30 15:03:09" itemprop="dateModified" datetime="2023-08-30T15:03:09+08:00">2023-08-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,7 +272,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="译者序"><a href="#译者序" class="headerlink" title="译者序"></a>译者序</h2><p>最近，我们为了增加一个功能，在运维 K8s 集群资源更新时，触发了 cilium 大量并发更新 endpoint 的 identity 资源，导致 API-Server 内存暴涨，请求无法响应。</p>
 <p>事后，我们在思考如何落地对 API-Server 限流，偶然中检索到了一篇外文博客，里面介绍了和我非常类似的故障情景，因此翻译整理出来留作参考。</p>
-<p>本文来自 2023 年 palark 的博客<a target="_blank" rel="noopener" href="https://blog.palark.com/kubernetes-api-flow-control-management/">Kubernetes API and flow control: Managing request quantity and queuing procedure</a>。 翻译了其中感兴趣的部分。</p>
+<p>本文来自 2023 年 palark 的博客 <a target="_blank" rel="noopener" href="https://blog.palark.com/kubernetes-api-flow-control-management/">Kubernetes API and flow control: Managing request quantity and queuing procedure</a>。 翻译了其中感兴趣的部分。</p>
 <p>译者水平有限，不免存在遗漏或错误之处。如有疑问，敬请查阅原文。</p>
 <p>以下是译文：</p>
           <!--noindex-->

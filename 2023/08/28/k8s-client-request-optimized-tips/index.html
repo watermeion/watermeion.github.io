@@ -24,7 +24,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8s API-Server Query 接口使用最佳实践">
 <meta property="og:url" content="https://github.com/watermeion/2023/08/28/k8s-client-request-optimized-tips/index.html">
-<meta property="og:site_name" content="“More is Different.”">
+<meta property="og:site_name" content="Tad 技术杂货铺">
 <meta property="og:description" content="引言最近在做 CRD Operatior 开发时一直有个疑问：k8s 中各种 Controller 在List-Watch或GEt索引对象时，广泛使用了 Selector 机制，如 Label、Node、Field Selector 等。他们是如何做索引？查询逻辑是怎么实现的？查询过滤是在 Api-Server 还是在 etcd 中？  粗略翻看了下 etcd 接口文档，也没有提供类似的检索能力。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-28T03:40:01.000Z">
@@ -42,7 +42,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":"","permalink":"https://github.com/watermeion/2023/08/28/k8s-client-request-optimized-tips/","path":"2023/08/28/k8s-client-request-optimized-tips/","title":"K8s API-Server Query 接口使用最佳实践"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>K8s API-Server Query 接口使用最佳实践 | “More is Different.”</title>
+<title>K8s API-Server Query 接口使用最佳实践 | Tad 技术杂货铺</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
@@ -78,10 +78,10 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">“More is Different.”</p>
+      <p class="site-title">Tad 技术杂货铺</p>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">-—Philip W. Anderson</p>
+      <p class="site-subtitle" itemprop="description">“More is Different.” -—Philip W. Anderson</p>
   </div>
 
   <div class="site-nav-right">
@@ -152,7 +152,7 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">Tad Guo</p>
-  <div class="site-description" itemprop="description">记录与分享我对世界认识</div>
+  <div class="site-description" itemprop="description">记录与分享我对技术和世界的理解</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -219,12 +219,12 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="“More is Different.”">
-      <meta itemprop="description" content="记录与分享我对世界认识">
+      <meta itemprop="name" content="Tad 技术杂货铺">
+      <meta itemprop="description" content="记录与分享我对技术和世界的理解">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="K8s API-Server Query 接口使用最佳实践 | “More is Different.”">
+      <meta itemprop="name" content="K8s API-Server Query 接口使用最佳实践 | Tad 技术杂货铺">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">

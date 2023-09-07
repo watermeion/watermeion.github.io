@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="google-site-verification" content="yaw798qpzWoTqUAxeZgvl6vCVrAcjk5G2hK4u1Sn9RY" />
+  <meta name="ahrefs-site-verification" content="bbcbfe5b79bfa77b140f47bd6fe037b7a6ca8fc4254caace7f41fb45e4ea2d7f">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引言Sidecar 是 Istio 提供的一种 CRD 资源, 用于对注入到业务 pod 中的流量劫持 sidecar 进行自定义的配置。 默认情况下，Istio 有全局统一的配置。使用 Sidecar CRD 可以用于对 Namespace 内的 sidecar 组件进行更精细的配置, 包括指定ingress, egress 监听的 端口、协议，已经转发到的后端等。 本文主要参考 Istio 社">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Istio CRD 详解 - Sidecar">
+<meta property="og:url" content="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/index.html">
+<meta property="og:site_name" content="Tad 技术杂货铺">
+<meta property="og:description" content="引言Sidecar 是 Istio 提供的一种 CRD 资源, 用于对注入到业务 pod 中的流量劫持 sidecar 进行自定义的配置。 默认情况下，Istio 有全局统一的配置。使用 Sidecar CRD 可以用于对 Namespace 内的 sidecar 组件进行更精细的配置, 包括指定ingress, egress 监听的 端口、协议，已经转发到的后端等。 本文主要参考 Istio 社">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-iptables.svg">
+<meta property="og:image" content="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-route-iptables.svg">
+<meta property="article:published_time" content="2023-09-07T06:45:57.000Z">
+<meta property="article:modified_time" content="2023-09-07T07:02:32.508Z">
+<meta property="article:author" content="Tad Guo">
+<meta property="article:tag" content="Cloud Native">
+<meta property="article:tag" content="Istio">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-iptables.svg">
+
+
+<link rel="canonical" href="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/","path":"2023/09/07/the-introduction-istio-sidecar-crd/","title":"Istio CRD 详解 - Sidecar"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Istio CRD 详解 - Sidecar | Tad 技术杂货铺</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106013373-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-106013373-1","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Tad 技术杂货铺</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">“More is Different.” -—Philip W. Anderson</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spec-%E5%AD%97%E6%AE%B5%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">Spec 字段详细说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">几个应用场景介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sidecar-%E4%BD%BF%E7%94%A8-iptables-%E5%AE%9E%E7%8E%B0%E6%B5%81%E9%87%8F%E5%8A%AB%E6%8C%81%E7%9A%84%E7%BB%86%E8%8A%82"><span class="nav-number">1.3.</span> <span class="nav-text">Sidecar 使用 iptables 实现流量劫持的细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sidecar-CRD-%E7%9B%B8%E5%85%B3%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%BB%8B%E7%BB%8D-Istio-1-12-%E7%89%88%E6%9C%AC"><span class="nav-number">1.4.</span> <span class="nav-text">Sidecar CRD 相关代码实现介绍 - Istio 1.12 版本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">1.4.1.</span> <span class="nav-text">关键数据结构：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8%E8%B7%AF%E5%BE%84"><span class="nav-number">1.4.2.</span> <span class="nav-text">代码调用路径</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Tad Guo</p>
+  <div class="site-description" itemprop="description">记录与分享我对技术和世界的理解</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:watermeion@hotmail.com" title="E-Mail → mailto:watermeion@hotmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+       <div class="wechat_channel">
+        <br>
+        <!-- 这里添加你的二维码图片 -->
+        <img src ="/images/wehao.png">
+        <!-- <span>公众号</span> -->
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Tad Guo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tad 技术杂货铺">
+      <meta itemprop="description" content="记录与分享我对技术和世界的理解">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Istio CRD 详解 - Sidecar | Tad 技术杂货铺">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Istio CRD 详解 - Sidecar
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-09-07 14:45:57 / 修改时间：15:02:32" itemprop="dateCreated datePublished" datetime="2023-09-07T14:45:57+08:00">2023-09-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech/" itemprop="url" rel="index"><span itemprop="name">Tech</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Sidecar 是 Istio 提供的一种 CRD 资源, 用于对注入到业务 pod 中的流量劫持 sidecar 进行自定义的配置。</p>
+<p>默认情况下，Istio 有全局统一的配置。<br>使用 Sidecar CRD 可以用于对 Namespace 内的 sidecar 组件进行更精细的配置, 包括指定ingress, egress 监听的 端口、协议，已经转发到的后端等。</p>
+<p>本文主要参考 Istio 社区官方文档<a target="_blank" rel="noopener" href="https://istio.io/latest/docs/reference/config/networking/sidecar/">sidecar</a>的内容。鉴于本人水平有限，如有错误和不准确的地方，欢迎批评指正，感谢。</p>
+<p>下面，本文将分别从 Spec 配置项说明、基本应用场景、sidecar iptables 流量劫持原理、配置下发源码分析四个方面，对 Istio Sidecar 做一个比较全面的介绍。</p>
+<span id="more"></span>
+
+<h3 id="Spec-字段详细说明"><a href="#Spec-字段详细说明" class="headerlink" title="Spec 字段详细说明"></a>Spec 字段详细说明</h3><p>istio 文档中，值得注意的点：</p>
+<ul>
+<li><p>Sidecar CRD 是 namespace 粒度的资源。配置在 namespace 下的Pod中生效。每个 Namespace 中只能有一个全局的 sidecar 配置</p>
+</li>
+<li><p>支持在 meshconfig 所在 root namespace(一般为 istio-system.) 中配置的 sidecar crd 为集群缺省生效的配置。 </p>
+</li>
+<li><p>指定 workloadSelector 来进一步限定生效的 Pod 集合。匹配规则按最 match 优先的策略，即 带 selector 的 &gt; 不带 selector 的 &gt; 集群全局配置的</p>
+</li>
+<li><p>对网关无效。</p>
+</li>
+</ul>
+<p>结合例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.istio.io/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Sidecar</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">partial-ip-tables</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prod-us1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">workloadSelector:</span>   <span class="comment"># workload 选择器， 非必需</span></span><br><span class="line">    <span class="attr">labels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">productpage</span></span><br><span class="line">  <span class="attr">ingress:</span>           <span class="comment"># 配置 Pod 入向流量处理规则, 非必需。缺省，会从 k8s 中相关的 services, pod 等字段生成；指定后，</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">bind:</span> <span class="number">172.16</span><span class="number">.1</span><span class="number">.32</span></span><br><span class="line">    <span class="attr">port:</span>            </span><br><span class="line">      <span class="attr">number:</span> <span class="number">80</span> <span class="comment"># binds to 172.16.1.32:80</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">HTTP</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">somename</span></span><br><span class="line">    <span class="attr">defaultEndpoint:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8080</span></span><br><span class="line">    <span class="attr">captureMode:</span> <span class="string">NONE</span></span><br><span class="line">  <span class="attr">egress:</span>           <span class="comment"># 配置业务容器出向流量处理规则，默认能劫持到的。非必需。缺省，从全局配置获取 </span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">captureMode:</span> <span class="string">IPTABLES</span></span><br><span class="line">    <span class="attr">hosts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;*/*&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>需要指出的：</p>
+<ol>
+<li>ingress: 是数组类型。可配置多个 inbound 监听规则</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ingress: </span><br><span class="line">- bind: 172.16.1.32   # 非必需， 监听 Ip, UDS 不支持</span><br><span class="line">  port:               # 必需</span><br><span class="line">      number: 80</span><br><span class="line">      protocol: HTTPS</span><br><span class="line">      name: somename</span><br><span class="line">  defaultEndpoint: unix:///var/run/someuds.sock    # 必需, Forward 地址，支持 UDS </span><br><span class="line">  captureMode:        # 非必需，拦截模式</span><br><span class="line">  tls:                # 非必需, 证书配置</span><br><span class="line">      mode: SIMPLE</span><br><span class="line">      privateKey: &quot;/etc/certs/privatekey.pem&quot;</span><br><span class="line">      serverCertificate: &quot;/etc/certs/servercert.pem&quot;</span><br></pre></td></tr></table></figure>
+
+<p>其中需要注意：</p>
+<ul>
+<li>captureMode：<ul>
+<li>DEFAULT: 继承全局配置</li>
+<li>IPTABLES: iptables redirection 的方式捕获流量</li>
+<li>None: 没有流量劫持能力。在 ingress 中，用于监听进程，需要保证端口无占用。在 egress 中配置，需要确保应用进程能够直接显式的和对应endpoints Ip 建立连接。</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>egress: 也是数组类型，可配置多个 outbound 监听规则。</li>
+</ol>
+<p>例：允许业务通过 127.0.0.1:3306 访问远端的mysql服务器</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">egress:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span></span><br><span class="line">      <span class="attr">number:</span> <span class="number">3306</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">MYSQL</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">egressmysql</span></span><br><span class="line">    <span class="attr">captureMode:</span> <span class="string">NONE</span></span><br><span class="line">    <span class="attr">bind:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">    <span class="attr">hosts:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;*/mysql.foo.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中需要注意：</p>
+<ul>
+<li>egress 中 bind: 支持IP，<strong>也支持 UDS</strong>，与 ingress 不同. <strong>但如果是 UDS, CaptureMode 不能为 IPTABLES</strong></li>
+<li>hosts: 配置格式：<code>namespace/dnsName</code>,<ul>
+<li>dnsName：FQDN, 支持通配符， *.example.com</li>
+<li>namespace: 支持 <code>*</code> 表示所有，<code>.</code> 表示当前，<code>~</code>表示没有。 特别场景，用<code>~/*</code>来禁止 proxy egress 代理功能。</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>outboundTrafficPolicy: 非必须，出向流量转发策略。<ul>
+<li>ALLOW_ANY： 适用于应用的出向流量无法预测且无规则，全部转发。</li>
+<li>REGISTRY_ONLY：限定在网格内感知到的服务，如通过 K8s Services 或 ServiceEntry 注册的服务。</li>
+</ul>
+</li>
+</ol>
+<h3 id="几个应用场景介绍"><a href="#几个应用场景介绍" class="headerlink" title="几个应用场景介绍"></a>几个应用场景介绍</h3><ol>
+<li>在 VM 场景下，无 Iptables-rule 规则（无init-container)或多网段中只有部分网段（192.168&#x2F;16）有规则, Sidecar CRD  是唯一的能够配置 Proxy 实现流量代理功能的方法。</li>
+</ol>
+<p>示例：192.168.0.0&#x2F;16 subnet 上有 iptables 规则， 而另外的网卡 172.16.0.0&#x2F;16 上没有，则通过这种方式，将服务暴露在 172.16 网段的IP上，用于接受来自 172.16 subnet 的流量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: networking.istio.io/v1beta1</span><br><span class="line">kind: Sidecar</span><br><span class="line">metadata:</span><br><span class="line">  name: partial-ip-tables</span><br><span class="line">  namespace: prod-us1</span><br><span class="line">spec:</span><br><span class="line">  workloadSelector: </span><br><span class="line">    labels:</span><br><span class="line">      app: productpage</span><br><span class="line">  ingress:</span><br><span class="line">  - bind: 172.16.1.32</span><br><span class="line">    port:</span><br><span class="line">      number: 80 # binds to 172.16.1.32:80</span><br><span class="line">      protocol: HTTP</span><br><span class="line">      name: somename</span><br><span class="line">    defaultEndpoint: 127.0.0.1:8080</span><br><span class="line">    captureMode: NONE</span><br><span class="line">  egress:</span><br><span class="line">    # use the system detected defaults</span><br><span class="line">    # sets up configuration to handle outbound traffic to services</span><br><span class="line">    # in 192.168.0.0/16 subnet, based on information provided by the</span><br><span class="line">    # service registry</span><br><span class="line">  - captureMode: IPTABLES</span><br><span class="line">    hosts:</span><br><span class="line">    - &quot;*/*&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Sidecar TLS 终结</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ratings</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">ratings</span></span><br><span class="line">    <span class="attr">service:</span> <span class="string">ratings</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">8443</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">https</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">ratings</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.istio.io/v1alpha3</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Sidecar</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ratings</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prod-us1</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">workloadSelector:</span></span><br><span class="line">    <span class="attr">labels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">ratings</span></span><br><span class="line">  <span class="attr">ingress:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span></span><br><span class="line">      <span class="attr">number:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">HTTPS</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">somename</span></span><br><span class="line">    <span class="attr">defaultEndpoint:</span> <span class="string">unix:///var/run/someuds.sock</span></span><br><span class="line">    <span class="attr">tls:</span></span><br><span class="line">      <span class="attr">mode:</span> <span class="string">SIMPLE</span></span><br><span class="line">      <span class="attr">privateKey:</span> <span class="string">&quot;/etc/certs/privatekey.pem&quot;</span></span><br><span class="line">      <span class="attr">serverCertificate:</span> <span class="string">&quot;/etc/certs/servercert.pem&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Sidecar UDS 加速优化</li>
+</ol>
+<p>网络包流向图：</p>
+<p>consumer(<a target="_blank" rel="noopener" href="http://uds-demo-provider.uds.svc.cluster.local/">http://uds-demo-provider.uds.svc.cluster.local:80</a>) → uds → envoy → upstream(服务发现uds-demo-provider:80) → envoy(15889) → uds → provider</p>
+<p>client 侧配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: Sidecar</span><br><span class="line">metadata:</span><br><span class="line">  name: uds-demo-consumer-uds</span><br><span class="line">  namespace: uds</span><br><span class="line">spec:</span><br><span class="line">  workloadSelector:</span><br><span class="line">    labels:</span><br><span class="line">      app: uds-demo-consumer-default</span><br><span class="line">  egress:    </span><br><span class="line">  - port:</span><br><span class="line">      number: 0</span><br><span class="line">      protocol: HTTP</span><br><span class="line">      name: http</span><br><span class="line">  - captureMode: NONE</span><br><span class="line">    bind: unix:///var/mesh/uds.sock   # envoy 监听的 uds 地址 </span><br><span class="line">    hosts:</span><br><span class="line">    - &quot;*/*&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Server 侧配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: Sidecar</span><br><span class="line">metadata:</span><br><span class="line">  name: uds-demo-privider-uds</span><br><span class="line">  namespace: uds</span><br><span class="line">spec:</span><br><span class="line">  workloadSelector:</span><br><span class="line">    labels:</span><br><span class="line">      app: uds-demo-service-default</span><br><span class="line">  ingress:</span><br><span class="line">  - port:</span><br><span class="line">      number: 15889</span><br><span class="line">      protocol: HTTP</span><br><span class="line">      name: http</span><br><span class="line">    defaultEndpoint: unix:///var/mesh/uds.sock  ##</span><br><span class="line">    captureMode: NONE</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">    labels:</span><br><span class="line">        app: uds-demo-service-default</span><br><span class="line">    name: uds-demo-provider</span><br><span class="line">    namespace: uds</span><br><span class="line">spec:</span><br><span class="line">    ports:</span><br><span class="line">        - name: http</span><br><span class="line">          port: 80</span><br><span class="line">          protocol: TCP</span><br><span class="line">          targetPort: 15889</span><br><span class="line">    selector:</span><br><span class="line">        app: uds-demo-service-default</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sidecar-使用-iptables-实现流量劫持的细节"><a href="#Sidecar-使用-iptables-实现流量劫持的细节" class="headerlink" title="Sidecar 使用 iptables 实现流量劫持的细节"></a>Sidecar 使用 iptables 实现流量劫持的细节</h3><p><img src="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-iptables.svg" alt="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-iptables.svg"></p>
+<p><img src="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-route-iptables.svg" alt="ISTIO_ROUTE 规则的详细流程"></p>
+<p>示例，sidecar network namespace 中 详细 Iptable 规则列表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">Chain PREROUTING (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">ISTIO_INBOUND  tcp  --  anywhere             anywhere</span><br><span class="line"></span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain OUTPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">ISTIO_OUTPUT  tcp  --  anywhere             anywhere</span><br><span class="line">RETURN     udp  --  anywhere             anywhere             udp dpt:domain owner UID match 1337</span><br><span class="line">RETURN     udp  --  anywhere             anywhere             udp dpt:domain owner GID match 1337</span><br><span class="line">REDIRECT   udp  --  anywhere             anywhere             udp dpt:domain redir ports 15053</span><br><span class="line"></span><br><span class="line">Chain POSTROUTING (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line"></span><br><span class="line">Chain ISTIO_INBOUND (1 references)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:15008</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:15090</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:15021</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:15020</span><br><span class="line">ISTIO_IN_REDIRECT  tcp  --  anywhere             anywhere</span><br><span class="line"></span><br><span class="line">Chain ISTIO_IN_REDIRECT (3 references)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">REDIRECT   tcp  --  anywhere             anywhere             redir ports 15006</span><br><span class="line"></span><br><span class="line">Chain ISTIO_OUTPUT (1 references)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">RETURN     all  --  127.0.0.6            anywhere</span><br><span class="line">ISTIO_IN_REDIRECT  tcp  --  anywhere            !localhost            tcp dpt:!domain owner UID match 1337</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:!domain ! owner UID match 1337</span><br><span class="line">RETURN     all  --  anywhere             anywhere             owner UID match 1337</span><br><span class="line">ISTIO_IN_REDIRECT  all  --  anywhere            !localhost            owner GID match 1337</span><br><span class="line">RETURN     tcp  --  anywhere             anywhere             tcp dpt:!domain ! owner GID match 1337</span><br><span class="line">RETURN     all  --  anywhere             anywhere             owner GID match 1337</span><br><span class="line">REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:domain redir ports 15053</span><br><span class="line">RETURN     all  --  anywhere             localhost</span><br><span class="line">ISTIO_REDIRECT  all  --  anywhere             anywhere</span><br><span class="line"></span><br><span class="line">Chain ISTIO_REDIRECT (1 references)</span><br><span class="line">target     prot opt source               destination</span><br><span class="line">REDIRECT   tcp  --  anywhere             anywhere             redir ports 15001</span><br></pre></td></tr></table></figure>
+
+<p>iptables 潜在问题：</p>
+<ol>
+<li>依赖 contrack 连接追踪，大量并发连接，会导致 contrack 表爆满。</li>
+<li>全局生效，不利于管控。</li>
+<li>通过 loopback 实现，outbound 会两次经过协议栈，性能有损耗。</li>
+</ol>
+<p>社区优化思路:</p>
+<ol>
+<li>ebpf</li>
+<li>tproxy inbound 优化</li>
+<li>hook connect 处理 outbound</li>
+</ol>
+<p>推荐阅读：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/">https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/</a></li>
+<li><a target="_blank" rel="noopener" href="https://jimmysong.io/blog/istio-sidecar-traffic-types/">https://jimmysong.io/blog/istio-sidecar-traffic-types/</a></li>
+<li><a target="_blank" rel="noopener" href="https://istio.io/latest/docs/reference/commands/pilot-agent/#pilot-agent-istio-iptables">https://istio.io/latest/docs/reference/commands/pilot-agent/#pilot-agent-istio-iptables</a></li>
+</ol>
+<h3 id="Sidecar-CRD-相关代码实现介绍-Istio-1-12-版本"><a href="#Sidecar-CRD-相关代码实现介绍-Istio-1-12-版本" class="headerlink" title="Sidecar CRD 相关代码实现介绍 - Istio 1.12 版本"></a>Sidecar CRD 相关代码实现介绍 - Istio 1.12 版本</h3><p>核心代码路径： pilot&#x2F;pkg&#x2F;networking&#x2F;core&#x2F;v1alpha3&#x2F;listener.go</p>
+<p>Sidecar CRD 配置主要用于 proxy Listener 生成。 </p>
+<h4 id="关键数据结构："><a href="#关键数据结构：" class="headerlink" title="关键数据结构："></a>关键数据结构：</h4><ol>
+<li>model.SidecarScope: 包含 sidecar, virtualservice, destinationrule 等需要 proxy 感知的资源对象。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// The SidecarScope object is a semi-processed view of the</span><br><span class="line">// service registry, and config state associated with the sidecar CRD. The</span><br><span class="line">// scope contains a set of inbound and outbound listeners, services/configs</span><br><span class="line">// per listener, etc. The sidecar scopes are precomputed based on the</span><br><span class="line">// Sidecar API objects in each namespace. If there is no sidecar api object</span><br><span class="line">// for a namespace, a default sidecarscope is assigned to the namespace</span><br><span class="line">// which enables connectivity to all services in the mesh.</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>model.Proxy：表示对应每一个 sidecar 或 Gateway 的元数据。</li>
+</ol>
+<h4 id="代码调用路径"><a href="#代码调用路径" class="headerlink" title="代码调用路径"></a>代码调用路径</h4><p>istio v1.12 </p>
+<ol>
+<li>Server 初始化 ConfigGenerator 逻辑</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NewServer</span><br><span class="line">    |_  xds.NewDiscoveryServer </span><br><span class="line">        |_core.NewConfigGenerator</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Xds 连接和请求处理 逻辑</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ADS GRPC _pb_handler</span><br><span class="line">    |_ DiscoveryServer.Stream</span><br><span class="line">        |_ DiscoveryServer.initializeProxy or DiscoveryServer.processRequest or DiscoveryServer.pushConnect</span><br><span class="line">            |_ DiscoveryServer.computeProxyState</span><br><span class="line">                |_ proxy.SetSidecarScope(pushContext)</span><br><span class="line">                    |_ pushConext.getSidecarScope(proxy, workloadLabels)</span><br><span class="line">                        |_ ps.sidecarIndex.sidecarsByNamespace[proxy.ConfigNamespace]</span><br><span class="line">            |_ xdsServer.pushXds or xdsServer.pushDeltaXds</span><br><span class="line">                |_ ldsGenerator.Generate</span><br><span class="line">                    |_  configGenerator.BuildListeners(proxy, push)</span><br><span class="line">                        |_ configgen.buidSidecarListeners(build)</span><br><span class="line">                            |_ builder.buildSidecarInboundListeners</span><br><span class="line">                                |_ configgen.buildSidecarInboundListenerForPortOrUDS</span><br><span class="line">                            |_ builder.buildSidecarOutboundListeners</span><br><span class="line">                                |_ configgen.buildSidecarOutboundListenerForPortOrUD</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>xds 请求事件驱动 - Sidecar CRD 生成 PushContext</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DiscoveryServer.Push() or </span><br><span class="line">    |_ PushContext.initContext()  // PushContext holds information during push generation. It is reset on config change, at the beginning of the pushAll.</span><br><span class="line">        |_ pushContext.createNewContext or updateContext</span><br><span class="line">            |_ PushContext.initSidecarScopes()   // initSidecarScopes synthesizes Sidecar CRDs into objects called SidecarScope. </span><br><span class="line">                |_ env.List(gvk.Sidecar, NamespaceAll) // List All Sidecar CRD</span><br><span class="line">                    |_  env.ConfigStore.List() // configStore is List-Watcher Store, Cache CRDs from remote k8s  </span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>初始化本地 List-watch 缓存 Store<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">newDiscoveryCommand()</span><br><span class="line">|_ NewServer()</span><br><span class="line">    |_ Server.initControllers()</span><br><span class="line">        |_ Server.initConfigController()</span><br><span class="line">            |_ s.environment.ConfigStore = model.MakeIstioStore(s.configController)</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cloud-Native/" rel="tag"># Cloud Native</a>
+              <a href="/tags/Istio/" rel="tag"># Istio</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/29/k8s-API-FlowControll-Introduct/" rel="prev" title="K8s API-Server 流量治理指南（2023）：FlowControler 入门介绍">
+                  <i class="fa fa-angle-left"></i> K8s API-Server 流量治理指南（2023）：FlowControler 入门介绍
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Tad Guo</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">40k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:24</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

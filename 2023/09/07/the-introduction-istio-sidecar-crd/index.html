@@ -19,12 +19,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"watermeion.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="引言Sidecar 是 Istio 提供的一种 CRD 资源, 用于对注入到业务 pod 中的流量劫持 sidecar 进行自定义的配置。 默认情况下，Istio 有全局统一的配置。使用 Sidecar CRD 可以用于对 Namespace 内的 sidecar 组件进行更精细的配置, 包括指定ingress, egress 监听的 端口、协议，已经转发到的后端等。 本文主要参考 Istio 社">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Istio CRD 详解 - Sidecar">
-<meta property="og:url" content="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/index.html">
+<meta property="og:url" content="https://watermeion.github.io/2023/09/07/the-introduction-istio-sidecar-crd/index.html">
 <meta property="og:site_name" content="Tad 技术杂货铺">
 <meta property="og:description" content="引言Sidecar 是 Istio 提供的一种 CRD 资源, 用于对注入到业务 pod 中的流量劫持 sidecar 进行自定义的配置。 默认情况下，Istio 有全局统一的配置。使用 Sidecar CRD 可以用于对 Namespace 内的 sidecar 组件进行更精细的配置, 包括指定ingress, egress 监听的 端口、协议，已经转发到的后端等。 本文主要参考 Istio 社">
 <meta property="og:locale" content="zh_CN">
@@ -39,11 +39,11 @@
 <meta name="twitter:image" content="https://jimmysong.io/blog/sidecar-injection-iptables-and-traffic-routing/istio-iptables.svg">
 
 
-<link rel="canonical" href="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/">
+<link rel="canonical" href="https://watermeion.github.io/2023/09/07/the-introduction-istio-sidecar-crd/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/","path":"2023/09/07/the-introduction-istio-sidecar-crd/","title":"Istio CRD 详解 - Sidecar"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://watermeion.github.io/2023/09/07/the-introduction-istio-sidecar-crd/","path":"2023/09/07/the-introduction-istio-sidecar-crd/","title":"Istio CRD 详解 - Sidecar"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Istio CRD 详解 - Sidecar | Tad 技术杂货铺</title>
@@ -180,7 +180,7 @@
 </div>
   <div class="links-of-author animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <a href="https://github.com/watermeion" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;watermeion" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
         <a href="mailto:watermeion@hotmail.com" title="E-Mail → mailto:watermeion@hotmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
@@ -215,7 +215,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/watermeion/2023/09/07/the-introduction-istio-sidecar-crd/">
+    <link itemprop="mainEntityOfPage" href="https://watermeion.github.io/2023/09/07/the-introduction-istio-sidecar-crd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">

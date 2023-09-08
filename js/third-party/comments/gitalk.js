@@ -15,11 +15,11 @@ document.addEventListener('page:loaded', () => {
         owner              : CONFIG.gitalk.github_id,
         admin              : [CONFIG.gitalk.admin_user],
         // id                 : CONFIG.gitalk.path_md5,
-        id                 : (location.pathname).split("/").pop().substring(0, 49),
+        id                 : (location.pathname).substring(0, 49),
         proxy              : CONFIG.gitalk.proxy,
         language           : CONFIG.gitalk.language || window.navigator.language,
         distractionFreeMode: CONFIG.gitalk.distraction_free_mode,
-        labels             : CONFIG.gitalk.labels.push(location.pathname)
+        // labels             : CONFIG.gitalk.labels? CONFIG.gitalk.labels.push(location.pathname): [].push(location.pathname)
       });
       gitalk.render(document.querySelector('.gitalk-container'));
     });

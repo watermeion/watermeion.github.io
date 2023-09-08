@@ -18,7 +18,8 @@ document.addEventListener('page:loaded', () => {
         id                 : (location.pathname).split("/").pop().substring(0, 49),
         proxy              : CONFIG.gitalk.proxy,
         language           : CONFIG.gitalk.language || window.navigator.language,
-        distractionFreeMode: CONFIG.gitalk.distraction_free_mode
+        distractionFreeMode: CONFIG.gitalk.distraction_free_mode,
+        labels             : CONFIG.gitalk.labels.push(location.pathname)
       });
       gitalk.render(document.querySelector('.gitalk-container'));
     });
